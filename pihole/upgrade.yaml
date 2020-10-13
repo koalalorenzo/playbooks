@@ -1,0 +1,10 @@
+---
+  - name: Upgrade Pi-Hole subsystems
+    hosts: pihole
+    become: yes
+    become_user: root
+    become_method: sudo
+  
+    tasks:
+      - shell: pihole -up
+ 

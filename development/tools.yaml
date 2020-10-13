@@ -1,0 +1,23 @@
+---
+- name: Install Tools used for development
+  hosts: development
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - name: "Install packages"
+      apt:
+        update_cache: yes
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - build-essential
+          - crossbuild-essential-amd64
+          - crossbuild-essential-arm64
+          - crossbuild-essential-armhf
+          - git
+          - make
+          - jq

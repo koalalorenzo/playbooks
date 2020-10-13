@@ -1,0 +1,38 @@
+---
+- name: Install software and upgrade dependencies
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  pre_tasks:
+    - name: 'Install python'
+      raw: sudo apt-get -y install python python-apt
+
+  tasks:
+    - name: Update packager chache
+      apt:
+        update_cache: yes
+
+    - name: Upgrade packages
+      apt:
+        upgrade: yes
+
+    - name: "Install packages"
+      apt:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - software-properties-common
+          - ca-certificates
+          - apt-transport-https
+          - openssl
+          - htop
+          - screen
+          - make
+          - curl
+          - unzip
+          - git
+          - mosh

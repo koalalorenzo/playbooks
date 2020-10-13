@@ -1,0 +1,10 @@
+---
+  - name: Update Gravity
+    hosts: pihole
+    become: yes
+    become_user: root
+    become_method: sudo
+  
+    tasks:
+      - shell: pihole -g
+ 

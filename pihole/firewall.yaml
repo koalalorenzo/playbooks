@@ -1,0 +1,29 @@
+---
+  - name: Setup Firewall for pihole
+    hosts: pihole 
+    become: yes
+    become_user: root
+    become_method: sudo
+    gather_facts: no
+  
+    tasks:
+      - name: "Ensures UFW is available"
+        apt:
+          name: ufw
+          state: present
+  
+      - name: Configure HTTP on UFW
+        ufw:
+          rule: allow
+          port: 80
+
+      - name: Configure HTTPS on UFW
+        ufw:
+          rule: allow
+          port: 443
+
+      - name: Configure DNS on UFW
+        ufw:
+          rule: allow
+          port: 53
+  

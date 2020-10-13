@@ -1,0 +1,31 @@
+---
+  - name: Install Unbound DNS
+    hosts: pihole
+    become: yes
+    become_user: root
+    become_method: sudo
+    gather_facts: no
+  
+    tasks:
+      - name: "Install packages"
+        apt:
+          update_cache: yes
+          name: "unbound"
+          state: present
+
+      - name: "Copy the configuration"
+        copy:
+          remote_src: false
+          src: unbound.conf
+          dest: /etc/unbound/unbound.conf.d/pi-hole.conf
+          owner: root
+          group: root
+          mode: 0644
+        register: copyconf
+
+      - name: Restart Unbound
+        service: 
+          name: unbound 
+          state: restarted
+        when: copyconf.changed
+    
