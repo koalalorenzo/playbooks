@@ -19,7 +19,7 @@
 - import_playbook: pihole/unbound.yaml
 - import_playbook: pihole/firewall.yaml
 - import_playbook: pihole/upgrade.yaml
-- import_playbook: pihole/list-update.yaml
+- import_playbook: pihole/gravity-update.yaml
 
 # Final Reboot
 - import_playbook: common/reboot.yaml

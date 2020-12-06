@@ -6,10 +6,6 @@
   become_method: sudo
   gather_facts: no
 
-  pre_tasks:
-    - name: 'install python'
-      raw: sudo apt-get -y install python python-apt
-
   tasks:
     - name: Ensure the locale exists
       locale_gen:

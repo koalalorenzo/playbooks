@@ -1,6 +1,6 @@
 
 run:
-	ansible-playbook -i ./main.inventory maintenance.yaml
+	ansible-playbook -i ./main.inventory default.yaml
 .PHONY: run
 
 reboot:
