@@ -5,7 +5,6 @@
 - import_playbook: common/ssh-secure.yaml
 - import_playbook: common/reboot.yaml
 # Post reboot setup
-- import_playbook: common/certificates.yaml
 - import_playbook: common/firewall.yaml
 - import_playbook: common/antivirus.yaml
 - import_playbook: common/cleanup.yaml

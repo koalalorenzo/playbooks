@@ -12,7 +12,7 @@
   tasks:
     - name: Authorize my keys (GitLab)
       authorized_key:
-        user: pi
+        user: "{{ ansible_user }}"
         state: present
         key: https://gitlab.com/koalalorenzo.keys
 

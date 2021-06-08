@@ -1,17 +1,17 @@
 [pihole]
 
+[pihole:vars]
+ansible_user='pi'
+ansible_become_pass='raspberry'
+ansible_python_interpreter='/usr/bin/python'
+
 [development]
 10.211.55.8 ansible_user='parallels'
 
 [visma]
 10.211.55.8 ansible_user='parallels'
 
-[all:pihole]
-ansible_user='pi'
-ansible_become_pass='raspberry'
-ansible_python_interpreter='/usr/bin/python'
-
-[all:vars]
+[visma:vars]
 assm_code=''
 assm_id=''
 assm_region=''
