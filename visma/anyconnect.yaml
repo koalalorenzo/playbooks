@@ -30,3 +30,6 @@
     - file:
         path: "{{ tempfiles.path }}/vpn/license.txt"
         state: absent
+
+    - name: Install the vpn
+      shell: "bash {{ tempfiles.path }}/vpn/vpn_install.sh"

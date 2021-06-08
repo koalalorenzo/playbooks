@@ -1,11 +1,17 @@
 [pihole]
-hdns01.local chostname=hdns01.local 
-hdns02.local chostname=hdns02.local
 
 [development]
-# raspberrypi.local chostname=raspberrypi.local
+10.211.55.8 ansible_user='parallels'
 
-[all:vars]
+[visma]
+10.211.55.8 ansible_user='parallels'
+
+[all:pihole]
 ansible_user='pi'
 ansible_become_pass='raspberry'
 ansible_python_interpreter='/usr/bin/python'
+
+[all:vars]
+assm_code=''
+assm_id=''
+assm_region=''
