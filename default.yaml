@@ -1,10 +1,10 @@
 ---
-- import_playbook: common/packages.yaml
-- import_playbook: common/locale.yaml
-# - import_playbook: common/hostname.yaml
-- import_playbook: common/ssh-secure.yaml
-- import_playbook: common/reboot.yaml
-# Post reboot setup
+# - import_playbook: common/packages.yaml
+# - import_playbook: common/locale.yaml
+# # - import_playbook: common/hostname.yaml
+# - import_playbook: common/ssh-secure.yaml
+# - import_playbook: common/reboot.yaml
+# # Post reboot setup
 - import_playbook: common/firewall.yaml
 - import_playbook: common/antivirus.yaml
 - import_playbook: common/cleanup.yaml

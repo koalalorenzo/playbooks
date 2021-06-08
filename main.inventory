@@ -12,6 +12,6 @@ ansible_python_interpreter='/usr/bin/python'
 10.211.55.8 ansible_user='parallels'
 
 [visma:vars]
-assm_code=''
-assm_id=''
-assm_region=''
+assm_code='uxFhYvHdeihIzGxt3yOd'
+assm_id='317399cd-99b2-42a4-8d5a-4aea6d57be1b'
+assm_region='eu-west-1'

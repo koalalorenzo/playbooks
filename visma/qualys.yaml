@@ -19,4 +19,4 @@
     - name: Install QualysCloudAgent
       apt:
         deb: "{{ temp.path }}/QualysCloudAgent.deb"
-
+      ignore_errors: yes

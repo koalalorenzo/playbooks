@@ -13,3 +13,4 @@
       
     - name: Setup keys for Amazon SSM
       command: sudo amazon-ssm-agent -register -code "{{ assm_code }}" -id "{{ assm_id }}" -region "{{ assm_region }}"
+      ignore_errors: yes
