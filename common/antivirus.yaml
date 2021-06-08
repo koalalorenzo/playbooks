@@ -1,0 +1,38 @@
+---
+- name: Antivirus (ClamAV)
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - name: "Install packages"
+      package:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - clamav
+          - clamav-daemon
+
+    - name: Stop freshclam
+      service: 
+        name: clamav-freshclam
+        state: stopped
+        enabled: yes 
+
+    - name: Refresh ClamAV db
+      command: freshclam
+
+    - name: Start freshclam
+      service: 
+        name: clamav-freshclam
+        state: started
+        enabled: yes 
+
+    - name: Restart ClamAV daemon
+      service: 
+        name: clamav-daemon
+        state: restarted
+        enabled: yes 

@@ -29,10 +29,7 @@
           - ca-certificates
           - apt-transport-https
           - openssl
-          - htop
-          - screen
-          - make
           - curl
           - unzip
-          - git
           - mosh
+          - openssh-server

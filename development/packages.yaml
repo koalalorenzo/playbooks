@@ -1,15 +1,26 @@
 ---
-- name: Install Tools used for development
+- name: Install Development packages
   hosts: development
   become: yes
   become_user: root
   become_method: sudo
   gather_facts: no
 
+  # pre_tasks:
+  #   - name: 'Install python'
+  #     raw: sudo apt-get -y install python python-apt
+
   tasks:
-    - name: "Install packages"
+    - name: Update packager cache
       apt:
         update_cache: yes
+
+    - name: Upgrade packages
+      apt:
+        upgrade: yes
+
+    - name: "Install packages"
+      apt:
         name: "{{ packages }}"
         state: present
       vars:
@@ -19,5 +30,8 @@
           - crossbuild-essential-arm64
           - crossbuild-essential-armhf
           - git
+          - golang
+          - nodejs
           - make
           - jq
+          - sed

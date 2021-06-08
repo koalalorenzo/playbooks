@@ -8,7 +8,7 @@
 
   tasks:
     - name: "Install UFW packages"
-      apt:
+      package:
         name: ufw
         state: present
 
