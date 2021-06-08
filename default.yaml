@@ -1,9 +1,9 @@
 ---
-# - import_playbook: common/packages.yaml
-# - import_playbook: common/locale.yaml
-# # - import_playbook: common/hostname.yaml
-# - import_playbook: common/ssh-secure.yaml
-# - import_playbook: common/reboot.yaml
+- import_playbook: common/packages.yaml
+- import_playbook: common/locale.yaml
+# - import_playbook: common/hostname.yaml
+- import_playbook: common/ssh-secure.yaml
+- import_playbook: common/reboot.yaml
 # # Post reboot setup
 - import_playbook: common/firewall.yaml
 - import_playbook: common/antivirus.yaml
@@ -21,10 +21,10 @@
 - import_playbook: pihole/upgrade.yaml
 - import_playbook: pihole/gravity-update.yaml
 
-# Visma VM
-- import_playbook: visma/amazon-ssm.yaml
-- import_playbook: visma/qualys.yaml
-- import_playbook: visma/anyconnect.yaml
+# Work VM / Station
+- import_playbook: work/amazon-ssm.yaml
+- import_playbook: work/qualys.yaml
+- import_playbook: work/anyconnect.yaml
 
 # Final Reboot
 - import_playbook: common/reboot.yaml
