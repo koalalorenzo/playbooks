@@ -16,6 +16,12 @@
         state: present
         key: https://gitlab.com/koalalorenzo.keys
 
+    - name: Authorize my keys (GitHub)
+      authorized_key:
+        user: "{{ ansible_user }}"
+        state: present
+        key: https://github.com/koalalorenzo.keys
+
     - name: Set Max users to 2
       lineinfile:
         path: /etc/ssh/sshd_config

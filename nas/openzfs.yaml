@@ -1,5 +1,5 @@
 ---
-- name: Install NAS packages
+- name: Setup OpenZFS devices
   hosts: nas
   become: yes
   become_user: root
@@ -17,5 +17,11 @@
         state: present
       vars:
         packages:
-          - jq
-          - sed
+          - zfsutils-linux
+          - zfs-initramfs
+          - cryptsetup
+          - mdadm
+
+    - name: Disable SWAP 
+      shell: |
+        swapoff -a

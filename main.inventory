@@ -5,13 +5,15 @@ ansible_user='pi'
 ansible_become_pass='raspberry'
 ansible_python_interpreter='/usr/bin/python'
 
+[nas]
+uranus ansible_user=koalalorenzo
+
 [development]
-10.211.55.8 ansible_user='parallels'
 
 [visma]
-10.211.55.8 ansible_user='parallels'
 
 [visma:vars]
+ansible_user='parallels'
 # Make will populate these
 assm_code='abc'
 assm_id='abc'
