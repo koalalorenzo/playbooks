@@ -27,7 +27,7 @@
         mode: 0644
 
     - shell: |
-        echo "{{ samba_password }}\n{{ samba_password }}\n" | smbpasswd -s {{ samba_username }}
+        echo "{{ samba_password }}\n{{ samba_password }}\n" | smbpasswd -sa {{ samba_username }}
 
     - file:
         path: /etc/samba/smbusers

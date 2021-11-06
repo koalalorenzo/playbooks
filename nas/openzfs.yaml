@@ -34,6 +34,18 @@
         group: root
         mode: "0600"
 
+    - name: Uses Bash shell
+      cron:
+        name: SHELL
+        env: yes
+        job: /bin/bash
+
+    - name: Adds Email notification
+      cron:
+        name: MAILTO
+        env: yes
+        job: lorenzo@setale.me
+
     - name: Load Keys at Reboot
       cron:
         name: "Load keys and mount at reboot"
