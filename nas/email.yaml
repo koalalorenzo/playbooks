@@ -1,0 +1,82 @@
+---
+- name: Set up Email notification
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - set_fact:
+        smtp_hostname: "{{ lookup('community.general.onepassword', 'nasberry@mg.setale.me', field='server') }}"
+        smtp_username: "{{ lookup('community.general.onepassword', 'nasberry@mg.setale.me', field='username') }}"
+        smtp_password: "{{ lookup('community.general.onepassword', 'nasberry@mg.setale.me', field='password') }}"
+
+    - debconf:
+        name: postfix
+        question: postfix/main_mailer_type
+        value: Satellite system
+        vtype: select
+
+    - debconf:
+        name: postfix
+        question: postfix/mailname
+        value: "{{ ansible_host }}"
+        vtype: string
+
+    - debconf:
+        name: postfix
+        question: postfix/relayhost
+        value: smtp.mailgun.org
+        vtype: string
+
+    - name: "Install packages"
+      apt:
+        name: "{{ packages }}"
+        update_cache: yes
+        state: present
+      vars:
+        packages:
+          - postfix
+          - mailutils
+          - libsasl2-modules
+
+    - copy:
+        dest: "/etc/postfix/sasl_passwd"
+        content: |
+          {{ smtp_hostname }} {{ smtp_username }}:{{ smtp_password }}
+        owner: root
+        group: root
+        mode: "0600"
+
+    - shell: postmap /etc/postfix/sasl_passwd
+
+    - name: Update the configuration for postfix
+      blockinfile:
+        path: /etc/postfix/main.cf
+        block: |
+          smtp_sasl_auth_enable = yes
+          smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+          smtp_sasl_security_options = noanonymous
+          smtp_sasl_tls_security_options = noanonymous
+          smtp_sasl_mechanism_filter = AUTH LOGIN
+          smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+          smtp_generic_maps = hash:/etc/postfix/generic
+
+    - name: Set generic email aliases
+      blockinfile:
+        create: yes
+        path: /etc/postfix/generic
+        block: |
+          pi@nasberry no-reply@mg.setale.me
+          root@nasberry no-reply@mg.setale.me
+
+    - shell: postmap /etc/postfix/generic
+
+    - name: Restart Postifx to send email
+      service:
+        name: postfix
+        state: restarted
+        enabled: yes
+
+    - shell: echo "Ansible Email Setup on {{ ansible_host }} completed" | mail -s "Test mail" lorenzo@setale.me
