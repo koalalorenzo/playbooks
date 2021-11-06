@@ -1,0 +1,43 @@
+---
+- name: Install SAMBA
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - set_fact:
+        samba_username: "{{ lookup('community.general.onepassword', 'Samba - NAS - koalalorenzo', field='username') }}"
+        samba_password: "{{ lookup('community.general.onepassword', 'Samba - NAS - koalalorenzo', field='password') }}"
+
+    - name: "Install packages"
+      apt:
+        name: "{{ packages }}"
+        update_cache: yes
+        state: present
+      vars:
+        packages:
+          - samba
+          - samba-common-bin
+
+    - template:
+        src: samba.conf.tpl
+        dest: /etc/samba/smb.conf
+        mode: 0644
+
+    - shell: |
+        echo "{{ samba_password }}\n{{ samba_password }}\n" | smbpasswd -sa {{ samba_username }}
+
+    - file:
+        path: /etc/samba/smbusers
+        state: touch
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Restart & Enable Samba (smbd) service
+      service:
+        name: smbd
+        state: restarted
+        enabled: yes

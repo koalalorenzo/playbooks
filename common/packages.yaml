@@ -29,6 +29,8 @@
           - ca-certificates
           - apt-transport-https
           - openssl
+          - python3
+          - gnupg
           - curl
           - unzip
           - mosh

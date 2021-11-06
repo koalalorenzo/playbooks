@@ -7,21 +7,46 @@
   gather_facts: no
 
   tasks:
-    - name: Update packager cache
-      apt:
-        update_cache: yes
-
     - name: "Install packages"
       apt:
         name: "{{ packages }}"
+        update_cache: yes
         state: present
       vars:
         packages:
           - zfsutils-linux
           - zfs-initramfs
-          - cryptsetup
-          - mdadm
+          - zfs-dkms
 
-    - name: Disable SWAP 
-      shell: |
-        swapoff -a
+    - name: Adds encryption keys [backups]
+      copy:
+        dest: "/boot/values/backups"
+        content: "{{ lookup('community.general.onepassword', 'OpenZFS - NAS - Personal', field='password') }}"
+        owner: root
+        group: root
+        mode: "0600"
+
+    - name: Adds encryption keys [backups]
+      copy:
+        dest: "/boot/values/backups"
+        content: "{{ lookup('community.general.onepassword', 'OpenZFS - NAS - Backup', field='password') }}"
+        owner: root
+        group: root
+        mode: "0600"
+
+    - shell: zfs load-key -a
+    - shell: zfs mount -a
+
+    - name: Load Keys at Reboot
+      cron:
+        name: "Load keys and mount at reboot"
+        user: root
+        special_time: reboot
+        job: "sleep 5 ; /usr/sbin/zfs load-key -a ; /usr/sbin/zfs mount -a"
+
+    - name: Scrub Monthly
+      cron:
+        name: "Scrub disk once a month"
+        user: root
+        special_time: monthly
+        job: "/usr/sbin/zpool scrub main"

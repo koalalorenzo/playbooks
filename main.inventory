@@ -6,9 +6,11 @@ ansible_become_pass='raspberry'
 ansible_python_interpreter='/usr/bin/python'
 
 [nas]
-uranus ansible_user=koalalorenzo
+nasberry 
 
-[development]
+[nas:vars]
+ansible_user="{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
+ansible_become_pass="{{ lookup('community.general.onepassword', 'Nasberry', field='password') }}"
 
 [visma]
 
