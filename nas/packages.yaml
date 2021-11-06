@@ -18,6 +18,7 @@
       vars:
         packages:
           - unattended-upgrades
+          - moreutils
           - jq
           - sed
           - gpg

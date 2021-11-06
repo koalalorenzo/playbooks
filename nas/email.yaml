@@ -79,4 +79,11 @@
         state: restarted
         enabled: yes
 
+    - name: Adds Email notification
+      cron:
+        name: MAILTO
+        user: root
+        env: yes
+        job: lorenzo@setale.me
+
     - shell: echo "Ansible Email Setup on {{ ansible_host }} completed" | mail -s "Test mail" lorenzo@setale.me

@@ -12,3 +12,14 @@
         reboot_timeout: 300
         post_reboot_delay: 15
         pre_reboot_delay: 15
+---
+- name:  Reload ZFS after reboot
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - shell: zfs load-key -a
+    - shell: zfs mount -a

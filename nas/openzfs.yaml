@@ -34,28 +34,19 @@
         group: root
         mode: "0600"
 
-    - name: Uses Bash shell
-      cron:
-        name: SHELL
-        env: yes
-        job: /bin/bash
-
-    - name: Adds Email notification
-      cron:
-        name: MAILTO
-        env: yes
-        job: lorenzo@setale.me
+    - shell: zfs load-key -a
+    - shell: zfs mount -a
 
     - name: Load Keys at Reboot
       cron:
         name: "Load keys and mount at reboot"
         user: root
         special_time: reboot
-        job: "zfs load-key -a ; zfs mount -a"
+        job: "sleep 5 ; /usr/sbin/zfs load-key -a ; /usr/sbin/zfs mount -a"
 
     - name: Scrub Monthly
       cron:
         name: "Scrub disk once a month"
         user: root
         special_time: monthly
-        job: "zpool scrub main"
+        job: "/usr/sbin/zpool scrub main"

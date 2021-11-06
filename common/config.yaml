@@ -1,5 +1,5 @@
 ---
-- name: Updates the locale used (to use mosh)
+- name: Bunch of generic configuration
   hosts: all
   become: yes
   become_user: root
@@ -14,3 +14,10 @@
 
     - name: set as default locale
       command: localectl set-locale LANG=en_US.UTF-8
+
+    - name: Uses bash shell in cron
+      cron:
+        name: SHELL
+        user: root
+        env: yes
+        job: /bin/bash
