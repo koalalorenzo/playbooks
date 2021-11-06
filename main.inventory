@@ -6,7 +6,7 @@ ansible_become_pass='raspberry'
 ansible_python_interpreter='/usr/bin/python'
 
 [nas]
-nasberry ansible_user='pi'
+nasberry ansible_user='koalalorenzo'
 
 [visma]
 
