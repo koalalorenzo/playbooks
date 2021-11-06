@@ -3,6 +3,7 @@
 - import_playbook: common/locale.yaml
 # - import_playbook: common/hostname.yaml
 - import_playbook: common/ssh-secure.yaml
+- import_playbook: common/tailscale.yaml
 - import_playbook: common/reboot.yaml
 # # Post reboot setup
 - import_playbook: common/firewall.yaml
@@ -14,6 +15,11 @@
 # - import_playbook: development/golang.yaml
 # - import_playbook: development/docker.yaml
 # - import_playbook: development/nomad.yaml
+
+# NAS
+- import_playbook: nas/openzfs.yaml
+- import_playbook: nas/packages.yaml
+- import_playbook: nas/users.yaml
 
 # Pihole stuff
 - import_playbook: pihole/unbound.yaml

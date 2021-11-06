@@ -1,0 +1,34 @@
+---
+- name: Sets user access
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - user:
+        name: koalalorenzo
+        comment: Lorenzo Setale
+        groups: pi,adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,input,netdev,gpio,i2c,spi
+        password: "{{ lookup('community.general.onepassword', 'Nasberry', field='password') | password_hash('sha512', 'SREsaltMiniera') }}"
+        update_password: always
+
+    - name: Authorize my keys (GitLab)
+      authorized_key:
+        user: koalalorenzo
+        state: present
+        key: https://gitlab.com/koalalorenzo.keys
+
+    - name: Authorize my keys (GitHub)
+      authorized_key:
+        user: koalalorenzo
+        state: present
+        key: https://github.com/koalalorenzo.keys
+
+    - name: Load Keys at Reboot
+      ansible.builtin.cron:
+        user: koalalorenzo
+        name: "Load keys and mount at reboot"
+        special_time: daily
+        job: "zfs load-key -a ; zfs mount -a"

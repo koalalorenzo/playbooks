@@ -17,5 +17,10 @@
         state: present
       vars:
         packages:
+          - unattended-upgrades
           - jq
           - sed
+          - gpg
+          - make
+          - git
+          - openssh

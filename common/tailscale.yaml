@@ -1,0 +1,28 @@
+---
+- name: Install Tailscale Daemon
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - apt_key:
+        url: https://pkgs.tailscale.com/stable/raspbian/buster.gpg
+        state: present
+
+    - apt_repository:
+        repo: "deb https://pkgs.tailscale.com/stable/raspbian buster main"
+        state: present
+
+    - name: "Install packages"
+      apt:
+        name: tailscale
+        state: present
+        update_cache: yes
+
+    - name: Configure SSH on UFW
+      ufw:
+        rule: allow
+        port: 41641
+        proto: udp
