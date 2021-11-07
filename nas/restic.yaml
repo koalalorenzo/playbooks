@@ -1,0 +1,41 @@
+---
+- name: Setup Restic Automated Scripts (Backup)
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - set_fact:
+        sys_username: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
+        
+    - name: "Install Restic"
+      apt:
+        name: "restic"
+        update_cache: yes
+        state: present
+    - name: Get latest version of Restic
+      shell: restic self-update
+
+    - name: Daily cleanup (local)
+      cron:
+        user: "{{ sys_username }}"
+        name: "Daily Local (/main/restic) cleanup"
+        special_time: daily
+        job: "/main/system/bin/restic-local-cleanup | $GPG_CMD"
+
+    - name: Weekly cleanup (remote)
+      cron:
+        user: "{{ sys_username }}"
+        name: "Weekly cleanup (remote)"
+        special_time: weekly
+        job: "/main/system/bin/restic-cleanup | $GPG_CMD"
+
+    - name: Daily Backup
+      cron:
+        user: "{{ sys_username }}"
+        name: "Daily Backup"
+        hour: "5"
+        minute: "0"
+        job: "/main/system/bin/restic-backup | $GPG_CMD"
