@@ -18,9 +18,9 @@
           - zfs-initramfs
           - zfs-dkms
 
-    - name: Adds encryption keys [backups]
+    - name: Adds encryption keys [personal]
       copy:
-        dest: "/boot/values/backups"
+        dest: "/boot/values/personal"
         content: "{{ lookup('community.general.onepassword', 'OpenZFS - NAS - Personal', field='password') }}"
         owner: root
         group: root
