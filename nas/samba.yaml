@@ -21,10 +21,33 @@
           - samba
           - samba-common-bin
 
-    - template:
-        src: samba.conf.tpl
-        dest: /etc/samba/smb.conf
+    - name: Adds Samba volumes
+      blockinfile:
+        path: /etc/samba/smb.conf
         mode: 0644
+        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
+        block: |
+          [{{ item.name }}]
+            comment = {{ item.name }} Disk
+            path = {{ item.path }}
+            browseable = yes
+            create mask = 0755
+            directory mask = 0777
+
+            {% if item.public %}
+            guest ok = yes
+            read only = yes
+            {% else %}
+            read only = no
+            guest ok = no
+            valid users = {{ samba_username }}
+            {% endif %}
+      loop:
+        - { name: Multimedia, path: /main/multimedia, public: false }
+        - { name: Downloads, path: /main/downloads, public: false }
+        - { name: Personal, path: /main/personal, public: false }
+        - { name: Backups, path: /main/backups, public: false }
+        - { name: System, path: /main/system, public: false }
 
     - shell: |
         echo "{{ samba_password }}\n{{ samba_password }}\n" | smbpasswd -sa {{ samba_username }}
