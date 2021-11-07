@@ -15,6 +15,7 @@
         name: "restic"
         update_cache: yes
         state: present
+
     - name: Get latest version of Restic
       shell: restic self-update
 
@@ -35,7 +36,7 @@
     - name: Daily Backup
       cron:
         user: "{{ sys_username }}"
-        name: "Daily Backup"
+        name: "Daily Backup (local to remote)"
         hour: "5"
         minute: "0"
         job: "/main/system/bin/restic-backup | $GPG_CMD"
