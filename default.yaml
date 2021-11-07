@@ -22,6 +22,7 @@
 - import_playbook: nas/packages.yaml
 - import_playbook: nas/users.yaml
 - import_playbook: nas/samba.yaml
+- import_playbook: nas/restic.yaml
 
 # Pihole stuff
 - import_playbook: pihole/unbound.yaml

@@ -7,54 +7,46 @@
   gather_facts: no
 
   tasks:
+    - set_fact:
+        sys_username: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
+        sys_password: "{{ lookup('community.general.onepassword', 'Nasberry', field='password') }}"
+        
     - user:
-        name: koalalorenzo
+        name: "{{ sys_username }}"
         comment: Lorenzo Setale
         groups: pi,adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,input,netdev,gpio,i2c,spi
-        password: "{{ lookup('community.general.onepassword', 'Nasberry', field='password') | password_hash('sha512', 'SREsaltMiniera') }}"
+        password: "{{ sys_password | password_hash('sha512', 'SREsaltMiniera') }}"
         update_password: always
 
     - name: Authorize my keys (GitLab)
       authorized_key:
-        user: koalalorenzo
+        user: "{{ sys_username }}"
         state: present
         key: https://gitlab.com/koalalorenzo.keys
 
     - name: Authorize my keys (GitHub)
       authorized_key:
-        user: koalalorenzo
+        user: "{{ sys_username }}"
         state: present
         key: https://github.com/koalalorenzo.keys
 
     - name: Uses Bash shell
-      ansible.builtin.cron:
-        user: koalalorenzo
+      cron:
+        user: "{{ sys_username }}"
         name: SHELL
         env: yes
         job: /bin/bash
 
     - name: Adds GPG Key
-      ansible.builtin.cron:
-        user: koalalorenzo
+      cron:
+        user: "{{ sys_username }}"
         name: GPG_CMD
         env: yes
         job: ifne /usr/bin/gpg --batch --armor --trust-model always --no-default-keyring --keyring /main/system/email.asc.gpg --recipient lorenzo@setale.me --encrypt
 
     - name: Adds Email notification
-      ansible.builtin.cron:
-        user: koalalorenzo
+      cron:
+        user: "{{ sys_username }}"
         name: MAILTO
         env: yes
         job: lorenzo@setale.me
-
-    - ansible.builtin.cron:
-        user: koalalorenzo
-        name: "Restic cleanup"
-        special_time: weekly
-        job: "/main/system/bin/restic-cleanup | $GPG_CMD"
-
-    - ansible.builtin.cron:
-        user: koalalorenzo
-        name: "Daily Local Restic cleanup"
-        special_time: daily
-        job: "/main/system/bin/restic-local-cleanup | $GPG_CMD"
