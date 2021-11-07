@@ -18,21 +18,16 @@
           - zfs-initramfs
           - zfs-dkms
 
-    - name: Adds encryption keys (personal)
+    - name: Adds encryption keys ({{ item.name }})
       copy:
-        dest: "/boot/values/personal"
-        content: "{{ lookup('community.general.onepassword', 'OpenZFS - NAS - Personal', field='password') }}"
+        dest: item.path
+        content: "{{ lookup('community.general.onepassword', item.name, field='password') }}"
         owner: root
         group: root
         mode: "0600"
-
-    - name: Adds encryption keys (backups)
-      copy:
-        dest: "/boot/values/backups"
-        content: "{{ lookup('community.general.onepassword', 'OpenZFS - NAS - Backup', field='password') }}"
-        owner: root
-        group: root
-        mode: "0600"
+      loop:
+        - { name: "OpenZFS - NAS - Personal", path: "/boot/values/personal"}
+        - { name: "OpenZFS - NAS - Backup", path: "/boot/values/backups"}
 
     - shell: zfs load-key -a
     - shell: zfs mount -a
@@ -44,7 +39,7 @@
         special_time: reboot
         job: "sleep 5 ; /usr/sbin/zfs load-key -a ; /usr/sbin/zfs mount -a"
 
-    - name: Scrub Monthly
+    - name: Add cronjob to Scrub Monthly
       cron:
         name: "Scrub disk once a month"
         user: root
