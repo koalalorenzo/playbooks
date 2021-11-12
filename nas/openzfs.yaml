@@ -17,6 +17,8 @@
           - zfsutils-linux
           - zfs-initramfs
           - zfs-dkms
+          - zfs-auto-snapshot
+          - zfs-zed
 
     - name: Adds encryption keys ({{ item.name }})
       copy:
