@@ -17,6 +17,7 @@
 # - import_playbook: development/nomad.yaml
 
 # NAS
+- import_playbook: nas/zram.yaml
 - import_playbook: nas/openzfs.yaml
 - import_playbook: nas/email.yaml
 - import_playbook: nas/packages.yaml
