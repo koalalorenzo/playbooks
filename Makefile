@@ -6,7 +6,7 @@ run:
 
 reboot:
 	ansible-playbook -i ./main.inventory common/reboot.yaml ${ARGS}
-.PHONY:reboot
+.PHONY: reboot
 
 %:
 	ansible-playbook -i ./main.inventory $*.yaml
