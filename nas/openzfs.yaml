@@ -14,7 +14,7 @@
       vars:
         packages:
           - raspberrypi-kernel-headers
-          - dkms-dev
+          - dpkg-dev
       when: ansible_os_family == "Debian"
 
     - name: Add Debian Backports
