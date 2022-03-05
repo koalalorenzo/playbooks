@@ -4,7 +4,6 @@
   become: yes
   become_user: root
   become_method: sudo
-  gather_facts: no
 
   tasks:
     - name: "Install packages for RaspberryPi"
