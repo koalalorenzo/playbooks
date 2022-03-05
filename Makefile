@@ -1,7 +1,7 @@
 ARGS ?=
 
 run:
-	ansible-playbook -i ./main.inventory default.yaml ${ARGS}
+	ansible-playbook -i ./main.inventory default.yaml --limit @main.retry ${ARGS}
 .PHONY: run
 
 reboot:

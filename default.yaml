@@ -16,12 +16,12 @@
 # - import_playbook: development/nomad.yaml
 
 # NAS
+- import_playbook: nas/users.yaml
 - import_playbook: nas/openzfs.yaml
 - import_playbook: nas/email.yaml
 - import_playbook: nas/packages.yaml
 - import_playbook: common/reboot.yaml
 - import_playbook: nas/samba.yaml
-- import_playbook: nas/users.yaml
 - import_playbook: nas/restic.yaml
 
 # Pihole stuff
