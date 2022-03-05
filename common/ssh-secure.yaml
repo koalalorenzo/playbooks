@@ -53,3 +53,14 @@
       ufw:
         rule: allow
         port: 22
+
+    - name: Install mosh
+      apt:
+        name: mosh
+        state: present
+
+    - name: Configure MOSH on UFW
+      ufw:
+        rule: allow
+        proto: udp
+        port: '60000:61000'

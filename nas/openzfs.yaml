@@ -31,6 +31,11 @@
         - { name: "OpenZFS - NAS - Personal", path: "/boot/values/personal"}
         - { name: "OpenZFS - NAS - Backup", path: "/boot/values/backups"}
 
+    - name: modprobe zfs
+      modprobe:
+        name: zfs
+        state: present
+
     - shell: zfs load-key -a
     - shell: zfs mount -a
 
