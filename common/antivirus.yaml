@@ -17,22 +17,22 @@
           - clamav-daemon
 
     - name: Stop freshclam
-      service: 
+      service:
         name: clamav-freshclam
         state: stopped
-        enabled: yes 
+        enabled: yes
 
     - name: Refresh ClamAV db
       command: freshclam
 
     - name: Start freshclam
-      service: 
+      service:
         name: clamav-freshclam
         state: started
-        enabled: yes 
+        enabled: yes
 
     - name: Restart ClamAV daemon
-      service: 
+      service:
         name: clamav-daemon
         state: restarted
-        enabled: yes 
+        enabled: yes

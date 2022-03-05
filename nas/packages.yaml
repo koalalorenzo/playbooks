@@ -7,12 +7,8 @@
   gather_facts: no
 
   tasks:
-    - name: Update packager cache
-      apt:
-        update_cache: yes
-
     - name: "Install packages"
-      apt:
+      package:
         name: "{{ packages }}"
         state: present
       vars:

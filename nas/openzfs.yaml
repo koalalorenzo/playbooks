@@ -8,9 +8,8 @@
 
   tasks:
     - name: "Install packages"
-      apt:
+      package:
         name: "{{ packages }}"
-        update_cache: yes
         state: present
       vars:
         packages:

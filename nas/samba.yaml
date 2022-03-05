@@ -12,9 +12,8 @@
         samba_password: "{{ lookup('community.general.onepassword', 'Samba - NAS - koalalorenzo', field='password') }}"
 
     - name: "Install packages"
-      apt:
+      package:
         name: "{{ packages }}"
-        update_cache: yes
         state: present
       vars:
         packages:

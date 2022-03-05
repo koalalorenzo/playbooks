@@ -4,19 +4,20 @@
   become: yes
   become_user: root
   become_method: sudo
-  gather_facts: no
 
   tasks:
     - apt_key:
         url: https://pkgs.tailscale.com/stable/raspbian/buster.gpg
         state: present
+      when: ansible_os_family == "Debian"
 
     - apt_repository:
         repo: "deb https://pkgs.tailscale.com/stable/raspbian buster main"
         state: present
+      when: ansible_os_family == "Debian"
 
-    - name: "Install packages"
-      apt:
+    - name: Install tailscale package
+      package:
         name: tailscale
         state: present
         update_cache: yes

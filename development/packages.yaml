@@ -6,21 +6,9 @@
   become_method: sudo
   gather_facts: no
 
-  # pre_tasks:
-  #   - name: 'Install python'
-  #     raw: sudo apt-get -y install python python-apt
-
   tasks:
-    - name: Update packager cache
-      apt:
-        update_cache: yes
-
-    - name: Upgrade packages
-      apt:
-        upgrade: yes
-
     - name: "Install packages"
-      apt:
+      package:
         name: "{{ packages }}"
         state: present
       vars:
