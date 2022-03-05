@@ -5,11 +5,10 @@
     become_user: root
     become_method: sudo
     gather_facts: no
-  
+
     tasks:
       - name: "Install packages"
-        apt:
-          update_cache: yes
+        package:
           name: "unbound"
           state: present
 
@@ -24,8 +23,7 @@
         register: copyconf
 
       - name: Restart Unbound
-        service: 
-          name: unbound 
+        service:
+          name: unbound
           state: restarted
         when: copyconf.changed
-    

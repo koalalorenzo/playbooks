@@ -8,7 +8,6 @@
 # # Post reboot setup
 - import_playbook: common/tailscale.yaml
 - import_playbook: common/antivirus.yaml
-- import_playbook: common/cleanup.yaml
 
 # Development tools
 - import_playbook: development/packages.yaml
@@ -17,13 +16,13 @@
 # - import_playbook: development/nomad.yaml
 
 # NAS
+- import_playbook: nas/users.yaml
 - import_playbook: nas/zram.yaml
 - import_playbook: nas/openzfs.yaml
 - import_playbook: nas/email.yaml
 - import_playbook: nas/packages.yaml
 - import_playbook: common/reboot.yaml
 - import_playbook: nas/samba.yaml
-- import_playbook: nas/users.yaml
 - import_playbook: nas/restic.yaml
 
 # Pihole stuff
@@ -31,11 +30,6 @@
 - import_playbook: pihole/firewall.yaml
 - import_playbook: pihole/upgrade.yaml
 - import_playbook: pihole/gravity-update.yaml
-
-# Work VM / Station
-- import_playbook: work/amazon-ssm.yaml
-- import_playbook: work/qualys.yaml
-- import_playbook: work/anyconnect.yaml
 
 # Final Reboot
 - import_playbook: common/reboot.yaml

@@ -55,7 +55,7 @@
         port: 22
 
     - name: Install mosh
-      apt:
+      package:
         name: mosh
         state: present
 

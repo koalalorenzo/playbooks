@@ -1,13 +1,13 @@
 ---
 - name: Setup Firewall and fail2ban
-  hosts: all 
+  hosts: all
   become: yes
   become_user: root
   become_method: sudo
   gather_facts: no
 
   tasks:
-    - name: "Install UFW packages"
+    - name: Install UFW packages
       package:
         name: ufw
         state: present
@@ -23,8 +23,8 @@
         policy: deny
         direction: incoming
 
-    - name: "Install fail2ban packages"
-      apt:
+    - name: Install fail2ban packages
+      package:
         name: fail2ban
         state: present
 

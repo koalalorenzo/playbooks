@@ -9,11 +9,10 @@
   tasks:
     - set_fact:
         sys_username: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
-        
+
     - name: "Install Restic"
-      apt:
+      package:
         name: "restic"
-        update_cache: yes
         state: present
 
     - name: Get latest version of Restic
