@@ -12,12 +12,3 @@ nasberry
 ansible_user="pi"
 # ansible_user="{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
 # ansible_become_pass="{{ lookup('community.general.onepassword', 'Nasberry', field='password') }}"
-
-[visma]
-
-[visma:vars]
-ansible_user='parallels'
-# Make will populate these
-assm_code='abc'
-assm_id='abc'
-assm_region='eu-west-1'

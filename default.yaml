@@ -30,10 +30,5 @@
 - import_playbook: pihole/upgrade.yaml
 - import_playbook: pihole/gravity-update.yaml
 
-# Work VM / Station
-- import_playbook: work/amazon-ssm.yaml
-- import_playbook: work/qualys.yaml
-- import_playbook: work/anyconnect.yaml
-
 # Final Reboot
 - import_playbook: common/reboot.yaml
