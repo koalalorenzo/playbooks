@@ -63,5 +63,4 @@
       ufw:
         rule: allow
         proto: udp
-        from_port: 60000
-        to_port: 61000
+        port: '60000:61000'
