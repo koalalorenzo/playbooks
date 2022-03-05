@@ -53,6 +53,14 @@
           - zfs-dkms
           - zfs-auto-snapshot
 
+    - name: Makes sure that encryption keys are stored safe in path
+      file:
+        state: directory
+        path: "/boot/values"
+        owner: root
+        group: root
+        mode: "0655"
+
     - name: Adds encryption keys ({{ item.name }})
       copy:
         dest: item.path
