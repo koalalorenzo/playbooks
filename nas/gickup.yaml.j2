@@ -1,0 +1,21 @@
+source:
+  github:
+    - token: {{ github_token }}
+      user: koalalorenzo
+      url: github.com
+      username: koalalorenzo
+      ssh: true
+      sshkey:
+      excludeorgs:
+        - e-conomic
+        - ipfs
+        - ethereum-cph
+  gitlab:
+    - token: {{ gitlab_token }}
+      user: koalalorenzo
+      username: koalalorenzo
+      ssh: true
+      sshkey:
+destination:
+  local:
+    - path: /main/backups/gickup

@@ -1,0 +1,59 @@
+---
+- name: Gickup for git backups
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  tasks:
+    - set_fact:
+        sys_username: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
+        github_token: "{{ lookup('community.general.onepassword', 'Nasberry', field='GitHub Token') }}"
+        gitlab_token: "{{ lookup('community.general.onepassword', 'Nasberry', field='GitLab Token') }}"
+        gickup_version: "0.10.2"
+
+    - name: Create temporary build directory
+      tempfile:
+        state: directory
+        suffix: gickup-build
+      register: tempdir
+
+    - name: Gets tarball (arm64)
+      get_url:
+        url: "https://github.com/cooperspencer/gickup/releases/download/v{{ gickup_version }}/gickup_{{ gickup_version }}_linux_arm64.tar.gz"
+        dest: "{{ tempdir.path }}/gickup.tar.gz"
+      when: ansible_machine == "aarch64"
+
+    - name: Gets tarball (others)
+      get_url:
+        url: "https://github.com/cooperspencer/gickup/releases/download/v{{ gickup_version }}/gickup_{{ gickup_version }}_linux_{{ ansible_machine }}.tar.gz"
+        dest: "{{ tempdir.path }}/gickup.tar.gz"
+      when: ansible_machine != "aarch64"
+
+    - name: Unarchive the tarball
+      unarchive:
+        src: "{{ tempdir.path }}/gickup.tar.gz"
+        dest: "{{ tempdir.path }}/"
+        copy: no
+
+    - name: Move the binary
+      copy:
+        src: "{{ tempdir.path }}/gickup"
+        dest: /main/system/bin/gickup
+        mode: '0655'
+        remote_src: yes
+
+    - name: Populate /main/system/config/gickup.yaml
+      template:
+        src: gickup.yaml.j2
+        dest: /main/system/config/gickup.yaml
+        # validate: "/main/system/bin/gickup --dryrun %s"
+        mode: '0755'
+
+    - name: Weekly Git Backup
+      cron:
+        user: "{{ sys_username }}"
+        name: "Weekly git repos backup"
+        special_time: weekly
+        job: "/main/system/bin/gickup /main/system/config/gickup.yaml | $GPG_CMD"
