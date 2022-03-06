@@ -9,8 +9,8 @@
   tasks:
     - set_fact:
         sys_username: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
-        # github_token: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
-        # gitlab_token: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
+        github_token: "{{ lookup('community.general.onepassword', 'Nasberry', field='GitHub Token') }}"
+        gitlab_token: "{{ lookup('community.general.onepassword', 'Nasberry', field='GitLab Token') }}"
 
     - name: Create temporary build directory
       tempfile:
@@ -30,14 +30,22 @@
         copy: no
 
     - name: Move the binary
-      ansible.builtin.copy:
+      copy:
         src: "{{ tempdir.path }}/gickup"
         dest: /main/system/bin/gickup
         mode: '0655'
+        remote_src: yes
+
+    - name: Populate /main/system/config/gickup.yaml
+      template:
+        src: gickup.yaml.j2
+        dest: /main/system/config/gickup.yaml
+        # validate: "/main/system/bin/gickup --dryrun %s"
+        mode: '0755'
 
     - name: Weekly Git Backup
       cron:
         user: "{{ sys_username }}"
         name: "Weekly git repos backup"
         special_time: weekly
-        job: "/main/system/bin/gickup /main/system/env/gickup.yaml | $GPG_CMD"
+        job: "/main/system/bin/gickup /main/system/config/gickup.yaml | $GPG_CMD"
