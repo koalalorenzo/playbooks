@@ -1,0 +1,43 @@
+---
+- name: Gickup for GitBackups
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  tasks:
+    - set_fact:
+        sys_username: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
+        # github_token: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
+        # gitlab_token: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
+
+    - name: Create temporary build directory
+      tempfile:
+        state: directory
+        suffix: gickup-build
+      register: tempdir
+
+    - name: Gets tarball
+      get_url:
+        url: "https://github.com/cooperspencer/gickup/releases/download/v0.10.2/gickup_0.10.2_linux_arm64.tar.gz"
+        dest: "{{ tempdir.path }}/gickup.tar.gz"
+
+    - name: Unarchive the tarball
+      unarchive:
+        src: "{{ tempdir.path }}/gickup.tar.gz"
+        dest: "{{ tempdir.path }}/"
+        copy: no
+
+    - name: Move the binary
+      ansible.builtin.copy:
+        src: "{{ tempdir.path }}/gickup"
+        dest: /main/system/bin/gickup
+        mode: '0655'
+
+    - name: Weekly Git Backup
+      cron:
+        user: "{{ sys_username }}"
+        name: "Weekly git repos backup"
+        special_time: weekly
+        job: "/main/system/bin/gickup /main/system/env/gickup.yaml | $GPG_CMD"
