@@ -33,8 +33,16 @@
         state: present
         reload: yes
 
-    - name: Configure SSH on UFW
+    - name: Configure Tailscale on UFW
       ufw:
         rule: allow
         port: 41641
         proto: udp
+
+    - name: Allow any on Tailscale
+      ufw:
+        rule: allow
+        interface: tailscale0
+        direction: in
+        proto: any
+        log: yes
