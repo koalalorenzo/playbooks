@@ -27,7 +27,7 @@
     - debconf:
         name: postfix
         question: postfix/relayhost
-        value: smtp.mailgun.org
+        value: "{{ smtp_hostname }}"
         vtype: string
 
     - name: "Install packages"
@@ -40,6 +40,8 @@
           - postfix
           - mailutils
           - libsasl2-modules
+
+    - shell: dpkg-reconfigure -f noninteractive postfix
 
     - copy:
         dest: "/etc/postfix/sasl_passwd"
@@ -63,12 +65,19 @@
           smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
           smtp_generic_maps = hash:/etc/postfix/generic
 
+    - name: Ensures the smtp server is correct
+      ansible.builtin.lineinfile:
+        path: /etc/postfix/main.cf
+        regexp: '^relayhost ='
+        line: relayhost = smtp.eu.mailgun.org
+
     - name: Set generic email aliases
       blockinfile:
         create: yes
         path: /etc/postfix/generic
         block: |
           pi@nasberry no-reply@mg.setale.me
+          koalalorenzo@nasberry no-reply@mg.setale.me
           root@nasberry no-reply@mg.setale.me
 
     - shell: postmap /etc/postfix/generic
@@ -86,4 +95,4 @@
         env: yes
         job: lorenzo@setale.me
 
-    - shell: echo "Ansible Email Setup on {{ ansible_host }} completed" | mail -s "Test mail" lorenzo@setale.me
+    - shell: echo "Ansible Email Setup on {{ ansible_host }} completed" | mail -s "Ansible Setup Completed" lorenzo@setale.me
