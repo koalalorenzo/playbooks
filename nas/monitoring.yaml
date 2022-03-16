@@ -1,0 +1,82 @@
+---
+- name: Set up Munin monitoring
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - name: "Install packages"
+      package:
+        name: "{{ packages }}"
+        update_cache: yes
+        state: present
+      vars:
+        packages:
+          - munin
+          - munin-node
+          - nginx
+
+    - name: Set munin node
+      blockinfile:
+        create: yes
+        path: /etc/munin/munin-node.conf
+        block: |
+          allow ‘^127.0.0.1’
+
+    - name: Renames localhost to nasberry
+      lineinfile:
+        path: /etc/munin/munin.conf
+        regexp: '^\[localhost.localdomain\]'
+        line: "[nasberry]"
+
+    - name: Restart munin master
+      service:
+        name: munin
+        state: restarted
+        enabled: yes
+
+    - name: Restart munin-node master
+      service:
+        name: munin-node
+        state: restarted
+        enabled: yes
+
+    - name: Grant access to munin via Tailscale
+      ufw:
+        rule: allow
+        direction: in
+        interface: tailscale0
+        port: 4949
+        proto: tcp
+
+    - name: Set nginx config for munin
+      blockinfile:
+        create: yes
+        path: /etc/nginx/sites-enabled/munin
+        block: |
+          server {
+            listen 80;
+            listen [::]:80;
+            server_name nasberry;
+
+            location /munin/static/ {
+                alias /etc/munin/static/;
+            }
+
+            location /munin/ {
+                alias /var/cache/munin/www/;
+                expires modified +310s;
+            }
+
+            location / {
+                rewrite ^/$ munin/ redirect; break;
+            }
+          }
+
+    - name: Restart NGINX
+      service:
+        name: nginx
+        state: restarted
+        enabled: yes

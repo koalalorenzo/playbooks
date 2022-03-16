@@ -68,3 +68,5 @@
       ufw:
         rule: allow
         port: 445
+        direction: in
+        interface: tailscale0
