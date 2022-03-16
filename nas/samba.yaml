@@ -63,3 +63,8 @@
         name: smbd
         state: restarted
         enabled: yes
+
+    - name: Allow Samba on UFW
+      ufw:
+        rule: allow
+        port: 445
