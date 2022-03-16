@@ -47,8 +47,8 @@
       ufw:
         rule: allow
         direction: in
-        port: 4949
         interface: tailscale0
+        port: 4949
         proto: tcp
 
     - name: Set nginx config for munin
