@@ -53,6 +53,8 @@
       ufw:
         rule: allow
         port: 22
+        from_ip: 192.168.0.0/16
+        log: yes
 
     - name: Install mosh
       package:
@@ -63,4 +65,5 @@
       ufw:
         rule: allow
         proto: udp
+        from_ip: 192.168.0.0/16
         port: '60000:61000'

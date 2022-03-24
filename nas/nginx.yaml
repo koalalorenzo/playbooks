@@ -1,0 +1,93 @@
+---
+- name: NGINX setup with Tailscale Certs
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  handlers:
+    - name: Restart nginx
+      service: name=nginx state=restarted
+
+  tasks:
+    - name: "Install packages"
+      package:
+        name: "nginx"
+        update_cache: yes
+        state: present
+
+    - name: Grant access to HTTP via Tailscale
+      ufw:
+        rule: allow
+        direction: in
+        interface: tailscale0
+        port: 80
+        proto: tcp
+
+    - name: Grant access to HTTPS via Tailscale
+      ufw:
+        rule: allow
+        direction: in
+        interface: tailscale0
+        port: 443
+        proto: tcp
+
+    - name: Set nginx config for munin
+      file:
+        state: absent
+        path: /etc/nginx/sites-enabled/default
+      notify: Restart nginx
+
+    - name: Get HTTPS Certificates from tailscale
+      shell: tailscale cert --cert-file /etc/ssl/nasberry.fish-alpha.ts.net.crt --key-file /etc/ssl/nasberry.fish-alpha.ts.net.key nasberry.fish-alpha.ts.net
+
+    - name: Set nginx config for main
+      blockinfile:
+        create: yes
+        path: /etc/nginx/sites-enabled/main
+        block: |
+          server {
+            listen 443 ssl;
+            server_name _;
+
+            ssl_certificate     /etc/ssl/nasberry.fish-alpha.ts.net.crt;
+            ssl_certificate_key /etc/ssl/nasberry.fish-alpha.ts.net.key;
+            ssl_protocols       TLSv1.2 TLSv1.3;
+
+            ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;
+            ssl_prefer_server_ciphers   on;
+            ssl_ecdh_curve              secp384r1;
+
+            rewrite ^/$ https://setale.me/ redirect;
+          }
+
+          server {
+            listen 80;
+            server_name _;
+
+            return 302 https://$host$request_uri;
+          }
+      notify: Restart nginx
+
+    - name: Enable NGINX
+      service:
+        name: nginx
+        enabled: yes
+
+    - name: Allow HTTP on Tailscale
+      ufw:
+        rule: allow
+        interface: tailscale0
+        direction: in
+        port: 80
+        proto: tcp
+
+    - name: Allow HTTPS on Tailscale
+      ufw:
+        rule: allow
+        interface: tailscale0
+        direction: in
+        port: 443
+        proto: tcp
+

@@ -6,67 +6,80 @@
   become_method: sudo
   gather_facts: no
 
+  handlers:
+    - name: Restart samba
+      service: name=smbd state=restarted
+
   tasks:
-    - set_fact:
-        samba_username: "{{ lookup('community.general.onepassword', 'Samba - NAS - koalalorenzo', field='username') }}"
-        samba_password: "{{ lookup('community.general.onepassword', 'Samba - NAS - koalalorenzo', field='password') }}"
+    # - set_fact:
+    #     samba_username: "{{ lookup('community.general.onepassword', 'Samba - NAS - koalalorenzo', field='username') }}"
+    #     samba_password: "{{ lookup('community.general.onepassword', 'Samba - NAS - koalalorenzo', field='password') }}"
 
-    - name: "Install packages"
-      package:
-        name: "{{ packages }}"
-        state: present
-      vars:
-        packages:
-          - samba
-          - samba-common-bin
+    # - name: "Install packages"
+    #   package:
+    #     name: "{{ packages }}"
+    #     state: present
+    #   vars:
+    #     packages:
+    #       - samba
+    #       - samba-common-bin
+    #   notify: Restart smbd
 
-    - name: Adds Samba volumes
-      blockinfile:
-        path: /etc/samba/smb.conf
-        mode: 0644
-        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
-        block: |
-          [{{ item.name }}]
-            comment = {{ item.name }} Disk
-            path = {{ item.path }}
-            browseable = yes
-            create mask = 0755
-            directory mask = 0777
+    # - name: Adds Samba volumes
+    #   blockinfile:
+    #     path: /etc/samba/smb.conf
+    #     mode: 0644
+    #     marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
+    #     block: |
+    #       [{{ item.name }}]
+    #         comment = {{ item.name }} Disk
+    #         path = {{ item.path }}
+    #         browseable = yes
+    #         create mask = 0755
+    #         directory mask = 0777
 
-            {% if item.public %}
-            guest ok = yes
-            read only = yes
-            {% else %}
-            read only = no
-            guest ok = no
-            valid users = {{ samba_username }}
-            {% endif %}
-      loop:
-        - { name: Multimedia, path: /main/multimedia, public: false }
-        - { name: Downloads, path: /main/downloads, public: false }
-        - { name: Personal, path: /main/personal, public: false }
-        - { name: Backups, path: /main/backups, public: false }
-        - { name: System, path: /main/system, public: false }
+    #         {% if item.public %}
+    #         guest ok = yes
+    #         read only = yes
+    #         {% else %}
+    #         read only = no
+    #         guest ok = no
+    #         valid users = {{ samba_username }}
+    #         {% endif %}
+    #   loop:
+    #     - { name: Multimedia, path: /main/multimedia, public: false }
+    #     - { name: Downloads, path: /main/downloads, public: false }
+    #     - { name: Personal, path: /main/personal, public: false }
+    #     - { name: Backups, path: /main/backups, public: false }
+    #     - { name: System, path: /main/system, public: false }
+    #   notify: Restart smbd
 
-    - shell: |
-        echo "{{ samba_password }}\n{{ samba_password }}\n" | smbpasswd -sa {{ samba_username }}
+    # - shell: |
+    #     echo "{{ samba_password }}\n{{ samba_password }}\n" | smbpasswd -sa {{ samba_username }}
 
-    - file:
-        path: /etc/samba/smbusers
-        state: touch
-        owner: root
-        group: root
-        mode: 0644
+    # - file:
+    #     path: /etc/samba/smbusers
+    #     state: touch
+    #     owner: root
+    #     group: root
+    #     mode: 0644
+    #   notify: Restart smbd
 
-    - name: Restart & Enable Samba (smbd) service
-      service:
-        name: smbd
-        state: restarted
-        enabled: yes
+    # - name: Enable Samba (smbd) service
+    #   service:
+    #     name: smbd
+    #     enabled: yes
 
-    - name: Allow Samba on UFW
+    - name: Allow Samba on Tailscale
       ufw:
         rule: allow
         port: 445
         direction: in
         interface: tailscale0
+
+    - name: Allow Samba on local network
+      ufw:
+        rule: allow
+        proto: tcp
+        from_ip: 192.168.0.0/16
+        port: 445
