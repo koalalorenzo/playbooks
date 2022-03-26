@@ -6,11 +6,15 @@
   become_method: sudo
   gather_facts: no
 
+  handlers:
+    - name: Restart ssh
+      service: name=ssh state=restarted
+
   tasks:
     - set_fact:
         sys_username: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
         sys_password: "{{ lookup('community.general.onepassword', 'Nasberry', field='password') }}"
-        
+
     - user:
         name: "{{ sys_username }}"
         comment: Lorenzo Setale
@@ -50,3 +54,19 @@
         name: MAILTO
         env: yes
         job: lorenzo@setale.me
+
+    - name: Secure SSH by Allowing current user
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        line: AllowUsers {{ sys_username }}
+        state: present
+        mode: 0644
+      notify: Restart ssh
+
+    - name: Secure SSH by denying Pi
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        line: 'DenyUsers pi'
+        state: present
+        mode: 0644
+      notify: Restart ssh
