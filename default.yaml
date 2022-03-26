@@ -17,9 +17,11 @@
 
 # NAS
 - import_playbook: nas/users.yaml
+- import_playbook: nas/nginx.yaml
 - import_playbook: nas/zram.yaml
 - import_playbook: nas/openzfs.yaml
 - import_playbook: nas/email.yaml
+- import_playbook: nas/monitoring.yaml
 - import_playbook: nas/packages.yaml
 - import_playbook: common/reboot.yaml
 - import_playbook: nas/samba.yaml

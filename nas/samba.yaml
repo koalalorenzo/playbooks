@@ -6,6 +6,10 @@
   become_method: sudo
   gather_facts: no
 
+  handlers:
+    - name: Restart samba
+      service: name=smbd state=restarted
+
   tasks:
     - set_fact:
         samba_username: "{{ lookup('community.general.onepassword', 'Samba - NAS - koalalorenzo', field='username') }}"
@@ -61,12 +65,18 @@
     - name: Restart & Enable Samba (smbd) service
       service:
         name: smbd
-        state: restarted
         enabled: yes
 
-    - name: Allow Samba on UFW
+    - name: Allow Samba on Tailscale
       ufw:
         rule: allow
         port: 445
         direction: in
         interface: tailscale0
+
+    - name: Allow Samba on local network
+      ufw:
+        rule: allow
+        proto: tcp
+        from_ip: 192.168.0.0/16
+        port: 445

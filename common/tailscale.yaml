@@ -39,10 +39,19 @@
         port: 41641
         proto: udp
 
-    - name: Allow any on Tailscale
+    - name: Allow SSH on Tailscale
       ufw:
         rule: allow
         interface: tailscale0
         direction: in
-        proto: any
+        port: 22
+        proto: tcp
         log: yes
+
+    - name: Configure MOSH on UFW with tailscale
+      ufw:
+        rule: allow
+        interface: tailscale0
+        direction: in
+        proto: udp
+        port: '60000:61000'

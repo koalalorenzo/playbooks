@@ -84,7 +84,7 @@
         name: "Load keys and mount at reboot"
         user: root
         special_time: reboot
-        job: "sleep 5 ; /usr/sbin/zfs load-key -a ; /usr/sbin/zfs mount -a"
+        job: "sleep 5; /usr/sbin/zpool import -d /dev/ -a; sleep 1; /usr/sbin/zfs load-key -a ; /usr/sbin/zfs mount -a"
 
     - name: Add cronjob to Scrub Monthly
       cron:

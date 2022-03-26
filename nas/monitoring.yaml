@@ -6,6 +6,12 @@
   become_method: sudo
   gather_facts: no
 
+  handlers:
+    - name: Restart nginx
+      service: name=nginx state=restarted
+    - name: Restart munin
+      service: name=munin state=restarted
+
   tasks:
     - name: "Install packages"
       package:
@@ -17,6 +23,8 @@
           - munin
           - munin-node
           - nginx
+          - munin-plugins-extra
+      notify: Restart munin
 
     - name: Set munin node
       blockinfile:
@@ -24,20 +32,33 @@
         path: /etc/munin/munin-node.conf
         block: |
           allow ‘^127.0.0.1’
+      notify: Restart nginx
 
     - name: Renames localhost to nasberry
       lineinfile:
         path: /etc/munin/munin.conf
         regexp: '^\[localhost.localdomain\]'
         line: "[nasberry]"
+      notify: Restart munin
 
-    - name: Restart munin master
+    - name: Enable plugins
+      file:
+        src: "/usr/share/munin/plugins/{{ item }}"
+        dest: "/etc/munin/plugins/{{ item }}"
+        state: link
+      with_items:
+        - nginx_request
+        - nginx_status
+        - postfix_mailstats
+        - samba
+      notify: Restart munin
+
+    - name: Enable munin master
       service:
         name: munin
-        state: restarted
         enabled: yes
 
-    - name: Restart munin-node master
+    - name: Enable & Restart munin-node master
       service:
         name: munin-node
         state: restarted
@@ -57,9 +78,16 @@
         path: /etc/nginx/sites-enabled/munin
         block: |
           server {
-            listen 80;
-            listen [::]:80;
-            server_name nasberry;
+            listen 443 ssl;
+            server_name nasberry.fish-alpha.ts.net;
+
+            ssl_certificate     /etc/ssl/nasberry.fish-alpha.ts.net.crt;
+            ssl_certificate_key /etc/ssl/nasberry.fish-alpha.ts.net.key;
+            ssl_protocols       TLSv1.2 TLSv1.3;
+
+            ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;
+            ssl_prefer_server_ciphers   on;
+            ssl_ecdh_curve              secp384r1;
 
             location /munin/static/ {
                 alias /etc/munin/static/;
@@ -74,9 +102,4 @@
                 rewrite ^/$ munin/ redirect; break;
             }
           }
-
-    - name: Restart NGINX
-      service:
-        name: nginx
-        state: restarted
-        enabled: yes
+      notify: Restart nginx

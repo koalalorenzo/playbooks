@@ -6,6 +6,10 @@
   become_method: sudo
   gather_facts: no
 
+  handlers:
+    - name: Restart postfix
+      service: name=postfix state=restarted
+
   tasks:
     - set_fact:
         smtp_hostname: "{{ lookup('community.general.onepassword', 'nasberry@mg.setale.me', field='server') }}"
@@ -17,18 +21,21 @@
         question: postfix/main_mailer_type
         value: Satellite system
         vtype: select
+      notify: Restart postfix
 
     - debconf:
         name: postfix
         question: postfix/mailname
         value: "{{ ansible_host }}"
         vtype: string
+      notify: Restart postfix
 
     - debconf:
         name: postfix
         question: postfix/relayhost
         value: "{{ smtp_hostname }}"
         vtype: string
+      notify: Restart postfix
 
     - name: "Install packages"
       package:
@@ -50,6 +57,7 @@
         owner: root
         group: root
         mode: "0600"
+      notify: Restart postfix
 
     - shell: postmap /etc/postfix/sasl_passwd
 
@@ -64,12 +72,14 @@
           smtp_sasl_mechanism_filter = AUTH LOGIN
           smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
           smtp_generic_maps = hash:/etc/postfix/generic
+      notify: Restart postfix
 
     - name: Ensures the smtp server is correct
       ansible.builtin.lineinfile:
         path: /etc/postfix/main.cf
         regexp: '^relayhost ='
         line: relayhost = smtp.eu.mailgun.org
+      notify: Restart postfix
 
     - name: Set generic email aliases
       blockinfile:
@@ -79,13 +89,13 @@
           pi@nasberry no-reply@mg.setale.me
           koalalorenzo@nasberry no-reply@mg.setale.me
           root@nasberry no-reply@mg.setale.me
+      notify: Restart postfix
 
     - shell: postmap /etc/postfix/generic
 
-    - name: Restart Postifx to send email
+    - name: Enable Postifx to send email on reboot
       service:
         name: postfix
-        state: restarted
         enabled: yes
 
     - name: Adds Email notification
@@ -94,5 +104,4 @@
         user: root
         env: yes
         job: lorenzo@setale.me
-
-    - shell: echo "Ansible Email Setup on {{ ansible_host }} completed" | mail -s "Ansible Setup Completed" lorenzo@setale.me
+      notify: Restart postfix

@@ -31,6 +31,15 @@
         mode: 0644
       notify: Restart ssh
 
+    - name: Deny root
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: 'PermitRootLogin no'
+        state: present
+        mode: 0644
+      notify: Restart ssh
+
     - name: Set interval for alive check to every 20 seconds
       lineinfile:
         path: /etc/ssh/sshd_config
@@ -53,6 +62,8 @@
       ufw:
         rule: allow
         port: 22
+        from_ip: 192.168.0.0/16
+        log: yes
 
     - name: Install mosh
       package:
@@ -63,4 +74,5 @@
       ufw:
         rule: allow
         proto: udp
+        from_ip: 192.168.0.0/16
         port: '60000:61000'
