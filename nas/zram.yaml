@@ -8,13 +8,10 @@
 
   tasks:
     - name: "Install packages"
-      apt:
-        name: "{{ packages }}"
+      package:
+        name: zram-tools
         update_cache: yes
         state: present
-      vars:
-        packages:
-          - zram-tools
 
     - name: Restart & Enable zram swap service
       service:
