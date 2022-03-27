@@ -1,0 +1,32 @@
+---
+- name: Setup swap
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  handlers:
+    - name: setup swapfile
+      shell: dphys-swapfile setup
+
+  tasks:
+    - name: "Install packages"
+      package:
+        name: dphys-swapfile
+        state: present
+        update_cache: yes
+
+    - name: Stop swap
+      shell: dphys-swapfile swapoff
+
+    - name: Makes sure to set a big swap file
+      lineinfile:
+        path: /etc/dphys-swapfile
+        regexp: '^CONF_SWAPSIZE'
+        line: 'CONF_SWAPSIZE=2048'
+        state: present
+      notify: setup swapfile
+
+    - name: restart swap
+      shell: dphys-swapfile swapon
