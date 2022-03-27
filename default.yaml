@@ -16,6 +16,7 @@
 # - import_playbook: development/nomad.yaml
 
 # NAS
+- import_playbook: nas/swap.yaml
 - import_playbook: nas/users.yaml
 - import_playbook: nas/nginx.yaml
 - import_playbook: nas/zram.yaml
