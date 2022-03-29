@@ -27,4 +27,5 @@
           - unzip
           - mosh
           - ufw
+          - screen
           - openssh-server
