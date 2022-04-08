@@ -1,0 +1,151 @@
+---
+- name: MinIO setup
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  handlers:
+    - name: Restart nginx
+      service: name=nginx state=restarted
+    - name: Restart minio
+      systemd: name=minio state=restarted daemon_reload=true
+
+  tasks:
+    - set_fact:
+        minio_usr: "{{ lookup('community.general.onepassword', 'Minio Nasberry', field='username') }}"
+        minio_pwd: "{{ lookup('community.general.onepassword', 'Minio Nasberry', field='password') }}"
+
+    - name: Gets binary (arm64)
+      get_url:
+        url: "https://dl.min.io/server/minio/release/linux-arm64/minio"
+        dest: "/usr/bin/minio"
+      when: ansible_machine == "aarch64"
+      notify: Restart minio
+
+
+    - name: Gets binary (others)
+      get_url:
+        url: "https://dl.min.io/server/minio/release/linux-{{ ansible_machine }}/minio"
+        dest: "/usr/bin/minio"
+      when: ansible_machine != "aarch64"
+      notify: Restart minio
+
+    - name: Change file ownership, group and permissions
+      file:
+        path: /usr/bin/minio
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Gets client binary (arm64)
+      get_url:
+        url: "https://dl.min.io/client/mc/release/linux-arm64/mc"
+        dest: "/usr/bin/mc"
+      when: ansible_machine == "aarch64"
+
+    - name: Gets client binary (others)
+      get_url:
+        url: "https://dl.min.io/client/mc/release/linux-{{ ansible_machine }}/mc"
+        dest: "/usr/bin/mc"
+      when: ansible_machine != "aarch64"
+
+    - name: Change file ownership, group and permissions
+      file:
+        path: /usr/bin/mc
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Allow Minio on Tailscale
+      ufw:
+        rule: allow
+        proto: tcp
+        port: '9000:9001'
+        direction: in
+        interface: tailscale0
+
+    - name: Allow Minio on local network
+      ufw:
+        rule: allow
+        proto: tcp
+        from_ip: 192.168.0.0/16
+        port: '9000:9001'
+
+    - user:
+        name: "minio"
+        system: yes
+        create_home: no
+
+    - name: Makes sure permissions are correct
+      file:
+        path: /main/minio
+        owner: "minio"
+        recurse: yes
+      notify: Restart minio
+
+    - name: Setup minio config
+      blockinfile:
+        create: yes
+        path: /etc/default/minio
+        block: |
+          # Volume to be used for MinIO server.
+          MINIO_VOLUMES="/main/minio/"
+          # Use if you want to run MinIO on a custom port.
+          MINIO_OPTS="--address \":9000\" --console-address \":9001\" --anonymous"
+          # Access Key of the server.
+          MINIO_ACCESS_KEY="{{ minio_usr }}"
+          MINIO_ROOT_USER="{{ minio_usr }}"
+          # Secret key of the server.
+          MINIO_SECRET_KEY="{{ minio_pwd }}"
+          MINIO_ROOT_PASSWORD="{{ minio_pwd }}"
+      notify: Restart minio
+
+    - name: Setup minio systemd service
+      blockinfile:
+        create: yes
+        path: /etc/systemd/system/minio.service
+        block: |
+          [Unit]
+          Description=Minio
+          Documentation=https://docs.minio.io
+          Wants=network-online.target
+          After=network-online.target
+          AssertFileIsExecutable=/usr/bin/minio
+
+          [Service]
+          WorkingDirectory=/usr/local
+
+          User=minio
+          Group=minio
+
+          PermissionsStartOnly=true
+          EnvironmentFile=-/etc/default/minio
+          ExecStartPre=/bin/bash -c "[ -n \"${MINIO_VOLUMES}\" ] || echo \"Variable MINIO_VOLUMES not set in /etc/defaults/minio.conf\""
+          ExecStart=/usr/bin/minio server $MINIO_OPTS $MINIO_VOLUMES
+
+          StandardOutput=journal
+          StandardError=inherit
+
+          # Specifies the maximum file descriptor number that can be opened by this process
+          LimitNOFILE=65536
+
+          # Disable timeout logic and wait until process is stopped
+          TimeoutStopSec=0
+
+          # SIGTERM signal is used to stop Minio
+          KillSignal=SIGTERM
+
+          SendSIGKILL=no
+          SuccessExitStatus=0
+
+          [Install]
+          WantedBy=multi-user.target
+      notify: Restart minio
+
+    - name: Enable minio service
+      service:
+        name: minio
+        enabled: yes
+      notify: Restart minio
