@@ -1,0 +1,122 @@
+
+---
+- name: Setup Grafana Agent
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  handlers:
+    - name: Restart grafana-agent
+      service: name=grafana-agent state=restarted
+
+  tasks:
+    - set_fact:
+        grafana_stack_id: "{{ lookup('community.general.onepassword', 'Grafana Cloud Nasberry', field='stack_id') }}"
+        grafana_api_key: "{{ lookup('community.general.onepassword', 'Grafana Cloud Nasberry', field='api_key') }}"
+        grafana_api_url: "{{ lookup('community.general.onepassword', 'Grafana Cloud Nasberry', field='api_url') }}"
+
+    - uri:
+        url: https://api.github.com/repos/grafana/agent/releases/latest
+        return_content: true
+      register: json_reponse
+
+    - name: Download package (arch64)
+      apt:
+        deb: "{{ item }}"
+      when: (ansible_machine == "aarch64") and (".deb" in item) and ("arm64" in item)
+      with_items:
+        - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
+      notify: Restart grafana-agent
+      async: 60
+      poll: 3
+
+    - name: Download package (other)
+      apt:
+        deb: "{{ item }}"
+      when: (ansible_machine != "aarch64") and (".deb" in item) and (ansible_machine in item)
+      with_items:
+        - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
+      notify: Restart grafana-agent
+      async: 60
+      poll: 3
+
+    - name: Setup Grafana Cloud
+      shell: |
+        grafana-agentctl cloud-config \
+           -u "{{ grafana_stack_id }}" \
+           -p "{{ grafana_api_key }}" \
+           -e "{{ grafana_api_url }}"
+      notify: Restart grafana-agent
+
+    - name: Update the configuration
+      copy:
+        dest: /etc/grafana-agent.yaml
+        content: |
+          # Sample config for Grafana Agent
+          # For a full configuration reference, see: https://github.com/grafana/agent/blob/main/docs/configuration-reference.md.
+          server:
+            log_level: warn
+
+          metrics:
+            global:
+              scrape_interval: 1m
+            wal_directory: '/var/lib/grafana-agent'
+            configs:
+              # Example Prometheus scrape configuration to scrape the agent itself for metrics.
+              # This is not needed if the agent integration is enabled.
+              # - name: agent
+              #   host_filter: false
+              #   scrape_configs:
+              #     - job_name: agent
+              #       static_configs:
+              #         - targets: ['127.0.0.1:9090']
+
+          integrations:
+            agent:
+              enabled: true
+            node_exporter:
+              enabled: true
+              include_exporter_metrics: true
+              disable_collectors:
+                - "mdadm"
+              relabel_configs:
+              - replacement: hostname
+                source_labels:
+                - __address__
+                target_label: instance
+
+          logs:
+            configs:
+            - name: integrations
+              scrape_configs:
+              - job_name: integrations/node_exporter_direct_scrape
+                static_configs:
+                - targets:
+                  - localhost
+                  labels:
+                    instance: hostname
+                    __path__: /var/log/{syslog,messages,*.log}
+                    job: integrations/node_exporter
+              - job_name: integrations/node_exporter_journal_scrape
+                journal:
+                  max_age: 24h
+                  labels:
+                    instance: hostname
+                    job: integrations/node_exporter
+                relabel_configs:
+                - source_labels: ['__journal__systemd_unit']
+                  target_label: 'unit'
+                - source_labels: ['__journal__boot_id']
+                  target_label: 'boot_id'
+                - source_labels: ['__journal__transport']
+                  target_label: 'transport'
+      notify: Restart grafana-agent
+
+    - name: Enable Grafana Agent
+      service:
+        name: grafana-agent
+        enabled: yes
+      notify: Restart grafana-agent
+
