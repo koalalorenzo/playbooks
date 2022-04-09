@@ -14,13 +14,34 @@
         datadog_api_key: "{{ lookup('community.general.onepassword', 'Datadog Nasberry', field='datadog_api_key') }}"
         datadog_site: "{{ lookup('community.general.onepassword', 'Datadog Nasberry', field='datadog_site') }}"
         datadog_checks:
+          logs_enabled: true
+          logs:
+            - type: file
+              path: /var/log/nginx/access.log
+              service: nginx
+              source: nginx
+
+            - type: file
+              path: /var/log/nginx/error.log
+              service: nginx
+              source: nginx
+
+          process_config:
+            enabled: true
+            custom_sensitive_words: ['personal_key', '*token', 'sql*', '*pass*d*']
+
           process:
             init_config:
             instances:
               - name: ssh
                 search_string: ['ssh', 'sshd']
-              - name: syslog
-                search_string: ['rsyslog']
-                cpu_check_interval: 0.2
-                exact_match: true
-                ignore_denied_access: true
+
+          openmetrics:
+            instances:
+              - openmetrics_endpoint: http://localhost:9000/minio/v2/metrics/cluster
+                namespace: "minio_cluster"
+                metrics: ".*"
+
+              - openmetrics_endpoint: http://localhost:9000/minio/v2/metrics/node
+                namespace: "minio_node"
+                metrics: ".*"
