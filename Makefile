@@ -4,7 +4,11 @@ ANSIBLE_CONFIG=facts.cfg
 
 .EXPORT_ALL_VARIABLES:
 
-run:
+deps:
+	ansible-galaxy install datadog.datadog
+.PHONY: deps
+
+run: deps
 	ansible-playbook -i ./main.inventory default.yaml ${ARGS}
 .PHONY: run
 

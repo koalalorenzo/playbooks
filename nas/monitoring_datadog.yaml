@@ -1,0 +1,26 @@
+
+---
+- name: Setup Datadog Agent
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  tasks:
+    - include_role:
+        name: datadog.datadog
+      vars:
+        datadog_api_key: "{{ lookup('community.general.onepassword', 'Datadog Nasberry', field='datadog_api_key') }}"
+        datadog_site: "{{ lookup('community.general.onepassword', 'Datadog Nasberry', field='datadog_site') }}"
+        datadog_checks:
+          process:
+            init_config:
+            instances:
+              - name: ssh
+                search_string: ['ssh', 'sshd']
+              - name: syslog
+                search_string: ['rsyslog']
+                cpu_check_interval: 0.2
+                exact_match: true
+                ignore_denied_access: true
