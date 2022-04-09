@@ -99,6 +99,8 @@
           # Secret key of the server.
           MINIO_SECRET_KEY="{{ minio_pwd }}"
           MINIO_ROOT_PASSWORD="{{ minio_pwd }}"
+          # Enable Prometheus
+          MINIO_PROMETHEUS_AUTH_TYPE="public"
       notify: Restart minio
 
     - name: Setup minio systemd service
