@@ -70,6 +70,31 @@
           }
       notify: Restart nginx
 
+    - name: Set nginx config for status report
+      blockinfile:
+        create: yes
+        path: /etc/nginx/sites-enabled/status
+        block: |
+          server {
+            listen 81;
+            server_name localhost;
+
+            access_log off;
+            allow 127.0.0.1;
+            deny all;
+
+            location /nginx_status {
+              # Choose your status module
+
+              # freely available with open source NGINX
+              stub_status;
+
+              # ensures the version information can be retrieved
+              server_tokens on;
+            }
+          }
+      notify: Restart nginx
+
     - name: Enable NGINX
       service:
         name: nginx
