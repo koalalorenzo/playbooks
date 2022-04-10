@@ -73,6 +73,13 @@
         replace: "nasberry"
       notify: Restart grafana-agent
 
+    - name: Replace hostname to proper value
+      replace:
+        path: /etc/grafana-agent.yaml
+        regexp: "instance: hostname"
+        replace: "instance: nasberry"
+      notify: Restart grafana-agent
+
     - name: Enable Grafana Agent
       service:
         name: grafana-agent
