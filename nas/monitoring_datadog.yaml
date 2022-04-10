@@ -15,17 +15,8 @@
         datadog_site: "{{ lookup('community.general.onepassword', 'Datadog Nasberry', field='datadog_site') }}"
         # /etc/datadog-agent/datadog.yaml
         datadog_config:
-          logs_enabled: "true"
-          logs:
-            - type: file
-              path: /var/log/nginx/access.log
-              service: nginx
-              source: nginx
-
-            - type: file
-              path: /var/log/nginx/error.log
-              service: nginx
-              source: nginx
+          site: datadoghq.eu
+          logs_enabled: true
 
           process_config:
             enabled: true
@@ -44,6 +35,23 @@
                 search_string: ['tailscale', 'tailscaled']
               - name: minio
                 search_string: ['minio', 'mc']
+
+          journald:
+            - type: journald
+
+          nginx:
+            logs:
+              - type: file
+                path: /var/log/nginx/access.log
+                service: nginx
+                source: nginx
+                sourcecategory: http_web_access
+
+              - type: file
+                path: /var/log/nginx/error.log
+                service: nginx
+                source: nginx
+                sourcecategory: http_web_access
 
           openmetrics:
             instances:
