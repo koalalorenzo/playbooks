@@ -18,6 +18,7 @@
 # NAS
 - import_playbook: nas/swap.yaml
 - import_playbook: nas/users.yaml
+- import_playbook: nas/ssl.yaml
 - import_playbook: nas/nginx.yaml
 - import_playbook: nas/zram.yaml
 - import_playbook: nas/openzfs.yaml
