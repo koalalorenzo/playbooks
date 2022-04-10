@@ -36,8 +36,6 @@
           with_items:
             - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
           notify: Restart grafana-agent
-          async: 60
-          poll: 3
 
       - when: ansible_machine != "aarch64"
         block:
@@ -48,8 +46,6 @@
           with_items:
             - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
           notify: Restart grafana-agent
-          async: 60
-          poll: 3
 
       - name: Setup Grafana Cloud
         shell: |
@@ -70,14 +66,14 @@
       replace:
         path: /etc/grafana-agent.yaml
         regexp: "<http_hostname>"
-        replace: "nasberry"
+        replace: "{{ ansible_host }}"
       notify: Restart grafana-agent
 
     - name: Replace hostname to proper value
       replace:
         path: /etc/grafana-agent.yaml
         regexp: "instance: hostname"
-        replace: "instance: nasberry"
+        replace: "instance: {{ ansible_host }}"
       notify: Restart grafana-agent
 
     - name: Enable Grafana Agent
