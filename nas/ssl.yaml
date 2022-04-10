@@ -1,0 +1,90 @@
+---
+- name: SSL Setup
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+  vars:
+    certs_path: /etc/ssl/h.setale.me/
+    crt_common_name: "*.h.setale.me"
+    crt_subject_alt_name:
+      - "h.setale.me"
+    cloudflare_email: "{{ lookup('community.general.onepassword', 'Cloudflare - Personal', field='username') }}"
+    cloudflare_api_token: "{{ lookup('community.general.onepassword', 'Cloudflare - Personal', field='api_token') }}"
+    cloudflare_zone: setale.me
+
+  tasks:
+  - name: create directory to store certs
+    file:
+      path: "{{ certs_path }}"
+      state: directory
+
+  - name: generate account key
+    openssl_privatekey:
+      path: "{{ certs_path }}/account-key.pem"
+      size: 4096
+
+  - name: generate signing key
+    openssl_privatekey:
+      path: "{{ certs_path }}/cert-priv.pem"
+      size: 4096
+
+  - name: generate csr
+    openssl_csr:
+      path: "{{ certs_path }}/cert.csr"
+      privatekey_path: "{{ certs_path }}/cert-priv.pem"
+      common_name: "{{ crt_common_name }}"
+      subject_alt_name: "DNS:{{ crt_subject_alt_name | join(',DNS:') }}"
+
+  - name: create acme challenge
+    acme_certificate:
+      acme_version: 2
+      terms_agreed: yes
+      account_key_src: "{{ certs_path }}/account-key.pem"
+      src: "{{ certs_path }}/cert.csr"
+      cert: "{{ certs_path }}/cert.crt"
+      challenge: dns-01
+      acme_directory: https://acme-v02.api.letsencrypt.org/directory
+      remaining_days: 90
+    register: challenge
+
+  - name: create cloudflare TXT records
+    cloudflare_dns:
+      api_token: "{{ cloudflare_api_token }}"
+      account_email: "{{ cloudflare_email }}"
+      zone: "{{ cloudflare_zone }}"
+      record: "{{ challenge.challenge_data[item]['dns-01'].record }}"
+      type: TXT
+      value: "{{ challenge.challenge_data[item]['dns-01'].resource_value }}"
+      solo: true
+      state: present
+    # Disabled as *.h.setale.me will overwrite h.setale.me
+    # with_items: "{{ [crt_common_name] + crt_subject_alt_name }}"
+    with_items: "{{ [crt_common_name] }}"
+    when: challenge is changed
+
+  - name: validate acme challenge
+    acme_certificate:
+      acme_version: 2
+      account_key_src: "{{ certs_path }}/account-key.pem"
+      src: "{{ certs_path }}/cert.csr"
+      cert: "{{ certs_path }}/cert.crt"
+      fullchain: "{{ certs_path }}/fullchain.crt"
+      chain: "{{ certs_path }}/intermediate.crt"
+      challenge: dns-01
+      acme_directory: https://acme-v02.api.letsencrypt.org/directory
+      remaining_days: 90
+      data: "{{ challenge }}"
+    when: challenge is changed
+
+  - name: delete cloudflare TXT record
+    cloudflare_dns:
+      api_token: "{{ cloudflare_api_token }}"
+      account_email: "{{ cloudflare_email }}"
+      zone: "{{ cloudflare_zone }}"
+      record: "{{ challenge.challenge_data[item]['dns-01'].record }}"
+      type: TXT
+      state: absent
+    with_items: "{{ [crt_common_name] }}"
+    when: challenge is changed
