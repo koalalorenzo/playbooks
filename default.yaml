@@ -24,6 +24,8 @@
 - import_playbook: nas/openzfs.yaml
 - import_playbook: nas/email.yaml
 - import_playbook: nas/monitoring_grafana.yaml
+# - import_playbook: nas/monitoring_datadog.yaml
+# - import_playbook: nas/monitoring_munin.yaml
 - import_playbook: nas/packages.yaml
 - import_playbook: common/reboot.yaml
 - import_playbook: nas/samba.yaml
