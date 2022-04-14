@@ -1,0 +1,90 @@
+
+---
+- name: Setup Grafana Agent
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  handlers:
+    - name: Restart grafana-agent
+      service: name=grafana-agent state=restarted
+
+  tasks:
+    - set_fact:
+        grafana_stack_id: "{{ lookup('community.general.onepassword', 'Grafana Cloud Nasberry', field='stack_id') }}"
+        grafana_api_key: "{{ lookup('community.general.onepassword', 'Grafana Cloud Nasberry', field='api_key') }}"
+        grafana_api_url: "{{ lookup('community.general.onepassword', 'Grafana Cloud Nasberry', field='api_url') }}"
+
+    - name: gather installed packages
+      package_facts:
+
+    - when: not "grafana-agent" in ansible_facts.packages
+      block:
+      - uri:
+          url: https://api.github.com/repos/grafana/agent/releases/latest
+          return_content: true
+        register: json_reponse
+
+      - when: ansible_machine == "aarch64"
+        block:
+        - name: Download package (arch64)
+          apt:
+            deb: "{{ item }}"
+          when: (".deb" in item) and ("arm64" in item)
+          with_items:
+            - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
+          notify: Restart grafana-agent
+
+      - when: ansible_machine != "aarch64"
+        block:
+        - name: Download package (other)
+          apt:
+            deb: "{{ item }}"
+          when: (".deb" in item) and (ansible_machine in item)
+          with_items:
+            - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
+          notify: Restart grafana-agent
+
+    - name: Sync Grafana Cloud Agent Config
+      shell: |
+        grafana-agentctl cloud-config \
+          -u "{{ grafana_stack_id }}" \
+          -p "{{ grafana_api_key }}" \
+          -e "{{ grafana_api_url }}" > /etc/grafana-agent.yaml
+      notify: Restart grafana-agent
+
+    - name: Replace NGINX path
+      replace:
+        path: /etc/grafana-agent.yaml
+        regexp: "<path to json nginx access log>"
+        replace: /var/log/nginx/json_access.log
+      notify: Restart grafana-agent
+
+    - name: Replace NGINX hostname
+      replace:
+        path: /etc/grafana-agent.yaml
+        regexp: "<http_hostname>"
+        replace: "{{ ansible_host }}"
+      notify: Restart grafana-agent
+
+    - name: Replace node_exporter hostname
+      replace:
+        path: /etc/grafana-agent.yaml
+        regexp: "replacement: hostname"
+        replace: "replacement: {{ ansible_host }}"
+      notify: Restart grafana-agent
+
+    - name: Replace hostname to proper value
+      replace:
+        path: /etc/grafana-agent.yaml
+        regexp: "instance: hostname"
+        replace: "instance: {{ ansible_host }}"
+      notify: Restart grafana-agent
+
+    - name: Enable Grafana Agent
+      service:
+        name: grafana-agent
+        enabled: yes
+      notify: Restart grafana-agent

@@ -79,10 +79,10 @@
         block: |
           server {
             listen 443 ssl;
-            server_name nasberry.fish-alpha.ts.net;
+            server_name munin.h.setale.me;
 
-            ssl_certificate     /etc/ssl/nasberry.fish-alpha.ts.net.crt;
-            ssl_certificate_key /etc/ssl/nasberry.fish-alpha.ts.net.key;
+            ssl_certificate      /etc/ssl/h.setale.me/cert.crt;
+            ssl_certificate_key  /etc/ssl/h.setale.me/cert-priv.pem;
             ssl_protocols       TLSv1.2 TLSv1.3;
 
             ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;

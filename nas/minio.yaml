@@ -24,7 +24,6 @@
       when: ansible_machine == "aarch64"
       notify: Restart minio
 
-
     - name: Gets binary (others)
       get_url:
         url: "https://dl.min.io/server/minio/release/linux-{{ ansible_machine }}/minio"
@@ -73,7 +72,8 @@
         from_ip: 192.168.0.0/16
         port: '9000:9001'
 
-    - user:
+    - name: Ensures minio user exists
+      user:
         name: "minio"
         system: yes
         create_home: no
@@ -95,11 +95,11 @@
           # Use if you want to run MinIO on a custom port.
           MINIO_OPTS="--address \":9000\" --console-address \":9001\" --anonymous"
           # Access Key of the server.
-          MINIO_ACCESS_KEY="{{ minio_usr }}"
           MINIO_ROOT_USER="{{ minio_usr }}"
           # Secret key of the server.
-          MINIO_SECRET_KEY="{{ minio_pwd }}"
           MINIO_ROOT_PASSWORD="{{ minio_pwd }}"
+          # Enable Prometheus
+          MINIO_PROMETHEUS_AUTH_TYPE="public"
       notify: Restart minio
 
     - name: Setup minio systemd service
@@ -110,19 +110,28 @@
           [Unit]
           Description=Minio
           Documentation=https://docs.minio.io
+          RequiresMountsFor=/main/minio
           Wants=network-online.target
           After=network-online.target
           AssertFileIsExecutable=/usr/bin/minio
 
+          # Max 5 retries on restart
+          StartLimitInterval=90
+          StartLimitBurst=30
+
           [Service]
           WorkingDirectory=/usr/local
+
+          Restart=always
+          RestartSec=30
 
           User=minio
           Group=minio
 
           PermissionsStartOnly=true
           EnvironmentFile=-/etc/default/minio
-          ExecStartPre=/bin/bash -c "[ -n \"${MINIO_VOLUMES}\" ] || echo \"Variable MINIO_VOLUMES not set in /etc/defaults/minio.conf\""
+          # Sleeping 7 seconds to wait for sleep
+          ExecStartPre=/bin/bash -c "/usr/bin/sleep 7 ; [ -n \"${MINIO_VOLUMES}\" ] || echo \"Variable MINIO_VOLUMES not set in /etc/defaults/minio.conf\""
           ExecStart=/usr/bin/minio server $MINIO_OPTS $MINIO_VOLUMES
 
           StandardOutput=journal
@@ -143,6 +152,84 @@
           [Install]
           WantedBy=multi-user.target
       notify: Restart minio
+
+    - name: Set nginx config for minio
+      blockinfile:
+        create: yes
+        path: /etc/nginx/sites-enabled/minio
+        block: |
+          server {
+            listen 443 ssl;
+            server_name minio-api.h.setale.me;
+
+            ssl_certificate      /etc/ssl/h.setale.me/cert.crt;
+            ssl_certificate_key  /etc/ssl/h.setale.me/cert-priv.pem;
+            ssl_protocols       TLSv1.2 TLSv1.3;
+
+            ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;
+            ssl_prefer_server_ciphers   on;
+            ssl_ecdh_curve              secp384r1;
+
+            # To allow special characters in headers
+            ignore_invalid_headers off;
+            # Allow any size file to be uploaded.
+            # Set to a value such as 1000m; to restrict file size to a specific value
+            client_max_body_size 0;
+            # To disable buffering
+            proxy_buffering off;
+
+            location / {
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+              proxy_set_header Host $http_host;
+
+              proxy_connect_timeout 300;
+              # Default is HTTP/1, keepalive is only enabled in HTTP/1.1
+              proxy_http_version 1.1;
+              proxy_set_header Connection "";
+              chunked_transfer_encoding off;
+
+              proxy_pass http://localhost:9000;
+            }
+          }
+
+          server {
+            listen 443 ssl;
+            server_name minio.h.setale.me;
+
+            ssl_certificate      /etc/ssl/h.setale.me/cert.crt;
+            ssl_certificate_key  /etc/ssl/h.setale.me/cert-priv.pem;
+            ssl_protocols       TLSv1.2 TLSv1.3;
+
+            ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;
+            ssl_prefer_server_ciphers   on;
+            ssl_ecdh_curve              secp384r1;
+
+            # To allow special characters in headers
+            ignore_invalid_headers off;
+            # Allow any size file to be uploaded.
+            # Set to a value such as 1000m; to restrict file size to a specific value
+            client_max_body_size 0;
+            # To disable buffering
+            proxy_buffering off;
+
+            location / {
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+              proxy_set_header Host $http_host;
+
+              proxy_connect_timeout 300;
+              # Default is HTTP/1, keepalive is only enabled in HTTP/1.1
+              proxy_http_version 1.1;
+              proxy_set_header Connection "";
+              chunked_transfer_encoding off;
+
+              proxy_pass http://localhost:9001;
+            }
+          }
+      notify: Restart nginx
 
     - name: Enable minio service
       service:
