@@ -110,13 +110,14 @@
           [Unit]
           Description=Minio
           Documentation=https://docs.minio.io
+          RequiresMountsFor=/main/minio
           Wants=network-online.target
           After=network-online.target
           AssertFileIsExecutable=/usr/bin/minio
 
           # Max 5 retries on restart
-          StartLimitInterval=200
-          StartLimitBurst=5
+          StartLimitInterval=90
+          StartLimitBurst=30
 
           [Service]
           WorkingDirectory=/usr/local
@@ -129,7 +130,8 @@
 
           PermissionsStartOnly=true
           EnvironmentFile=-/etc/default/minio
-          ExecStartPre=/bin/bash -c "[ -n \"${MINIO_VOLUMES}\" ] || echo \"Variable MINIO_VOLUMES not set in /etc/defaults/minio.conf\""
+          # Sleeping 7 seconds to wait for sleep
+          ExecStartPre=/bin/bash -c "/usr/bin/sleep 7 ; [ -n \"${MINIO_VOLUMES}\" ] || echo \"Variable MINIO_VOLUMES not set in /etc/defaults/minio.conf\""
           ExecStart=/usr/bin/minio server $MINIO_OPTS $MINIO_VOLUMES
 
           StandardOutput=journal
