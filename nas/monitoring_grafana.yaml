@@ -47,13 +47,13 @@
             - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
           notify: Restart grafana-agent
 
-      - name: Setup Grafana Cloud
-        shell: |
-          grafana-agentctl cloud-config \
-            -u "{{ grafana_stack_id }}" \
-            -p "{{ grafana_api_key }}" \
-            -e "{{ grafana_api_url }}" > /etc/grafana-agent.yaml
-        notify: Restart grafana-agent
+    - name: Sync Grafana Cloud Agent Config
+      shell: |
+        grafana-agentctl cloud-config \
+          -u "{{ grafana_stack_id }}" \
+          -p "{{ grafana_api_key }}" \
+          -e "{{ grafana_api_url }}" > /etc/grafana-agent.yaml
+      notify: Restart grafana-agent
 
     - name: Replace NGINX path
       replace:
