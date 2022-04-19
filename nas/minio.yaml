@@ -65,13 +65,6 @@
         direction: in
         interface: tailscale0
 
-    - name: Allow Minio on local network
-      ufw:
-        rule: allow
-        proto: tcp
-        from_ip: 192.168.0.0/16
-        port: '9000:9001'
-
     - name: Ensures minio user exists
       user:
         name: "minio"
