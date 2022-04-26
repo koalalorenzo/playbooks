@@ -62,10 +62,8 @@
         name: tailscaled
         enabled: yes
 
-    - when: tailscale_install.changed
-      block:
-      - set_fact:
-          tailscale_authkey: "{{ lookup('community.general.onepassword', 'Tailscale - Reusalbe key', field='credential') }}"
+    # - set_fact:
+    #     tailscale_authkey: "{{ lookup('community.general.onepassword', 'Tailscale - Reusalbe key', field='credential') }}"
 
-      - name: Setup Tailscale Login
-        shell: tailscale up --authkey {{ tailscale_authkey }}
+    # - name: Setup Tailscale Login
+    #   shell: tailscale up --authkey "{{ tailscale_authkey }}"

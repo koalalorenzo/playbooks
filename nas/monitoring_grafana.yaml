@@ -76,21 +76,21 @@
       replace:
         path: /etc/grafana-agent.yaml
         regexp: "<http_hostname>"
-        replace: "{{ ansible_host }}"
+        replace: "{{ ansible_hostname }}"
       notify: Restart grafana-agent
 
     - name: Replace node_exporter hostname
       replace:
         path: /etc/grafana-agent.yaml
         regexp: "replacement: hostname"
-        replace: "replacement: {{ ansible_host }}"
+        replace: "replacement: {{ ansible_hostname }}"
       notify: Restart grafana-agent
 
     - name: Replace hostname to proper value
       replace:
         path: /etc/grafana-agent.yaml
         regexp: "instance: hostname"
-        replace: "instance: {{ ansible_host }}"
+        replace: "instance: {{ ansible_hostname }}"
       notify: Restart grafana-agent
 
     - name: Enable Grafana Agent
