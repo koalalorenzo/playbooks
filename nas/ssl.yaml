@@ -1,6 +1,8 @@
 ---
 - name: SSL Setup
-  hosts: nas
+  hosts:
+  - nas
+  - ssl
   become: yes
   become_user: root
   become_method: sudo

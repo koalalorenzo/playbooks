@@ -1,6 +1,6 @@
 ---
 - name: Antivirus (ClamAV)
-  hosts: all
+  hosts: nas
   become: yes
   become_user: root
   become_method: sudo

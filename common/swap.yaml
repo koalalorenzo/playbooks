@@ -1,6 +1,6 @@
 ---
 - name: Setup swap
-  hosts: nas
+  hosts: all
   become: yes
   become_user: root
   become_method: sudo
@@ -20,7 +20,7 @@
       lineinfile:
         path: /etc/dphys-swapfile
         regexp: '^CONF_SWAPSIZE'
-        line: 'CONF_SWAPSIZE=2048'
+        line: 'CONF_SWAPSIZE=1024'
         state: present
       register: swapsize
 
