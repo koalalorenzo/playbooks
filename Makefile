@@ -17,4 +17,4 @@ reboot:
 .PHONY: reboot
 
 %:
-	ansible-playbook -i ./main.inventory $*.yaml
+	ansible-playbook -i ./main.inventory $*.yaml ${ARGS}

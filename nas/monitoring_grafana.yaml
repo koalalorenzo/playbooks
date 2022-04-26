@@ -1,7 +1,7 @@
 
 ---
 - name: Setup Grafana Agent
-  hosts: nas
+  hosts: all
   become: yes
   become_user: root
   become_method: sudo
@@ -37,7 +37,17 @@
             - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
           notify: Restart grafana-agent
 
-      - when: ansible_machine != "aarch64"
+      - when: ansible_machine == "armv6l"
+        block:
+        - name: Download package (armv6l)
+          apt:
+            deb: "{{ item }}"
+          when: (".deb" in item) and ("armv6" in item)
+          with_items:
+            - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
+          notify: Restart grafana-agent
+
+      - when: ansible_machine != "aarch64" and ansible_machine != "armv6"
         block:
         - name: Download package (other)
           apt:

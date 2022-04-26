@@ -2,7 +2,7 @@
 - name: SSL Setup
   hosts:
   - nas
-  - ssl
+  - web
   become: yes
   become_user: root
   become_method: sudo

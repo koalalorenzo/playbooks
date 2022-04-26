@@ -1,7 +1,7 @@
 
 ---
 - name: Setup Datadog Agent
-  hosts: nas
+  hosts: all
   become: yes
   become_user: root
   become_method: sudo

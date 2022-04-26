@@ -86,9 +86,9 @@
         create: yes
         path: /etc/postfix/generic
         block: |
-          pi@nasberry no-reply@mg.setale.me
-          koalalorenzo@nasberry no-reply@mg.setale.me
-          root@nasberry no-reply@mg.setale.me
+          pi@{{ ansible_host }} no-reply@mg.setale.me
+          koalalorenzo@{{ ansible_host }} no-reply@mg.setale.me
+          root@{{ ansible_host }} no-reply@mg.setale.me
       notify: Restart postfix
 
     - shell: postmap /etc/postfix/generic
