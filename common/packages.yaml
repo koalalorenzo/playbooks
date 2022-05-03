@@ -28,4 +28,5 @@
           - mosh
           - ufw
           - screen
+          - tmux
           - openssh-server
