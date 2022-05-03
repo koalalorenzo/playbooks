@@ -1,6 +1,6 @@
 ---
 - name: Set up Munin monitoring
-  hosts: nas
+  hosts: all
   become: yes
   become_user: root
   become_method: sudo
@@ -34,11 +34,11 @@
           allow ‘^127.0.0.1’
       notify: Restart nginx
 
-    - name: Renames localhost to nasberry
+    - name: Renames localhost to host
       lineinfile:
         path: /etc/munin/munin.conf
         regexp: '^\[localhost.localdomain\]'
-        line: "[nasberry]"
+        line: "[{{ ansible_host }}]"
       notify: Restart munin
 
     - name: Enable plugins

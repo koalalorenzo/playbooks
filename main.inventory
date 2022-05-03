@@ -1,9 +1,9 @@
-[pihole]
+zeroberry.local ansible_user='pi'
 
-[pihole:vars]
-ansible_user='pi'
-ansible_become_pass='raspberry'
-ansible_python_interpreter='/usr/bin/python'
+[web]
+zeroberry ansible_user='pi'
+
+[pihole]
 
 [nas]
 nasberry
@@ -12,3 +12,4 @@ nasberry
 # ansible_user="pi"
 ansible_user="{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
 ansible_become_pass="{{ lookup('community.general.onepassword', 'Nasberry', field='password') }}"
+

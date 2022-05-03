@@ -1,6 +1,8 @@
 ---
 - name: NGINX setup with Tailscale Certs
-  hosts: nas
+  hosts:
+  - nas
+  - web
   become: yes
   become_user: root
   become_method: sudo
@@ -40,7 +42,7 @@
       notify: Restart nginx
 
     - name: Get HTTPS Certificates from tailscale
-      shell: tailscale cert --cert-file /etc/ssl/nasberry.fish-alpha.ts.net.crt --key-file /etc/ssl/nasberry.fish-alpha.ts.net.key nasberry.fish-alpha.ts.net
+      shell: tailscale cert --cert-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.crt --key-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key {{ ansible_hostname }}.fish-alpha.ts.net
 
     - name: Set nginx config for main
       blockinfile:
@@ -51,8 +53,8 @@
             listen 443 ssl;
             server_name _;
 
-            ssl_certificate     /etc/ssl/nasberry.fish-alpha.ts.net.crt;
-            ssl_certificate_key /etc/ssl/nasberry.fish-alpha.ts.net.key;
+            ssl_certificate     /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.crt;
+            ssl_certificate_key /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key;
             ssl_protocols       TLSv1.2 TLSv1.3;
 
             ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;

@@ -1,6 +1,8 @@
 ---
 - name: Install NAS packages
-  hosts: nas
+  hosts:
+  - nas
+  - tools
   become: yes
   become_user: root
   become_method: sudo

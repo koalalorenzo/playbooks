@@ -21,6 +21,7 @@
         name: tailscale
         state: present
         update_cache: yes
+      register: tailscale_install
 
     - sysctl:
         name: net.ipv6.conf.all.forwarding
@@ -55,3 +56,14 @@
         direction: in
         proto: udp
         port: '60000:61000'
+
+    - name: Enable Tailscale
+      service:
+        name: tailscaled
+        enabled: yes
+
+    # - set_fact:
+    #     tailscale_authkey: "{{ lookup('community.general.onepassword', 'Tailscale - Reusalbe key', field='credential') }}"
+
+    # - name: Setup Tailscale Login
+    #   shell: tailscale up --authkey "{{ tailscale_authkey }}"

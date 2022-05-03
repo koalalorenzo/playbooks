@@ -1,0 +1,19 @@
+---
+- name: Set up DNS server
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  handlers:
+    - name: Restart DNS
+      service: name=dhcpcd state=restarted
+
+  tasks:
+    - name: Set DNS records for cloudflare
+      lineinfile:
+        path: /etc/dhcpcd.conf
+        regexp: '^static domain_name_servers='
+        line: 'static domain_name_servers=1.1.1.1, 1.0.0.1'
+        state: present
+      notify: Restart DNS

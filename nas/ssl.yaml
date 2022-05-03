@@ -1,5 +1,6 @@
 ---
-- name: SSL Setup
+- name: SSL Setup (NAS)
+  serial: 1
   hosts: nas
   become: yes
   become_user: root
@@ -19,6 +20,16 @@
     file:
       path: "{{ certs_path }}"
       state: directory
+
+  - name: Install dependencies required
+    package:
+      name: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+        - openssl
+        - python3
+        - python3-openssl
 
   - name: generate account key
     openssl_privatekey:

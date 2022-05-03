@@ -17,4 +17,9 @@ reboot:
 .PHONY: reboot
 
 %:
-	ansible-playbook -i ./main.inventory $*.yaml
+	ansible-playbook -i ./main.inventory $*.yaml ${ARGS}
+
+apt_upgrade:
+	ansible all -i ./main.inventory --become \
+		-m apt -a "upgrade=yes update_cache=yes cache_valid_time=86400"
+.PHONY: apt_upgrade
