@@ -20,42 +20,43 @@
     #     msg: OpenZFS supports only Raspberry Pi Kernel 5.10 (Current {{ ansible_kernel }})
     #   when: ansible_kernel |  version('5.10','>')
 
-    - name: "Install dependencies"
-      package:
-        name: "{{ packages }}"
-        state: present
-      vars:
-        packages:
-          # - raspberrypi-kernel-headers
-          - dpkg-dev
-          # Dependencies for rpi-source and rpi-update
-          - git
-          - bc
-          - bison
-          - flex
-          - libssl-dev
-          - libncurses5-dev
-          - rpi-update
-      when: ansible_os_family == "Debian"
+    # - name: "Install dependencies"
+    #   package:
+    #     name: "{{ packages }}"
+    #     state: present
+    #   vars:
+    #     packages:
+    #       # - raspberrypi-kernel-headers
+    #       - dpkg-dev
+    #       # Dependencies for rpi-source and rpi-update
+    #       - git
+    #       - bc
+    #       - bison
+    #       - flex
+    #       - libssl-dev
+    #       - libncurses5-dev
+    #       - rpi-update
+    #   when: ansible_os_family == "Debian"
 
-    - name: Install 5.10 kernel
-      shell: BRANCH=oldstable rpi-update
+    # - name: Install 5.10 kernel
+    #   shell: BRANCH=oldstable rpi-update
 
-    - reboot:
-        reboot_timeout: 300
-        post_reboot_delay: 15
-        pre_reboot_delay: 15
+    # - reboot:
+    #     reboot_timeout: 300
+    #     post_reboot_delay: 15
+    #     pre_reboot_delay: 15
 
-    - name: Install/Update rpi-source
-      get_url:
-        url: "https://raw.githubusercontent.com/RPi-Distro/rpi-source/master/rpi-source"
-        dest: "/usr/local/bin/rpi-source"
-        mode: 0755
+    # - name: Install/Update rpi-source
+    #   get_url:
+    #     url: "https://raw.githubusercontent.com/RPi-Distro/rpi-source/master/rpi-source"
+    #     dest: "/usr/local/bin/rpi-source"
+    #     mode: 0755
 
-    - shell: /usr/local/bin/rpi-source -q --tag-update
+    # - shell: /usr/local/bin/rpi-source -q --tag-update
 
     - name: Download kernel headers
       shell: /usr/local/bin/rpi-source
+      ignore_errors: yes
 
     - name: Add Debian Backports
       apt_repository:
@@ -74,7 +75,7 @@
         path: /etc/apt/preferences.d/90_zfs
         create: yes
         block: |
-          Package: src:zfsutils-linux
+          Package: libnvpair1linux libnvpair3linux libuutil1linux libuutil3linux libzfs2linux libzfs4linux libzpool2linux libzpool4linux spl-dkms zfs-dkms zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
           Pin: release n=bullseye-backports
           Pin-Priority: 990
       when: ansible_os_family == "Debian"
