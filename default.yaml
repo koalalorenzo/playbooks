@@ -20,11 +20,11 @@
 # # # NAS
 - import_playbook: nas/openzfs.yaml
 - import_playbook: nas/users.yaml
+- import_playbook: nas/email.yaml
+- import_playbook: nas/monitoring_grafana.yaml
 - import_playbook: nas/ssl.yaml
 - import_playbook: nas/nginx.yaml
 # # - import_playbook: nas/zram.yaml
-- import_playbook: nas/email.yaml
-- import_playbook: nas/monitoring_grafana.yaml
 # # - import_playbook: nas/monitoring_datadog.yaml
 # # - import_playbook: nas/monitoring_munin.yaml
 - import_playbook: nas/packages.yaml
