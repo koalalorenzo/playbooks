@@ -8,7 +8,7 @@
 - import_playbook: common/reboot.yaml
 # # Post reboot setup
 - import_playbook: common/tailscale.yaml
-- import_playbook: common/antivirus.yaml
+# - import_playbook: common/antivirus.yaml
 - import_playbook: common/swap.yaml
 
 # # Development tools
@@ -18,19 +18,19 @@
 # # - import_playbook: development/nomad.yaml
 
 # # # NAS
-# - import_playbook: nas/openzfs.yaml
-# - import_playbook: nas/users.yaml
-# - import_playbook: nas/ssl.yaml
-# - import_playbook: nas/nginx.yaml
+- import_playbook: nas/openzfs.yaml
+- import_playbook: nas/users.yaml
+- import_playbook: nas/ssl.yaml
+- import_playbook: nas/nginx.yaml
 # # - import_playbook: nas/zram.yaml
-# - import_playbook: nas/email.yaml
-# # - import_playbook: nas/monitoring_grafana.yaml
+- import_playbook: nas/email.yaml
+- import_playbook: nas/monitoring_grafana.yaml
 # # - import_playbook: nas/monitoring_datadog.yaml
 # # - import_playbook: nas/monitoring_munin.yaml
-# - import_playbook: nas/packages.yaml
-# - import_playbook: common/reboot.yaml
-# - import_playbook: nas/samba.yaml
-# - import_playbook: nas/restic.yaml
+- import_playbook: nas/packages.yaml
+- import_playbook: common/reboot.yaml
+- import_playbook: nas/samba.yaml
+- import_playbook: nas/restic.yaml
 # - import_playbook: nas/gickup.yaml
 
 # # Pihole stuff
@@ -40,4 +40,4 @@
 # - import_playbook: pihole/gravity-update.yaml
 
 # # Final Reboot
-# - import_playbook: common/reboot.yaml
+- import_playbook: common/reboot.yaml
