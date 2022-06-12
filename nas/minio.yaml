@@ -78,7 +78,7 @@
       file:
         path: /main/minio
         owner: "minio"
-        recurse: yes
+        recurse: no
       notify: Restart minio
 
     - name: Setup minio config
