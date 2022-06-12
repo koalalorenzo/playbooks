@@ -20,6 +20,10 @@
   handlers:
     - name: Restart postfix
       service: name=postfix state=restarted
+      notify: Send test email
+
+    - name: Send test email
+      shell: echo "Ansible Email Setup on {{ ansible_host }} completed" | mail -s "Test mail" lorenzo@setale.me
 
   tasks:
     - debconf:
