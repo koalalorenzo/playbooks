@@ -103,8 +103,8 @@
         group: root
         mode: "0600"
       loop:
-        - { name: "OpenZFS - NAS - Personal", path: "/boot/values/personal", pwd: zfs_personal_pwd }
-        - { name: "OpenZFS - NAS - Backup", path: "/boot/values/backups", pwd: zfs_backups_pwd }
+        - { name: "OpenZFS - NAS - Personal", path: "/boot/values/personal", pwd: "{{ zfs_personal_pwd }}" }
+        - { name: "OpenZFS - NAS - Backup", path: "/boot/values/backups", pwd: "{{ zfs_backups_pwd }}" }
 
     - name: modprobe zfs
       modprobe:
