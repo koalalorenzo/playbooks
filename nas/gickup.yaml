@@ -6,11 +6,16 @@
   become_method: sudo
   gather_facts: yes
 
+  vars_prompt:
+    - name: github_token
+      prompt: "Enter github_token (Nasberry)"
+      private: yes
+    - name: gitlab_token
+      prompt: "Enter gitlab_token (Nasberry)"
+      private: yes
+
   tasks:
     - set_fact:
-        sys_username: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
-        github_token: "{{ lookup('community.general.onepassword', 'Nasberry', field='GitHub Token') }}"
-        gitlab_token: "{{ lookup('community.general.onepassword', 'Nasberry', field='GitLab Token') }}"
         gickup_version: "0.10.2"
 
     - name: Create temporary build directory
@@ -53,7 +58,7 @@
 
     - name: Weekly Git Backup
       cron:
-        user: "{{ sys_username }}"
+        user: "{{ ansible_user }}"
         name: "Weekly git repos backup"
         special_time: weekly
         job: "/main/system/bin/gickup /main/system/config/gickup.yaml | $GPG_CMD"

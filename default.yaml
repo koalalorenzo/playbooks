@@ -1,28 +1,28 @@
 ---
-- import_playbook: common/dns.yaml
-- import_playbook: common/packages.yaml
-- import_playbook: common/config.yaml
-# - import_playbook: common/hostname.yaml
-- import_playbook: common/firewall.yaml
-- import_playbook: common/ssh-secure.yaml
-- import_playbook: common/reboot.yaml
-# # Post reboot setup
-- import_playbook: common/tailscale.yaml
-- import_playbook: common/antivirus.yaml
-- import_playbook: common/swap.yaml
+# - import_playbook: common/dns.yaml
+# - import_playbook: common/packages.yaml
+# - import_playbook: common/config.yaml
+# # - import_playbook: common/hostname.yaml
+# - import_playbook: common/firewall.yaml
+# - import_playbook: common/ssh-secure.yaml
+# - import_playbook: common/reboot.yaml
+# # # Post reboot setup
+# - import_playbook: common/tailscale.yaml
+# - import_playbook: common/antivirus.yaml
+# - import_playbook: common/swap.yaml
 
-# Development tools
-- import_playbook: development/packages.yaml
-# - import_playbook: development/golang.yaml
-# - import_playbook: development/docker.yaml
-# - import_playbook: development/nomad.yaml
+# # Development tools
+# - import_playbook: development/packages.yaml
+# # - import_playbook: development/golang.yaml
+# # - import_playbook: development/docker.yaml
+# # - import_playbook: development/nomad.yaml
 
-# NAS
-- import_playbook: nas/users.yaml
-- import_playbook: nas/ssl.yaml
+# # NAS
+- import_playbook: nas/openzfs.yaml
+# - import_playbook: nas/users.yaml
+# - import_playbook: nas/ssl.yaml
 - import_playbook: nas/nginx.yaml
 - import_playbook: nas/zram.yaml
-- import_playbook: nas/openzfs.yaml
 - import_playbook: nas/email.yaml
 - import_playbook: nas/monitoring_grafana.yaml
 # - import_playbook: nas/monitoring_datadog.yaml

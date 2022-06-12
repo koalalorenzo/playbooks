@@ -10,11 +10,15 @@
     - name: Restart samba
       service: name=smbd state=restarted
 
-  tasks:
-    - set_fact:
-        samba_username: "{{ lookup('community.general.onepassword', 'Samba - NAS - koalalorenzo', field='username') }}"
-        samba_password: "{{ lookup('community.general.onepassword', 'Samba - NAS - koalalorenzo', field='password') }}"
+  vars_prompt:
+    - name: samba_username
+      prompt: "Enter Samba Username (Samba - NAS - koalalorenzo)"
+      private: no
+    - name: samba_password
+      prompt: "Enter Samba password (Samba - NAS - koalalorenzo)"
+      private: yes
 
+  tasks:
     - name: "Install packages"
       package:
         name: "{{ packages }}"

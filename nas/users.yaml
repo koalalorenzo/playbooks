@@ -11,46 +11,35 @@
       service: name=ssh state=restarted
 
   tasks:
-    - set_fact:
-        sys_username: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
-        sys_password: "{{ lookup('community.general.onepassword', 'Nasberry', field='password') }}"
-
-    - user:
-        name: "{{ sys_username }}"
-        comment: Lorenzo Setale
-        groups: pi,adm,dialout,cdrom,sudo,audio,video,plugdev,games,users,input,netdev,gpio,i2c,spi
-        password: "{{ sys_password | password_hash('sha512', 'SREsaltMiniera') }}"
-        update_password: always
-
     - name: Authorize my keys (GitLab)
       authorized_key:
-        user: "{{ sys_username }}"
+        user: "{{ ansible_user }}"
         state: present
         key: https://gitlab.com/koalalorenzo.keys
 
     - name: Authorize my keys (GitHub)
       authorized_key:
-        user: "{{ sys_username }}"
+        user: "{{ ansible_user }}"
         state: present
         key: https://github.com/koalalorenzo.keys
 
     - name: Uses Bash shell
       cron:
-        user: "{{ sys_username }}"
+        user: "{{ ansible_user }}"
         name: SHELL
         env: yes
         job: /bin/bash
 
     - name: Adds GPG Key
       cron:
-        user: "{{ sys_username }}"
+        user: "{{ ansible_user }}"
         name: GPG_CMD
         env: yes
         job: ifne /usr/bin/gpg --batch --armor --trust-model always --no-default-keyring --keyring /main/system/email.asc.gpg --recipient lorenzo@setale.me --encrypt
 
     - name: Adds Email notification
       cron:
-        user: "{{ sys_username }}"
+        user: "{{ ansible_user }}"
         name: MAILTO
         env: yes
         job: lorenzo@setale.me
@@ -58,7 +47,7 @@
     - name: Secure SSH by Allowing current user
       lineinfile:
         path: /etc/ssh/sshd_config
-        line: AllowUsers {{ sys_username }}
+        line: AllowUsers {{ ansible_user }}
         state: present
         mode: 0644
       notify: Restart ssh
