@@ -6,7 +6,7 @@
   become: yes
   become_user: root
   become_method: sudo
-  gather_facts: no
+  gather_facts: yes
 
   handlers:
     - name: Restart nginx
@@ -35,7 +35,7 @@
         port: 443
         proto: tcp
 
-    - name: Set nginx config for munin
+    - name: Remove NGINX default site
       file:
         state: absent
         path: /etc/nginx/sites-enabled/default
@@ -44,7 +44,7 @@
     - name: Get HTTPS Certificates from tailscale
       shell: tailscale cert --cert-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.crt --key-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key {{ ansible_hostname }}.fish-alpha.ts.net
 
-    - name: Set nginx config for main
+    - name: Set nginx config for main (aka new default)
       blockinfile:
         create: yes
         path: /etc/nginx/sites-enabled/main
