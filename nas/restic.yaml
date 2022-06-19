@@ -7,9 +7,6 @@
   gather_facts: no
 
   tasks:
-    - set_fact:
-        sys_username: "{{ lookup('community.general.onepassword', 'Nasberry', field='username') }}"
-
     - name: "Install Restic"
       package:
         name: "restic"
@@ -20,21 +17,21 @@
 
     - name: Daily cleanup (local)
       cron:
-        user: "{{ sys_username }}"
+        user: "{{ ansible_user }}"
         name: "Daily Local (/main/restic) cleanup"
         special_time: daily
         job: "/main/system/bin/restic-local-cleanup | $GPG_CMD"
 
     - name: Weekly cleanup (remote)
       cron:
-        user: "{{ sys_username }}"
+        user: "{{ ansible_user }}"
         name: "Weekly cleanup (remote)"
         special_time: weekly
         job: "/main/system/bin/restic-cleanup | $GPG_CMD"
 
     - name: Daily Backup
       cron:
-        user: "{{ sys_username }}"
+        user: "{{ ansible_user }}"
         name: "Daily Backup (local to remote)"
         hour: "5"
         minute: "0"

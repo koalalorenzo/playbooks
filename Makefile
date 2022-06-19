@@ -25,3 +25,4 @@ apt_upgrade:
 	ansible all -i ./main.inventory --become \
 		-m apt -a "upgrade=yes"
 .PHONY: apt_upgrade
+

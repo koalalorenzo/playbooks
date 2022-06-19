@@ -6,16 +6,26 @@
   become_method: sudo
   gather_facts: no
 
+  vars_prompt:
+    - name: smtp_hostname
+      prompt: "Enter SMTP Hostname (server)"
+      private: no
+    - name: smtp_username
+      prompt: "Enter SMTP username (server)"
+      private: no
+    - name: smtp_password
+      prompt: "Enter SMTP password (server)"
+      private: yes
+
   handlers:
     - name: Restart postfix
       service: name=postfix state=restarted
+      notify: Send test email
+
+    - name: Send test email
+      shell: echo "Ansible Email Setup on {{ ansible_host }} completed" | mail -s "Test mail" lorenzo@setale.me
 
   tasks:
-    - set_fact:
-        smtp_hostname: "{{ lookup('community.general.onepassword', 'nasberry@mg.setale.me', field='server') }}"
-        smtp_username: "{{ lookup('community.general.onepassword', 'nasberry@mg.setale.me', field='username') }}"
-        smtp_password: "{{ lookup('community.general.onepassword', 'nasberry@mg.setale.me', field='password') }}"
-
     - debconf:
         name: postfix
         question: postfix/main_mailer_type

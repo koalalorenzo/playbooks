@@ -6,13 +6,21 @@
   become_user: root
   become_method: sudo
   gather_facts: no
+  vars_prompt:
+    - name: cloudflare_email
+      prompt: "Enter Cloudflare username (Cloudflare - Personal)"
+      private: no
+    - name: cloudflare_api_token
+      prompt: "Enter Cloudflare api_token (Cloudflare - Personal)"
+      private: yes
+
   vars:
     certs_path: /etc/ssl/h.setale.me/
-    crt_common_name: "*.h.setale.me"
+    crt_common_name: "h.setale.me"
     crt_subject_alt_name:
-      - "h.setale.me"
-    cloudflare_email: "{{ lookup('community.general.onepassword', 'Cloudflare - Personal', field='username') }}"
-    cloudflare_api_token: "{{ lookup('community.general.onepassword', 'Cloudflare - Personal', field='api_token') }}"
+      - "minio.h.setale.me"
+      - "graph.h.setale.me"
+      - "dash.h.setale.me"
     cloudflare_zone: setale.me
 
   tasks:
@@ -69,11 +77,16 @@
       type: TXT
       value: "{{ challenge.challenge_data[item]['dns-01'].resource_value }}"
       solo: true
+      ttl: 60
       state: present
     # Disabled as *.h.setale.me will overwrite h.setale.me
-    # with_items: "{{ [crt_common_name] + crt_subject_alt_name }}"
-    with_items: "{{ [crt_common_name] }}"
+    with_items: "{{ [crt_common_name] + crt_subject_alt_name }}"
+    # with_items: "{{ [crt_common_name] }}"
     when: challenge is changed
+
+  - name: Pause
+    pause:
+      seconds: "60"
 
   - name: validate acme challenge
     acme_certificate:
@@ -97,5 +110,5 @@
       record: "{{ challenge.challenge_data[item]['dns-01'].record }}"
       type: TXT
       state: absent
-    with_items: "{{ [crt_common_name] }}"
+    with_items: "{{ [crt_common_name] + crt_subject_alt_name }}"
     when: challenge is changed

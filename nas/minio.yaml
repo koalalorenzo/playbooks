@@ -5,6 +5,13 @@
   become_user: root
   become_method: sudo
   gather_facts: yes
+  vars_prompt:
+    - name: minio_usr
+      prompt: "Enter minio username (Minio Nasberry)"
+      private: no
+    - name: minio_pwd
+      prompt: "Enter minio password (Minio Nasberry)"
+      private: yes
 
   handlers:
     - name: Restart nginx
@@ -13,10 +20,6 @@
       systemd: name=minio state=restarted daemon_reload=true
 
   tasks:
-    - set_fact:
-        minio_usr: "{{ lookup('community.general.onepassword', 'Minio Nasberry', field='username') }}"
-        minio_pwd: "{{ lookup('community.general.onepassword', 'Minio Nasberry', field='password') }}"
-
     - name: Gets binary (arm64)
       get_url:
         url: "https://dl.min.io/server/minio/release/linux-arm64/minio"
@@ -75,7 +78,7 @@
       file:
         path: /main/minio
         owner: "minio"
-        recurse: yes
+        recurse: no
       notify: Restart minio
 
     - name: Setup minio config

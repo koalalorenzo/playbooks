@@ -11,12 +11,18 @@
     - name: Restart grafana-agent
       service: name=grafana-agent state=restarted
 
-  tasks:
-    - set_fact:
-        grafana_stack_id: "{{ lookup('community.general.onepassword', 'Grafana Cloud Nasberry', field='stack_id') }}"
-        grafana_api_key: "{{ lookup('community.general.onepassword', 'Grafana Cloud Nasberry', field='api_key') }}"
-        grafana_api_url: "{{ lookup('community.general.onepassword', 'Grafana Cloud Nasberry', field='api_url') }}"
+  vars_prompt:
+    - name: grafana_stack_id
+      prompt: "Enter Grafana Stack ID (Grafana Cloud Nasberry)"
+      private: no
+    - name: grafana_api_key
+      prompt: "Enter Grafana API Key (Grafana Cloud Nasberry)"
+      private: yes
+    - name: grafana_api_url
+      prompt: "Enter Grafana API URL (Grafana Cloud Nasberry)"
+      private: yes
 
+  tasks:
     - name: gather installed packages
       package_facts:
 

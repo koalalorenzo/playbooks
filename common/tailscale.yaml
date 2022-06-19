@@ -4,17 +4,31 @@
   become: yes
   become_user: root
   become_method: sudo
+  # vars_prompt:
+  #   - name: tailscaleauthkey
+  #     prompt: "Enter Tailscale Auth Key"
+  #     private: yes
 
   tasks:
     - apt_key:
         url: https://pkgs.tailscale.com/stable/raspbian/buster.gpg
         state: present
-      when: ansible_os_family == "Debian"
+      when: ansible_distribution == 'Debian'
 
     - apt_repository:
         repo: "deb https://pkgs.tailscale.com/stable/raspbian buster main"
         state: present
-      when: ansible_os_family == "Debian"
+      when: ansible_distribution == 'Debian'
+
+    - apt_key:
+        url: https://pkgs.tailscale.com/stable/ubuntu/{{ ansible_distribution_release }}.noarmor.gpg
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+
+    - apt_repository:
+        repo: "deb https://pkgs.tailscale.com/stable/ubuntu {{ ansible_distribution_release }} main"
+        state: present
+      when: ansible_distribution == 'Ubuntu'
 
     - name: Install tailscale package
       package:
@@ -62,8 +76,5 @@
         name: tailscaled
         enabled: yes
 
-    # - set_fact:
-    #     tailscale_authkey: "{{ lookup('community.general.onepassword', 'Tailscale - Reusalbe key', field='credential') }}"
-
     # - name: Setup Tailscale Login
-    #   shell: tailscale up --authkey "{{ tailscale_authkey }}"
+    #   shell: tailscale up --authkey "{{ tailscaleauthkey }}"
