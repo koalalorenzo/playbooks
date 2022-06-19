@@ -6,13 +6,13 @@
 - import_playbook: common/firewall.yaml
 - import_playbook: common/ssh-secure.yaml
 - import_playbook: common/reboot.yaml
-# # Post reboot setup
+# Post reboot setup
 - import_playbook: common/tailscale.yaml
 # - import_playbook: common/antivirus.yaml
 - import_playbook: common/swap.yaml
 
 # # Development tools
-# - import_playbook: development/packages.yaml
+- import_playbook: development/packages.yaml
 # # - import_playbook: development/golang.yaml
 # # - import_playbook: development/docker.yaml
 # # - import_playbook: development/nomad.yaml
@@ -29,7 +29,7 @@
 # # - import_playbook: nas/monitoring_munin.yaml
 - import_playbook: nas/packages.yaml
 - import_playbook: common/reboot.yaml
-- import_playbook: nas/samba.yaml
+# - import_playbook: nas/samba.yaml
 - import_playbook: nas/restic.yaml
 # - import_playbook: nas/gickup.yaml
 
@@ -39,5 +39,5 @@
 # - import_playbook: pihole/upgrade.yaml
 # - import_playbook: pihole/gravity-update.yaml
 
-# # Final Reboot
+# Final Reboot
 - import_playbook: common/reboot.yaml
