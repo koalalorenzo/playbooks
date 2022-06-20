@@ -1,0 +1,29 @@
+---
+- name: Turn ON OverlayFS on root
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  handlers:
+    - name: Reboot
+      reboot:
+        reboot_timeout: 600
+        post_reboot_delay: 30
+        pre_reboot_delay: 15
+
+  tasks:
+    - name: "Install OverlayFS"
+      package:
+        name: overlayroot
+        state: present
+      notify: Reboot
+
+    - name: Set OverlayFS on root config (No recursive, with swap)
+      lineinfile:
+        path: /etc/overlayroot.conf
+        regexp: '^overlayroot='
+        line: 'overlayroot="tmpfs:swap=1,recurse=0"'
+        state: present
+      notify: Reboot
