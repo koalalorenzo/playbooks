@@ -22,3 +22,4 @@
           - gpg
           - make
           - git
+          - ncdu
