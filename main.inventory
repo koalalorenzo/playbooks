@@ -1,6 +1,7 @@
-zeroberry.local ansible_user='pi'
-
 [web]
+zeroberry ansible_user='pi'
+
+[homeautomation]
 zeroberry ansible_user='pi'
 
 [pihole]
