@@ -1,15 +1,14 @@
 [web]
-zeroberry ansible_user='pi'
+zeroberry
 
 [homeautomation]
-zeroberry ansible_user='pi'
+zeroberry
 
 [pihole]
 
 [nas]
 nasberry
 
-[nas:vars]
-# ansible_user="pi"
+[all]
 ansible_user="koalalorenzo"
 
