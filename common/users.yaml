@@ -1,5 +1,5 @@
 ---
-- name: Sets user access
+- name: Sets user access via SSH and cron users settings
   hosts: all
   become: yes
   become_user: root
@@ -35,19 +35,23 @@
         env: yes
         job: /bin/bash
 
-    - shell: gpg --recv-keys 73880ECAF69EC2ED44CE5889502BFB12D0B5295F 55065306FCC6617D4D928B70020F4A4E40F95228
-    - shell: gpg --recv-keys 73880ECAF69EC2ED44CE5889502BFB12D0B5295F 55065306FCC6617D4D928B70020F4A4E40F95228
+    - name: Download GPG/PGP Keys ( root )
+      shell: gpg --recv-keys 73880ECAF69EC2ED44CE5889502BFB12D0B5295F 55065306FCC6617D4D928B70020F4A4E40F95228
+      become: yes
+      become_user: root
+    - name: Download GPG/PGP Keys ( user )
+      shell: gpg --recv-keys 73880ECAF69EC2ED44CE5889502BFB12D0B5295F 55065306FCC6617D4D928B70020F4A4E40F95228
       become: yes
       become_user: "{{ ansible_user }}"
 
-    - name: Adds GPG Key
+    - name: Adds GPG Key on Cron ( user )
       cron:
         user: "{{ ansible_user }}"
         name: GPG_CMD
         env: yes
         job: ifne /usr/bin/gpg --batch --armor --trust-model always --recipient 55065306FCC6617D4D928B70020F4A4E40F95228 --recipient 73880ECAF69EC2ED44CE5889502BFB12D0B5295F --encrypt
 
-    - name: Adds GPG Key
+    - name: Adds GPG Key on Cron ( root )
       cron:
         user: root
         name: GPG_CMD
@@ -73,6 +77,14 @@
       lineinfile:
         path: /etc/ssh/sshd_config
         line: 'DenyUsers pi'
+        state: present
+        mode: 0644
+      notify: Restart ssh
+
+    - name: Secure SSH by denying root
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        line: 'DenyUsers root'
         state: present
         mode: 0644
       notify: Restart ssh
