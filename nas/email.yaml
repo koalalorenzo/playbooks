@@ -99,6 +99,10 @@
           pi@{{ ansible_host }} no-reply@mg.setale.me
           koalalorenzo@{{ ansible_host }} no-reply@mg.setale.me
           root@{{ ansible_host }} no-reply@mg.setale.me
+          pi@{{ ansible_host }}.fish-alpha.ts.net no-reply@mg.setale.me
+          koalalorenzo@{{ ansible_host }}.fish-alpha.ts.net no-reply@mg.setale.me
+          root@{{ ansible_host }}.fish-alpha.ts.net no-reply@mg.setale.me
+
       notify: Restart postfix
 
     - shell: postmap /etc/postfix/generic
