@@ -84,4 +84,9 @@
         enabled: yes
 
     # - name: Setup Tailscale Login
-    #   shell: tailscale up --authkey "{{ tailscaleauthkey }}"
+    #   shell: |
+    #     tailscale up --authkey "{{ tailscaleauthkey }}" \
+    #       --accept-dns --accept-routes \
+    #       --advertise-exit-node --advertise-routes="192.168.0.0/24" \
+    #       --ssh --accept-risk=lose-ssh
+
