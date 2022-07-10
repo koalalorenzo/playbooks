@@ -8,7 +8,7 @@ all:
         nas:
     homeautomation:
       hosts:
-        "192.168.0.9":
+        zeroberry:
     pihole:
       hosts:
     nas:
