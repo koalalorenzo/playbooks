@@ -5,7 +5,8 @@ ANSIBLE_CONFIG=facts.cfg
 .EXPORT_ALL_VARIABLES:
 
 deps:
-	ansible-galaxy install datadog.datadog
+	# Disabled datadog as we don't use it anymore
+	# ansible-galaxy install datadog.datadog
 .PHONY: deps
 
 run: deps
@@ -26,4 +27,4 @@ apt_upgrade:
 		-m apt -a "upgrade=yes"
 .PHONY: apt_upgrade
 
-.DEFAULT_GOAL: run
+.DEFAULT_GOAL := run
