@@ -25,16 +25,16 @@
         state: present
       when: ansible_distribution == 'Ubuntu'
 
-    - apt_repository:
-        repo: "deb [signed-by=/usr/share/keyrings/tailscale-archive-keyring.gpg] https://pkgs.tailscale.com/stable/ubuntu {{ ansible_distribution_release }} main"
-        state: present
-      when: ansible_distribution == 'Ubuntu'
-
     - name: Gets GPG Keyring from Tailscale
       get_url:
         url: https://pkgs.tailscale.com/stable/ubuntu/{{ ansible_distribution_release }}.noarmor.gpg
         dest: /usr/share/keyrings/tailscale-archive-keyring.gpg
         mode: 0644
+      when: ansible_distribution == 'Ubuntu'
+
+    - apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/tailscale-archive-keyring.gpg] https://pkgs.tailscale.com/stable/ubuntu {{ ansible_distribution_release }} main"
+        state: present
       when: ansible_distribution == 'Ubuntu'
 
     - name: Install tailscale package
