@@ -1,5 +1,5 @@
 ---
-- import_playbook: nas/overlay-off.yaml
+- import_playbook: common/overlay-off.yaml
 - import_playbook: common/dns.yaml
 - import_playbook: common/packages.yaml
 - import_playbook: common/config.yaml
@@ -32,7 +32,6 @@
 # - import_playbook: nas/samba.yaml
 - import_playbook: nas/restic.yaml
 # - import_playbook: nas/gickup.yaml
-- import_playbook: nas/overlay-on.yaml
 
 # # Pihole stuff
 # - import_playbook: pihole/unbound.yaml
@@ -40,5 +39,6 @@
 # - import_playbook: pihole/upgrade.yaml
 # - import_playbook: pihole/gravity-update.yaml
 
-# Final Reboot
+# Final Setup and reboot
+- import_playbook: common/overlay-on.yaml
 - import_playbook: common/reboot.yaml
