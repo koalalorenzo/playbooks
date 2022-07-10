@@ -39,6 +39,9 @@
 # - import_playbook: pihole/upgrade.yaml
 # - import_playbook: pihole/gravity-update.yaml
 
+# Home Automation
+- import: homeauto/hue_exporter.yaml
+
 # Final Setup and reboot
 - import_playbook: common/overlay-on.yaml
 - import_playbook: common/reboot.yaml
