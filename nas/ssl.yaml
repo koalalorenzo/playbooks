@@ -55,6 +55,7 @@
       privatekey_path: "{{ certs_path }}/cert-priv.pem"
       common_name: "{{ crt_common_name }}"
       subject_alt_name: "DNS:{{ crt_subject_alt_name | join(',DNS:') }}"
+    register: csr_data
 
   - name: create acme challenge
     acme_certificate:
@@ -67,6 +68,11 @@
       acme_directory: https://acme-v02.api.letsencrypt.org/directory
       remaining_days: 90
     register: challenge
+    when: csr_data is changed
+
+  - name: Pause 5 sec
+    pause:
+      seconds: "5"
 
   - name: create cloudflare TXT records
     cloudflare_dns:
