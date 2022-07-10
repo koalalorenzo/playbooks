@@ -25,8 +25,6 @@
           - gnupg
           - curl
           - unzip
-          - mosh
-          - ufw
           - screen
           - openssh-server
           - golang
