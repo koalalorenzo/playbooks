@@ -1,6 +1,6 @@
 ---
 - name: Sets user access
-  hosts: nas
+  hosts: all
   become: yes
   become_user: root
   become_method: sudo
@@ -11,6 +11,11 @@
       service: name=ssh state=restarted
 
   tasks:
+    - name: Install GnuPG
+      package:
+        name: gnupg
+        state: present
+
     - name: Authorize my keys (GitLab)
       authorized_key:
         user: "{{ ansible_user }}"
@@ -30,12 +35,24 @@
         env: yes
         job: /bin/bash
 
+    - shell: gpg --recv-keys 73880ECAF69EC2ED44CE5889502BFB12D0B5295F 55065306FCC6617D4D928B70020F4A4E40F95228
+    - shell: gpg --recv-keys 73880ECAF69EC2ED44CE5889502BFB12D0B5295F 55065306FCC6617D4D928B70020F4A4E40F95228
+      become: yes
+      become_user: "{{ ansible_user }}"
+
     - name: Adds GPG Key
       cron:
         user: "{{ ansible_user }}"
         name: GPG_CMD
         env: yes
-        job: ifne /usr/bin/gpg --batch --armor --trust-model always --no-default-keyring --keyring /main/system/email.asc.gpg --recipient lorenzo@setale.me --encrypt
+        job: ifne /usr/bin/gpg --batch --armor --trust-model always --recipient 55065306FCC6617D4D928B70020F4A4E40F95228 --recipient 73880ECAF69EC2ED44CE5889502BFB12D0B5295F --encrypt
+
+    - name: Adds GPG Key
+      cron:
+        user: root
+        name: GPG_CMD
+        env: yes
+        job: ifne /usr/bin/gpg --batch --armor --trust-model always --recipient 55065306FCC6617D4D928B70020F4A4E40F95228 --recipient 73880ECAF69EC2ED44CE5889502BFB12D0B5295F --encrypt
 
     - name: Adds Email notification
       cron:
