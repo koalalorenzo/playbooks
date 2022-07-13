@@ -1,0 +1,16 @@
+all:
+  vars:
+    ansible_user: koalalorenzo
+  children:
+    web:
+      children:
+        homeautomation:
+        nas:
+    homeautomation:
+      hosts:
+        zeroberry:
+    pihole:
+      hosts:
+    nas:
+      hosts:
+        nasberry:

@@ -10,6 +10,17 @@
       service: name=ssh state=restarted
 
   tasks:
+    - name: Install packages for SSH
+      package:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+          - openssl
+          - mosh
+          - ufw
+          - openssh-server
+
     - name: Authorize my keys (GitLab)
       authorized_key:
         user: "{{ ansible_user }}"

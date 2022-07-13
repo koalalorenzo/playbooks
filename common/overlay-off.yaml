@@ -1,0 +1,35 @@
+---
+- name: Disables OverlayFS on root
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  handlers:
+    - name: Reboot
+      reboot:
+        reboot_timeout: 600
+        post_reboot_delay: 30
+        pre_reboot_delay: 15
+
+  tasks:
+    - name: "Install OverlayFS"
+      package:
+        name: overlayroot
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+      notify: Reboot
+
+    - name: Force gathering facts from NAS servers
+      ansible.builtin.setup:
+      delegate_to: "{{ item }}"
+      delegate_facts: true
+      loop: "{{ groups['nas'] }}"
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Disable Chroot only when / is mounted on a device
+      shell: overlayroot-chroot sed -i -r 's/overlayroot=.*/overlayroot="disabled"/' /etc/overlayroot.conf
+      when: not ansible_mounts|json_query('[?mount == `/`].device')
+      notify: Reboot
+      when: ansible_distribution == 'Ubuntu'

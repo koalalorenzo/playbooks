@@ -1,0 +1,105 @@
+---
+- name: Set up Munin monitoring
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  handlers:
+    - name: Restart nginx
+      service: name=nginx state=restarted
+    - name: Restart munin
+      service: name=munin state=restarted
+
+  tasks:
+    - name: "Install packages"
+      package:
+        name: "{{ packages }}"
+        update_cache: yes
+        state: present
+      vars:
+        packages:
+          - munin
+          - munin-node
+          - nginx
+          - munin-plugins-extra
+      notify: Restart munin
+
+    - name: Set munin node
+      blockinfile:
+        create: yes
+        path: /etc/munin/munin-node.conf
+        block: |
+          allow ‘^127.0.0.1’
+      notify: Restart nginx
+
+    - name: Renames localhost to host
+      lineinfile:
+        path: /etc/munin/munin.conf
+        regexp: '^\[localhost.localdomain\]'
+        line: "[{{ ansible_host }}]"
+      notify: Restart munin
+
+    - name: Enable plugins
+      file:
+        src: "/usr/share/munin/plugins/{{ item }}"
+        dest: "/etc/munin/plugins/{{ item }}"
+        state: link
+      with_items:
+        - nginx_request
+        - nginx_status
+        - postfix_mailstats
+        - samba
+      notify: Restart munin
+
+    - name: Enable munin master
+      service:
+        name: munin
+        enabled: yes
+
+    - name: Enable & Restart munin-node master
+      service:
+        name: munin-node
+        state: restarted
+        enabled: yes
+
+    - name: Grant access to munin via Tailscale
+      ufw:
+        rule: allow
+        direction: in
+        interface: tailscale0
+        port: 4949
+        proto: tcp
+
+    - name: Set nginx config for munin
+      blockinfile:
+        create: yes
+        path: /etc/nginx/sites-enabled/munin
+        block: |
+          server {
+            listen 443 ssl;
+            server_name munin.h.setale.me;
+
+            ssl_certificate      /etc/ssl/h.setale.me/cert.crt;
+            ssl_certificate_key  /etc/ssl/h.setale.me/cert-priv.pem;
+            ssl_protocols       TLSv1.2 TLSv1.3;
+
+            ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;
+            ssl_prefer_server_ciphers   on;
+            ssl_ecdh_curve              secp384r1;
+
+            location /munin/static/ {
+                alias /etc/munin/static/;
+            }
+
+            location /munin/ {
+                alias /var/cache/munin/www/;
+                expires modified +310s;
+            }
+
+            location / {
+                rewrite ^/$ munin/ redirect; break;
+            }
+          }
+      notify: Restart nginx
