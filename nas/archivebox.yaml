@@ -53,10 +53,10 @@
         block: |
           server {
             listen 443 ssl;
-            server_name archive.h.setale.me;
+            server_name archive.setale.me;
 
-            ssl_certificate      /etc/ssl/h.setale.me/cert.crt;
-            ssl_certificate_key  /etc/ssl/h.setale.me/cert-priv.pem;
+            ssl_certificate      /etc/ssl/setale.me/cert.crt;
+            ssl_certificate_key  /etc/ssl/setale.me/cert-priv.pem;
             ssl_protocols       TLSv1.2 TLSv1.3;
 
             ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;
