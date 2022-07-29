@@ -15,12 +15,15 @@
       private: yes
 
   vars:
-    certs_path: /etc/ssl/h.setale.me/
-    crt_common_name: "h.setale.me"
+    certs_path: /etc/ssl/setale.me/
+    crt_common_name: "setale.me"
     crt_subject_alt_name:
-      - "minio.h.setale.me"
-      - "graph.h.setale.me"
-      - "dash.h.setale.me"
+      - "h.setale.me"
+      - "minio.setale.me"
+      - "minio-api.setale.me"
+      - "graph.setale.me"
+      - "dash.setale.me"
+      - "archive.setale.me"
     cloudflare_zone: setale.me
 
   tasks:
@@ -79,14 +82,14 @@
       api_token: "{{ cloudflare_api_token }}"
       account_email: "{{ cloudflare_email }}"
       zone: "{{ cloudflare_zone }}"
-      record: "{{ challenge.challenge_data[item]['dns-01'].record }}"
+      record: "{{ item.key }}"
       type: TXT
-      value: "{{ challenge.challenge_data[item]['dns-01'].resource_value }}"
+      value: "{{ item.value[0] }}"
       solo: true
       ttl: 60
       state: present
     # Disabled as *.h.setale.me will overwrite h.setale.me
-    with_items: "{{ [crt_common_name] + crt_subject_alt_name }}"
+    loop: "{{ challenge.challenge_data_dns | dict2items }}"
     # with_items: "{{ [crt_common_name] }}"
     when: challenge is changed
 
