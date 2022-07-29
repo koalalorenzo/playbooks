@@ -1,0 +1,89 @@
+---
+- name: ArchiveBox setup
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  handlers:
+    - name: Restart nginx
+      service: name=nginx state=restarted
+
+  tasks:
+    - name: Install Podman
+      package:
+        name: podman
+        state: present
+
+    - name: Create Archivebox Pod
+      shell: |
+        podman run --pod=new:archivebox -dt -v /main/downloads/archivebox/:/data/ -p 7550:8000 docker.io/archivebox/archivebox
+      ignore_errors: yes
+
+    - name: Create SystemD service for ArchiveBox Pods
+      shell: |
+        podman generate systemd --files --name archivebox
+      args:
+        chdir: /etc/systemd/system/
+
+    - name: Enable archivebox systemd service
+      service:
+        name: pod-archivebox
+        enabled: yes
+
+    - name: Monthly Archivebox update
+      cron:
+        user: "root"
+        name: "Monthly Archivebox update"
+        special_time: monthly
+        job: "podman run -dt -v /main/downloads/archivebox/:/data/ docker.io/archivebox/archivebox update | $GPG_CMD"
+
+    - name: Weekly Pocket Archivebox update
+      cron:
+        user: "root"
+        name: "Pocket Archivebox update"
+        special_time: weekly
+        job: "curl -L https://getpocket.com/users/koalalorenzo/feed/all | podman run -it -dt -v /main/downloads/archivebox/:/data/ docker.io/archivebox/archivebox add | $GPG_CMD"
+
+    - name: Set nginx config for ArchiveBox
+      blockinfile:
+        create: yes
+        path: /etc/nginx/sites-enabled/archivebox
+        block: |
+          server {
+            listen 443 ssl;
+            server_name archive.h.setale.me;
+
+            ssl_certificate      /etc/ssl/h.setale.me/cert.crt;
+            ssl_certificate_key  /etc/ssl/h.setale.me/cert-priv.pem;
+            ssl_protocols       TLSv1.2 TLSv1.3;
+
+            ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;
+            ssl_prefer_server_ciphers   on;
+            ssl_ecdh_curve              secp384r1;
+
+            # To allow special characters in headers
+            ignore_invalid_headers off;
+            # Allow any size file to be uploaded.
+            # Set to a value such as 1000m; to restrict file size to a specific value
+            client_max_body_size 0;
+            # To disable buffering
+            proxy_buffering off;
+
+            location / {
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+              proxy_set_header Host $http_host;
+
+              proxy_connect_timeout 300;
+              # Default is HTTP/1, keepalive is only enabled in HTTP/1.1
+              proxy_http_version 1.1;
+              proxy_set_header Connection "";
+              chunked_transfer_encoding off;
+
+              proxy_pass http://localhost:7550;
+            }
+          }
+      notify: Restart nginx
