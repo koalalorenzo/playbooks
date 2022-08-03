@@ -54,7 +54,7 @@
     - name: Set nginx config for PiHole
       blockinfile:
         create: yes
-        path: /etc/nginx/sites-enabled/archivebox
+        path: /etc/nginx/sites-enabled/pihole
         block: |
           server {
             listen 443 ssl;
