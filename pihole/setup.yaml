@@ -1,5 +1,5 @@
 ---
-- name: PiHole via Podman setup
+- name: PiHole pre-config (ex Podman commented)
   hosts: pihole
   become: yes
   become_user: root
@@ -29,27 +29,44 @@
         group: root
         mode: "0655"
 
+    - name: Create pihole config directory (etc)
+      file:
+        state: directory
+        path: "/etc/pihole/etc"
+        owner: root
+        group: root
+        mode: "0655"
+
+    - name: Create pihole config directory (dnsmasq)
+      file:
+        state: directory
+        path: "/etc/pihole/dnsmasq"
+        owner: root
+        group: root
+        mode: "0655"
+
     - name: Populate /etc/pihole/setupVars.conf
       template:
         src: setupVars.conf.tmpl
         dest: /etc/pihole/setupVars.conf
         mode: "0755"
 
-    - name: Create podman
-      shell: |
-        podman run --pod=new:pihole --env-file /etc/pihole/setupVars.conf -dt -v pihole:/etc/pihole -v pidnsmasq:/etc/dnsmasq.d -p 8780:80 -p 53:53/tcp -p 53:53/udp docker.io/pihole/pihole
-      ignore_errors: yes
+    # - name: Create podman
+    #   shell: |
+    #     podman pod create --name pihole --infra -p 127.0.0.1:8780:80 -p 0.0.0.0:53:53
+    #     podman run --pod=pihole --env-file /etc/pihole/setupVars.conf -dt -v /etc/pihole/etc:/etc/pihole -v /etc/pihole/dnsmasq:/etc/dnsmasq.d -p 8780:80 -p 53:53 docker.io/pihole/pihole
+    #   ignore_errors: yes
 
-    - name: Create SystemD service for Pods
-      shell: |
-        podman generate systemd --files --name pihole
-      args:
-        chdir: /etc/systemd/system/
+    # - name: Create SystemD service for Pods
+    #   shell: |
+    #     podman generate systemd --files --name pihole
+    #   args:
+    #     chdir: /etc/systemd/system/
 
-    - name: Enable systemd service
-      service:
-        name: pod-pihole
-        enabled: yes
+    # - name: Enable systemd service
+    #   service:
+    #     name: pod-pihole
+    #     enabled: yes
 
     - name: Set nginx config for PiHole
       blockinfile:
@@ -88,7 +105,7 @@
               proxy_set_header Connection "";
               chunked_transfer_encoding off;
 
-              proxy_pass http://localhost:8780;
+              proxy_pass http://localhost:80;
             }
           }
       notify: Restart nginx
