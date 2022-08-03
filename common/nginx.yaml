@@ -3,6 +3,7 @@
   hosts:
   - nas
   - web
+  - pihole
   become: yes
   become_user: root
   become_method: sudo
