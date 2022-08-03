@@ -1,0 +1,104 @@
+---
+- name: PiHole via Podman setup
+  hosts: pihole
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  handlers:
+    - name: Restart nginx
+      service: name=nginx state=restarted
+
+  vars_prompt:
+    - name: web_password
+      prompt: "Enter the password for PiHole Service"
+      private: yes
+
+  tasks:
+    - name: Install Podman
+      package:
+        name: podman
+        state: present
+
+    - name: Create pihole config directory
+      file:
+        state: directory
+        path: "/etc/pihole"
+        owner: root
+        group: root
+        mode: "0655"
+
+    - name: Populate /etc/pihole/setupVars.conf
+      template:
+        src: setupVars.conf.tmpl
+        dest: /etc/pihole/setupVars.conf
+        mode: "0755"
+
+    - name: Create podman
+      shell: |
+        podman run --pod=new:pihole --env-file /etc/pihole/setupVars.conf -dt -v pihole:/etc/pihole -v pidnsmasq:/etc/dnsmasq.d -p 8780:80 -p 53:53/tcp -p 53:53/udp docker.io/pihole/pihole
+      ignore_errors: yes
+
+    - name: Create SystemD service for Pods
+      shell: |
+        podman generate systemd --files --name pihole
+      args:
+        chdir: /etc/systemd/system/
+
+    - name: Enable systemd service
+      service:
+        name: pod-pihole
+        enabled: yes
+
+    - name: Set nginx config for PiHole
+      blockinfile:
+        create: yes
+        path: /etc/nginx/sites-enabled/archivebox
+        block: |
+          server {
+            listen 443 ssl;
+            server_name pihole.setale.me;
+
+            ssl_certificate      /etc/ssl/setale.me/cert.crt;
+            ssl_certificate_key  /etc/ssl/setale.me/cert-priv.pem;
+            ssl_protocols       TLSv1.2 TLSv1.3;
+
+            ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;
+            ssl_prefer_server_ciphers   on;
+            ssl_ecdh_curve              secp384r1;
+
+            # To allow special characters in headers
+            ignore_invalid_headers off;
+            # Allow any size file to be uploaded.
+            # Set to a value such as 1000m; to restrict file size to a specific value
+            client_max_body_size 0;
+            # To disable buffering
+            proxy_buffering off;
+
+            location / {
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+              proxy_set_header Host $http_host;
+
+              proxy_connect_timeout 300;
+              # Default is HTTP/1, keepalive is only enabled in HTTP/1.1
+              proxy_http_version 1.1;
+              proxy_set_header Connection "";
+              chunked_transfer_encoding off;
+
+              proxy_pass http://localhost:8780;
+            }
+          }
+      notify: Restart nginx
+
+    - name: "Ensures UFW is available"
+      package:
+        name: ufw
+        state: present
+
+    - name: Configure DNS on UFW
+      ufw:
+        rule: allow
+        port: 53
