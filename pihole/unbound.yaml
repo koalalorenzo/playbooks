@@ -7,9 +7,9 @@
     gather_facts: no
 
     tasks:
-      - name: "Install packages"
+      - name: Install packages
         package:
-          name: "unbound"
+          name: unbound
           state: present
 
       - name: "Copy the configuration"
