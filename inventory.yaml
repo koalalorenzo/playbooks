@@ -11,6 +11,7 @@ all:
         zeroberry:
     pihole:
       hosts:
+        zeroberry:
     nas:
       hosts:
         nasberry:
