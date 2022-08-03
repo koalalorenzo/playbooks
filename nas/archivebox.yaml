@@ -44,7 +44,7 @@
         user: "root"
         name: "Pocket Archivebox update"
         special_time: weekly
-        job: "curl -L https://getpocket.com/users/koalalorenzo/feed/all | podman run -it -dt -v /main/downloads/archivebox/:/data/ docker.io/archivebox/archivebox add | $GPG_CMD"
+        job: "podman run -dt -v /main/downloads/archivebox/:/data/ docker.io/archivebox/archivebox add https://getpocket.com/users/koalalorenzo/feed/all --depth=1 --update | $GPG_CMD"
 
     - name: Set nginx config for ArchiveBox
       blockinfile:
