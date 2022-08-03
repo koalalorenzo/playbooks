@@ -23,4 +23,5 @@
           - make
           - git
           - ncdu
+          - podman
           - smartmontools
