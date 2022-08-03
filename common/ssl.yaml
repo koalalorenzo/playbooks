@@ -1,7 +1,9 @@
 ---
 - name: SSL Setup (NAS)
   serial: 1
-  hosts: nas
+  hosts:
+    - nas
+    - pihole
   become: yes
   become_user: root
   become_method: sudo
@@ -24,6 +26,7 @@
       - "graph.setale.me"
       - "dash.setale.me"
       - "archive.setale.me"
+      - "pihole.setale.me"
     cloudflare_zone: setale.me
 
   tasks:
@@ -95,7 +98,7 @@
 
   - name: Pause
     pause:
-      seconds: "60"
+      seconds: "61"
 
   - name: validate acme challenge
     acme_certificate:
