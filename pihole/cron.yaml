@@ -1,0 +1,16 @@
+---
+- name: Crontab for pihole ( for manual setup )
+  hosts: pihole
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: Update the database every 2 weeks
+      cron:
+        name: "Update pihole gravity database"
+        user: root
+        hour: "11"
+        minute: "30"
+        day: "3, 18"
+        job: "pihole -g"

@@ -1,5 +1,5 @@
 ---
-- name: PiHole with NGINX (for manual setup)
+- name: PiHole with NGINX ( for manual setup )
   hosts:
   - pihole
   become: yes
