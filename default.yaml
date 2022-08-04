@@ -1,21 +1,6 @@
 ---
 - import_playbook: common.yaml
-
-# # # NAS
-- import_playbook: nas/openzfs.yaml
-- import_playbook: nas/email.yaml
-# # - import_playbook: nas/zram.yaml
-- import_playbook: nas/packages.yaml
-# - import_playbook: nas/samba.yaml
-- import_playbook: nas/restic.yaml
-# - import_playbook: nas/gickup.yaml
-
-# # Pihole stuff
-- import_playbook: pihole/unbound.yaml
-- import_playbook: pihole/firewall.yaml
-- import_playbook: pihole/pihole-setup.yaml
-# - import_playbook: pihole/upgrade.yaml
-# - import_playbook: pihole/gravity-update.yaml
+- import_playbook: nas.yaml
 
 # Home Automation
 - import: homeauto/hue_exporter.yaml
