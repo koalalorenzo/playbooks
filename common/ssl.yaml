@@ -3,7 +3,7 @@
   serial: 1
   hosts:
     - nas
-    - pihole
+    - web
   become: yes
   become_user: root
   become_method: sudo
