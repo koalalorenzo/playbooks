@@ -17,6 +17,10 @@ reboot:
 	ansible-playbook -i ./inventory.yaml common/reboot.yaml ${ARGS}
 .PHONY: reboot
 
+common:
+	ansible-playbook -i ./inventory.yaml ./common.yaml ${ARGS}
+.PHONY: common
+
 %:
 	ansible-playbook -i ./inventory.yaml $*.yaml ${ARGS}
 
