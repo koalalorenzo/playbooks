@@ -14,7 +14,7 @@ dns:
   bind_hosts:
   - 0.0.0.0
   port: 53
-  statistics_interval: 1
+  statistics_interval: 30
   querylog_enabled: true
   querylog_file_enabled: true
   querylog_interval: 2160h
@@ -43,7 +43,10 @@ dns:
   fastest_timeout: 1s
   allowed_clients: []
   disallowed_clients: []
-  blocked_hosts: []
+  blocked_hosts:
+  - version.bind
+  - id.server
+  - hostname.bind
   trusted_proxies:
   - 127.0.0.0/8
   - ::1/128
@@ -74,8 +77,8 @@ dns:
   local_ptr_upstreams: []
 tls:
   enabled: true
-  server_name: "dns.setale.me"
-  force_https: false
+  server_name: dns.setale.me
+  force_https: true
   port_https: 443
   port_dns_over_tls: 853
   port_dns_over_quic: 853
@@ -85,8 +88,8 @@ tls:
   strict_sni_check: false
   certificate_chain: ""
   private_key: ""
-  certificate_path: "/etc/ssl/setale.me/fullchain.crt"
-  private_key_path: "/etc/ssl/setale.me/cert-priv.pem"
+  certificate_path: /etc/ssl/setale.me/fullchain.crt
+  private_key_path: /etc/ssl/setale.me/cert-priv.pem
 filters:
 - enabled: true
   url: https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt
@@ -160,8 +163,120 @@ filters:
   url: https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
   name: WindowsSpyBlocker - Hosts spy rules
   id: 1660139160
+- enabled: true
+  url: https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
+  name: Polish Block List
+  id: 1660142028
+- enabled: true
+  url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
+  name: Spam Hosts
+  id: 1660142029
+- enabled: true
+  url: https://v.firebog.net/hosts/static/w3kbl.txt
+  name: FireBog List
+  id: 1660142030
+- enabled: true
+  url: https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
+  name: Referrer Spammers
+  id: 1660142031
+- enabled: true
+  url: https://v.firebog.net/hosts/AdguardDNS.txt
+  name: FireBog AdGuardDNS
+  id: 1660142033
+- enabled: true
+  url: https://v.firebog.net/hosts/Admiral.txt
+  name: FIreBog Admiral
+  id: 1660142034
+- enabled: true
+  url: https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
+  name: AnudeepND BlackList Ads
+  id: 1660142035
+- enabled: true
+  url: https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+  name: disconnect.me
+  id: 1660142036
+- enabled: true
+  url: https://v.firebog.net/hosts/Easylist.txt
+  name: FireBog EasyList Ads
+  id: 1660142037
+- enabled: true
+  url: https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+  name: YoYo Adserver List
+  id: 1660142038
+- enabled: true
+  url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
+  name: FadeMind Ads
+  id: 1660142039
+- enabled: true
+  url: https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
+  name: BigDargon Ads List
+  id: 1660142040
+- enabled: true
+  url: https://v.firebog.net/hosts/Easyprivacy.txt
+  name: FireBog Easy Privacy
+  id: 1660142041
+- enabled: true
+  url: https://v.firebog.net/hosts/Prigent-Ads.txt
+  name: FireBog Prigent Ads
+  id: 1660142042
+- enabled: true
+  url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
+  name: FadeMind Tracking
+  id: 1660142043
+- enabled: true
+  url: https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
+  name: Fogey Tracking
+  id: 1660142044
+- enabled: true
+  url: https://hostfiles.frogeye.fr/multiparty-trackers-hosts.txt
+  name: Fogey Multiparty Tracking
+  id: 1660142045
+- enabled: true
+  url: https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
+  name: DeveloperDan Tracking and ads
+  id: 1660142046
+- enabled: true
+  url: https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt
+  name: PiHole Smart TV
+  id: 1660142047
+- enabled: true
+  url: https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/android-tracking.txt
+  name: Android Tracking PiHole
+  id: 1660142048
+- enabled: true
+  url: https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
+  name: Malicious Dandelion Sprout
+  id: 1660142049
+- enabled: true
+  url: https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
+  name: Malicious digitali side
+  id: 1660142050
+- enabled: true
+  url: https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
+  name: disconnect.me Malware
+  id: 1660142051
+- enabled: true
+  url: https://v.firebog.net/hosts/Prigent-Crypto.txt
+  name: FireBog Malware Crypto
+  id: 1660142052
 whitelist_filters: []
-user_rules: []
+user_rules:
+- '@@||setale.me^'
+- '@@||icloud.com^'
+- '@@||tailscale.com^'
+- '@@||tailscale.io^'
+- '@@||ts.net^'
+- '@@t.ly^'
+- '@@bit.ly^'
+- '@@www.bit.ly^'
+- '@@ow.ly^'
+- '@@tinyurl.com^'
+- '@@s.shopify.com^'
+- '# EA / Origin uses this'
+- '@@cdn.optimizely.com^'
+- '# Mining XMR'
+- '@@pool.supportxmr.com^'
+- ""
 dhcp:
   enabled: false
   interface_name: ""
