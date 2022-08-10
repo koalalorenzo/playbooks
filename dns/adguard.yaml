@@ -16,7 +16,7 @@
           suffix: adguard
         register: tempdir
 
-    - name: Create an AdGuard Directory
+    - name: AdGuard Home directory in /opt/
       file:
         state: directory
         path: "/opt/adguard"
@@ -24,6 +24,21 @@
         group: root
         mode: "0655"
 
+    - name: Check if Adguard binary exists
+      stat:
+        path: /opt/adguard/AdGuardHome
+      register: adguard_installed
+
+    - name: Stops Adguard if it exists
+      shell: |
+        /opt/adguard/AdGuardHome -s stop
+        /opt/adguard/AdGuardHome -s uninstall
+      args:
+        chdir: "/opt/adguard/"
+      when: adguard_installed.stat.exists
+      ignore_errors: yes
+
+    - block:
       - uri:
           url: https://api.github.com/repos/AdguardTeam/AdGuardHome/releases/latest
           return_content: true
@@ -73,7 +88,7 @@
 
     - name: Populate adguard config file
       template:
-        src: adguard-config.yaml
+        src: AdGuardHome.yaml
         dest: /opt/adguard/AdGuardHome.yaml
         mode: "0755"
 
@@ -82,3 +97,39 @@
         /opt/adguard/AdGuardHome -h 0.0.0.0 -p 80 -c /opt/adguard/AdGuardHome.yaml -s install
       args:
         chdir: "/opt/adguard/"
+
+    - name: Allow Firewall DNS (UDP)
+      ufw:
+        rule: allow
+        port: 53
+        proto: udp
+
+    - name: Allow Firewall DNS (TCP)
+      ufw:
+        rule: allow
+        port: 53
+        proto: tcp
+
+    - name: Allow Firewall HTTP
+      ufw:
+        rule: allow
+        port: 80
+        proto: tcp
+
+    - name: Allow Firewall HTTPS
+      ufw:
+        rule: allow
+        port: 443
+        proto: tcp
+
+    - name: Allow Firewall DNS over Quic/TLS (TCP)
+      ufw:
+        rule: allow
+        port: 853
+        proto: tcp
+
+    - name: Allow Firewall DNS over Quic/TLS (UDP)
+      ufw:
+        rule: allow
+        port: 853
+        proto: udp
