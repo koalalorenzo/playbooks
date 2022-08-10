@@ -1,0 +1,64 @@
+
+---
+- name: Setup AdGuard
+  hosts: pihole
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  tasks:
+    - name: gather installed packages
+      package_facts:
+
+    - name: Install AdGuard
+      block:
+      - name: Create temporary build directory
+        tempfile:
+          state: directory
+          suffix: adguard
+        register: tempdir
+
+      - uri:
+          url: https://api.github.com/repos/AdguardTeam/AdGuardHome/releases/latest
+          return_content: true
+        register: json_reponse
+
+      - when: ansible_machine == "aarch64"
+        block:
+        - name: Download package (arch64)
+          unarchive:
+            src: "{{ item }}"
+            dest: "{{ tempdir.path }}/"
+            remote_src: yes
+          when: ("linux" in item) and (".tar.gz" in item) and ("arm64" in item)
+          with_items:
+            - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
+
+      - when: ansible_machine == "armv6l"
+        block:
+        - name: Download package (armv6l)
+          unarchive:
+            src: "{{ item }}"
+            dest: "{{ tempdir.path }}/"
+            remote_src: yes
+          when: ("linux" in item) and (".tar.gz" in item) and ("armv6" in item)
+          with_items:
+            - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
+
+      - when: ansible_machine != "aarch64" and ansible_machine != "armv6"
+        block:
+        - name: Download package (other)
+          unarchive:
+            src: "{{ item }}"
+            dest: "{{ tempdir.path }}/"
+            remote_src: yes
+          when: ("linux" in item) and (ansible_machine in item)
+          with_items:
+            - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
+
+    - name: Install Adguard via CLI
+      shell: |
+        {{ tempdir.path }}/AdGuardHome --install -h 0.0.0.0 -p 8191 -s install
+      args:
+        chdir: "{{ tempdir.path }}/"
