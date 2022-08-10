@@ -1,5 +1,0 @@
----
-- import_playbook: pihole/unbound.yaml
-# - import_playbook: pihole/podman.yaml
-# - import_playbook: pihole/nginx.yaml # manual
-- import_playbook: pihole/cron.yaml # manual

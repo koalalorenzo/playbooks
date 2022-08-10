@@ -9,7 +9,7 @@ all:
     homeautomation:
       hosts:
         zeroberry.local:
-    pihole:
+    dns:
       vars:
         tailscale_accept_dns: "false"
       hosts:
