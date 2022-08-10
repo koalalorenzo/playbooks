@@ -7,9 +7,9 @@
     gather_facts: no
 
     tasks:
-      - name: "Install packages"
+      - name: Install packages
         package:
-          name: "unbound"
+          name: unbound
           state: present
 
       - name: "Copy the configuration"
@@ -20,10 +20,21 @@
           owner: root
           group: root
           mode: 0644
-        register: copyconf
+
+      - name: Disable Unbound Resolvconf
+        service:
+          name: unbound-resolvconf
+          state: stopped
+          enabled: no
+
+      - name: Remove Unbound resolvconf
+        file:
+          state: absent
+          path: "/etc/unbound/unbound.conf.d/resolvconf_resolvers.conf"
 
       - name: Restart Unbound
         service:
           name: unbound
           state: restarted
-        when: copyconf.changed
+          enabled: yes
+

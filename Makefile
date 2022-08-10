@@ -2,7 +2,10 @@ ARGS ?=
 
 ANSIBLE_CONFIG=facts.cfg
 
-.EXPORT_ALL_VARIABLES:
+# Add some caffeine to prevent sleep while running
+ifeq ($(shell uname -s),Darwin)
+SHELL := caffeinate bash
+endif
 
 deps:
 	# Disabled datadog as we don't use it anymore
@@ -16,6 +19,10 @@ run: deps
 reboot:
 	ansible-playbook -i ./inventory.yaml common/reboot.yaml ${ARGS}
 .PHONY: reboot
+
+common:
+	ansible-playbook -i ./inventory.yaml ./common.yaml ${ARGS}
+.PHONY: common
 
 %:
 	ansible-playbook -i ./inventory.yaml $*.yaml ${ARGS}

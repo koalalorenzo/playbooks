@@ -28,3 +28,4 @@
           - screen
           - openssh-server
           - golang
+          - podman

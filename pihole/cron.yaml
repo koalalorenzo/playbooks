@@ -1,0 +1,19 @@
+---
+- name: Crontab for pihole ( for manual setup )
+  hosts: pihole
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: Update the database every 2 weeks
+      cron:
+        name: "Update pihole gravity database"
+        special_time: weekly
+        job: "pihole -g"
+
+    - name: Monthly config backup
+      cron:
+        name: "Config backup"
+        special_time: monthly
+        job: "pihole -a -t"

@@ -14,7 +14,7 @@
       lineinfile:
         path: /etc/dhcpcd.conf
         regexp: '^static domain_name_servers='
-        line: 'static domain_name_servers=1.1.1.1, 1.0.0.1'
+        line: 'static domain_name_servers=1.1.1.1'
         state: present
       notify: Restart DNS
       when: ansible_distribution == 'Debian'

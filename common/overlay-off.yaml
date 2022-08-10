@@ -30,6 +30,5 @@
 
     - name: Disable Chroot only when / is mounted on a device
       shell: overlayroot-chroot sed -i -r 's/overlayroot=.*/overlayroot="disabled"/' /etc/overlayroot.conf
-      when: not ansible_mounts|json_query('[?mount == `/`].device')
+      when: not ansible_mounts|json_query('[?mount == `/`].device') and ansible_distribution == 'Ubuntu'
       notify: Reboot
-      when: ansible_distribution == 'Ubuntu'
