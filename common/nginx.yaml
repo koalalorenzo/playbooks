@@ -19,22 +19,6 @@
         update_cache: yes
         state: present
 
-    - name: Grant access to HTTP via Tailscale
-      ufw:
-        rule: allow
-        direction: in
-        interface: tailscale0
-        port: 80
-        proto: tcp
-
-    - name: Grant access to HTTPS via Tailscale
-      ufw:
-        rule: allow
-        direction: in
-        interface: tailscale0
-        port: 443
-        proto: tcp
-
     - name: Remove NGINX default site
       file:
         state: absent
@@ -43,6 +27,8 @@
 
     - name: Get HTTPS Certificates from tailscale
       shell: tailscale cert --cert-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.crt --key-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key {{ ansible_hostname }}.fish-alpha.ts.net
+      ignore_errors: yes
+      register: tailscalecert
 
     - name: Set nginx config for main (aka new default)
       blockinfile:
@@ -98,6 +84,7 @@
             return 302 https://$host$request_uri;
           }
       notify: Restart nginx
+      when: tailscalecert is succeeded
 
     - name: Set nginx config for status report
       blockinfile:
