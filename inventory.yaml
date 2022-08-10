@@ -5,7 +5,6 @@ all:
   children:
     web:
       children:
-        homeautomation:
         nas:
     homeautomation:
       hosts:
