@@ -2,7 +2,10 @@ ARGS ?=
 
 ANSIBLE_CONFIG=facts.cfg
 
-.EXPORT_ALL_VARIABLES:
+# Add some caffeine to prevent sleep while running
+ifeq ($(shell uname -s),Darwin)
+SHELL := caffeinate bash
+endif
 
 deps:
 	# Disabled datadog as we don't use it anymore
