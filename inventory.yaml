@@ -1,6 +1,7 @@
 all:
   vars:
     ansible_user: koalalorenzo
+    tailscale_accept_dns: "true"
   children:
     web:
       children:
@@ -8,10 +9,12 @@ all:
         nas:
     homeautomation:
       hosts:
-        zeroberry:
+        zeroberry.local:
     pihole:
+      vars:
+        tailscale_accept_dns: "false"
       hosts:
-        zeroberry:
+        zeroberry.local:
     nas:
       hosts:
         nasberry:
