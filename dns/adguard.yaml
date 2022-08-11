@@ -1,0 +1,135 @@
+
+---
+- name: Setup AdGuard
+  hosts: dns
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  tasks:
+    - name: Install AdGuard
+      block:
+      - name: Create temporary build directory
+        tempfile:
+          state: directory
+          suffix: adguard
+        register: tempdir
+
+    - name: AdGuard Home directory in /opt/
+      file:
+        state: directory
+        path: "/opt/adguard"
+        owner: root
+        group: root
+        mode: "0655"
+
+    - name: Check if Adguard binary exists
+      stat:
+        path: /opt/adguard/AdGuardHome
+      register: adguard_installed
+
+    - name: Stops Adguard if it exists
+      shell: |
+        /opt/adguard/AdGuardHome -s stop
+        /opt/adguard/AdGuardHome -s uninstall
+      args:
+        chdir: "/opt/adguard/"
+      when: adguard_installed.stat.exists
+      ignore_errors: yes
+
+    - block:
+      - uri:
+          url: https://api.github.com/repos/AdguardTeam/AdGuardHome/releases/latest
+          return_content: true
+        register: json_reponse
+
+      - when: ansible_machine == "aarch64"
+        block:
+        - name: Download package (arch64)
+          unarchive:
+            src: "{{ item }}"
+            dest: "{{ tempdir.path }}/"
+            remote_src: yes
+          when: ("linux" in item) and (".tar.gz" in item) and ("arm64" in item)
+          with_items:
+            - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
+
+      - when: ansible_machine == "armv6l"
+        block:
+        - name: Download package (armv6l)
+          unarchive:
+            src: "{{ item }}"
+            dest: "{{ tempdir.path }}/"
+            remote_src: yes
+          when: ("linux" in item) and (".tar.gz" in item) and ("armv6" in item)
+          with_items:
+            - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
+
+      - when: ansible_machine != "aarch64" and ansible_machine != "armv6"
+        block:
+        - name: Download package (other)
+          unarchive:
+            src: "{{ item }}"
+            dest: "{{ tempdir.path }}/"
+            remote_src: yes
+          when: ("linux" in item) and (ansible_machine in item)
+          with_items:
+            - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
+
+    - name: "Copy the binary"
+      copy:
+        remote_src: true
+        src: "{{ tempdir.path }}/AdGuardHome/AdGuardHome"
+        dest: /opt/adguard/AdGuardHome
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Populate adguard config file
+      template:
+        src: AdGuardHome.yaml
+        dest: /opt/adguard/AdGuardHome.yaml
+        mode: "0755"
+
+    - name: Install Adguard via CLI
+      shell: |
+        /opt/adguard/AdGuardHome -h 0.0.0.0 -p 80 -c /opt/adguard/AdGuardHome.yaml -s install
+      args:
+        chdir: "/opt/adguard/"
+
+    - name: Allow Firewall DNS (UDP)
+      ufw:
+        rule: allow
+        port: 53
+        proto: udp
+
+    - name: Allow Firewall DNS (TCP)
+      ufw:
+        rule: allow
+        port: 53
+        proto: tcp
+
+    - name: Allow Firewall HTTP
+      ufw:
+        rule: allow
+        port: 80
+        proto: tcp
+
+    - name: Allow Firewall HTTPS
+      ufw:
+        rule: allow
+        port: 443
+        proto: tcp
+
+    - name: Allow Firewall DNS over Quic/TLS (TCP)
+      ufw:
+        rule: allow
+        port: 853
+        proto: tcp
+
+    - name: Allow Firewall DNS over Quic/TLS (UDP)
+      ufw:
+        rule: allow
+        port: 853
+        proto: udp

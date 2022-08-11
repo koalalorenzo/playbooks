@@ -1,6 +1,6 @@
 ---
 - name: PiHole config for manual setup
-  hosts: pihole
+  hosts: dns
   become: yes
   become_user: root
   become_method: sudo

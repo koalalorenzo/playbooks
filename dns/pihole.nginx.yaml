@@ -1,7 +1,7 @@
 ---
 - name: PiHole with NGINX ( for manual setup )
   hosts:
-  - pihole
+  - dns
   become: yes
   become_user: root
   become_method: sudo
@@ -46,7 +46,7 @@
         block: |
           server {
             listen 443 ssl;
-            server_name pihole.setale.me;
+            server_name dns.setale.me;
 
             ssl_certificate      /etc/ssl/setale.me/cert.crt;
             ssl_certificate_key  /etc/ssl/setale.me/cert-priv.pem;

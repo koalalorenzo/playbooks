@@ -1,6 +1,6 @@
 ---
   - name: Install Unbound DNS
-    hosts: pihole
+    hosts: dns
     become: yes
     become_user: root
     become_method: sudo
@@ -16,7 +16,7 @@
         copy:
           remote_src: false
           src: unbound.conf
-          dest: /etc/unbound/unbound.conf.d/pi-hole.conf
+          dest: /etc/unbound/unbound.conf.d/custom.conf
           owner: root
           group: root
           mode: 0644

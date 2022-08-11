@@ -4,6 +4,7 @@
   hosts:
     - nas
     - web
+    - dns
   become: yes
   become_user: root
   become_method: sudo
@@ -26,7 +27,7 @@
       - "graph.setale.me"
       - "dash.setale.me"
       - "archive.setale.me"
-      - "pihole.setale.me"
+      - "dns.setale.me"
     cloudflare_zone: setale.me
 
   tasks:

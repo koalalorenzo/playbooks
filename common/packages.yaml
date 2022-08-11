@@ -29,3 +29,4 @@
           - openssh-server
           - golang
           - podman
+          - vim
