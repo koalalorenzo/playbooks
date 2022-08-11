@@ -6,6 +6,9 @@ Dependencies:
 * Ansible
 * GNU Make
 
+**Important**: on macOS / Darwin it will use `caffeinate` command to prevent the
+Mac from sleeping while running the playbooks.
+
 ## How to Run
 You can run all or a specific one:
 
