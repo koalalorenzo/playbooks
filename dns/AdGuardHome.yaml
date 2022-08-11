@@ -43,10 +43,7 @@ dns:
   fastest_timeout: 1s
   allowed_clients: []
   disallowed_clients: []
-  blocked_hosts:
-  - version.bind
-  - id.server
-  - hostname.bind
+  blocked_hosts: []
   trusted_proxies:
   - 127.0.0.0/8
   - ::1/128
@@ -69,8 +66,19 @@ dns:
   safesearch_cache_size: 1048576
   parental_cache_size: 1048576
   cache_time: 30
-  rewrites: []
-  blocked_services: []
+  rewrites:
+  - domain: dns.setale.me
+    answer: 192.168.197.110
+  - domain: dns.setale.me
+    answer: 100.103.44.30
+  - domain: nasberry.fish-alpha.ts.net
+    answer: 100.83.51.127
+  - domain: nasberry.fish-alpha.ts.net
+    answer: 192.168.197.100
+  blocked_services:
+  - mail_ru
+  - vk
+  - ok
   upstream_timeout: 10s
   private_networks: []
   use_private_ptr_resolvers: true
@@ -259,9 +267,12 @@ filters:
   url: https://v.firebog.net/hosts/Prigent-Crypto.txt
   name: FireBog Malware Crypto
   id: 1660142052
+- enabled: true
+  url: https://filters.adtidy.org/extension/ublock/filters/1.txt
+  name: Russian Filter Block
+  id: 1660142053
 whitelist_filters: []
 user_rules:
-- '@@||setale.me^'
 - '@@||icloud.com^'
 - '@@||tailscale.com^'
 - '@@||tailscale.io^'
