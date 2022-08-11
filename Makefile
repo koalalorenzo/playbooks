@@ -4,7 +4,7 @@ ANSIBLE_CONFIG=facts.cfg
 
 # Add some caffeine to prevent sleep while running
 ifeq ($(shell uname -s),Darwin)
-SHELL := caffeinate bash
+SHELL := caffeinate -i bash
 endif
 
 deps:
