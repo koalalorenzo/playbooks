@@ -1,0 +1,20 @@
+---
+- name: Transmission BitTorrent
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - package:
+        name: "transmission-daemon"
+        state: present
+
+    - name: Create partials downloads directory
+      file:
+        state: directory
+        path: "/main/downloads/.partials"
+        owner: root
+        group: root
+        mode: "0777"
