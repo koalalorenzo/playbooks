@@ -24,6 +24,14 @@
         state: present
       register: swapsize
 
+    - name: Allows bigger
+      lineinfile:
+        path: /etc/dphys-swapfile
+        regexp: '^CONF_MAXSWAP'
+        line: 'CONF_MAXSWAP=4096'
+        state: present
+      register: swapsize
+
     - name: Create & setup swapfile
       shell: dphys-swapfile setup
       when: swapsize.changed
