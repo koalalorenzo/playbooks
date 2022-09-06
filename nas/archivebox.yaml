@@ -27,10 +27,21 @@
       args:
         chdir: /etc/systemd/system/
 
-    - name: Enable archivebox systemd service
+    - name: Stop the service
       service:
         name: pod-archivebox
-        enabled: yes
+        state: stopped
+
+    - name: Generate config file
+      template:
+        src: ArchiveBox.conf
+        dest: /main/downloads/archivebox/ArchiveBox.conf
+        mode: "0755"
+
+    - name: Stop the service
+      service:
+        name: pod-archivebox
+        state: started
 
     - name: Monthly Archivebox update
       cron:
@@ -72,3 +83,8 @@
             }
           }
       notify: Restart nginx
+
+    - name: Enable archivebox systemd service
+      service:
+        name: pod-archivebox
+        enabled: yes
