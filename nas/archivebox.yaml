@@ -27,10 +27,21 @@
       args:
         chdir: /etc/systemd/system/
 
-    - name: Enable archivebox systemd service
+    - name: Stop the service
       service:
         name: pod-archivebox
-        enabled: yes
+        state: stopped
+
+    - name: Generate config file
+      template:
+        src: ArchiveBox.conf
+        dest: /main/downloads/archivebox/ArchiveBox.conf
+        mode: "0755"
+
+    - name: Stop the service
+      service:
+        name: pod-archivebox
+        state: started
 
     - name: Monthly Archivebox update
       cron:
@@ -51,6 +62,8 @@
         create: yes
         path: /etc/nginx/sites-enabled/archivebox
         block: |
+          proxy_cache_path /tmp/archivebox levels=1:2 keys_zone=archivebox:5m max_size=1g inactive=60m use_temp_path=off;
+
           server {
             listen 443 ssl;
             server_name archive.setale.me;
@@ -63,27 +76,15 @@
             ssl_prefer_server_ciphers   on;
             ssl_ecdh_curve              secp384r1;
 
-            # To allow special characters in headers
-            ignore_invalid_headers off;
-            # Allow any size file to be uploaded.
-            # Set to a value such as 1000m; to restrict file size to a specific value
-            client_max_body_size 0;
-            # To disable buffering
-            proxy_buffering off;
-
             location / {
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Forwarded-Proto $scheme;
-              proxy_set_header Host $http_host;
-
-              proxy_connect_timeout 300;
-              # Default is HTTP/1, keepalive is only enabled in HTTP/1.1
-              proxy_http_version 1.1;
-              proxy_set_header Connection "";
-              chunked_transfer_encoding off;
-
+              proxy_read_timeout 300;
+              proxy_cache archivebox;
               proxy_pass http://localhost:7550;
             }
           }
       notify: Restart nginx
+
+    - name: Enable archivebox systemd service
+      service:
+        name: pod-archivebox
+        enabled: yes
