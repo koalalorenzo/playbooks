@@ -8,7 +8,7 @@
   become: yes
   become_user: root
   become_method: sudo
-  gather_facts: no
+  gather_facts: yes
   vars_prompt:
     - name: cloudflare_email
       prompt: "Enter Cloudflare username (Cloudflare - Personal)"
@@ -35,10 +35,22 @@
       service: name=nginx state=restarted
 
   tasks:
-    - name: Get HTTPS Certificates from tailscale
-      shell: tailscale cert --cert-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.crt --key-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key {{ ansible_hostname }}.fish-alpha.ts.net
-      ignore_errors: yes
-      notify: Restart nginx
+  - stat: path=/etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key get_md5=yes
+    register: tailscale_ssl_key_before
+    ignore_errors: yes
+
+  - name: Get HTTPS Certificates from tailscale
+    shell: tailscale cert --cert-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.crt --key-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key {{ ansible_hostname }}.fish-alpha.ts.net
+    ignore_errors: yes
+    changed_when: False
+
+  - stat: path=/etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key get_md5=yes
+    register: tailscale_ssl_key_after
+    ignore_errors: yes
+
+  - debug: msg='Notify to Restart NGINX if Tailscale SSL Certificate changed'
+    changed_when: tailscale_ssl_key_before.stat.md5 != tailscale_ssl_key_after.stat.md5
+    notify: Restart nginx
 
   - name: create directory to store certs
     file:
