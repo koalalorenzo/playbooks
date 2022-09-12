@@ -30,7 +30,16 @@
       - "dns.setale.me"
     cloudflare_zone: setale.me
 
+  handlers:
+    - name: Restart nginx
+      service: name=nginx state=restarted
+
   tasks:
+    - name: Get HTTPS Certificates from tailscale
+      shell: tailscale cert --cert-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.crt --key-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key {{ ansible_hostname }}.fish-alpha.ts.net
+      ignore_errors: yes
+      notify: Restart nginx
+
   - name: create directory to store certs
     file:
       path: "{{ certs_path }}"
