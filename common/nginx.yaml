@@ -29,6 +29,7 @@
       shell: tailscale cert --cert-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.crt --key-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key {{ ansible_hostname }}.fish-alpha.ts.net
       ignore_errors: yes
       register: tailscalecert
+      notify: Restart nginx
 
     - name: Set nginx config for main (aka new default)
       blockinfile:
