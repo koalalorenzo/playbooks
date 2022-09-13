@@ -27,10 +27,21 @@
       args:
         chdir: /etc/systemd/system/
 
-    - name: Enable archivebox systemd service
+    - name: Stop the service
       service:
         name: pod-archivebox
-        enabled: yes
+        state: stopped
+
+    - name: Generate config file
+      template:
+        src: ArchiveBox.conf
+        dest: /main/downloads/archivebox/ArchiveBox.conf
+        mode: "0755"
+
+    - name: Stop the service
+      service:
+        name: pod-archivebox
+        state: started
 
     - name: Monthly Archivebox update
       cron:
@@ -51,6 +62,8 @@
         create: yes
         path: /etc/nginx/sites-enabled/archivebox
         block: |
+          proxy_cache_path /tmp/archivebox levels=1:2 keys_zone=archivebox:5m max_size=1g inactive=60m use_temp_path=off;
+
           server {
             listen 443 ssl;
             server_name archive.setale.me;
@@ -64,7 +77,14 @@
             ssl_ecdh_curve              secp384r1;
 
             location / {
+              proxy_read_timeout 300;
+              proxy_cache archivebox;
               proxy_pass http://localhost:7550;
             }
           }
       notify: Restart nginx
+
+    - name: Enable archivebox systemd service
+      service:
+        name: pod-archivebox
+        enabled: yes

@@ -8,7 +8,7 @@
   become: yes
   become_user: root
   become_method: sudo
-  gather_facts: no
+  gather_facts: yes
   vars_prompt:
     - name: cloudflare_email
       prompt: "Enter Cloudflare username (Cloudflare - Personal)"
@@ -31,7 +31,28 @@
       - "dns.setale.me"
     cloudflare_zone: setale.me
 
+  handlers:
+    - name: Restart nginx
+      service: name=nginx state=restarted
+
   tasks:
+  - stat: path=/etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key get_md5=yes
+    register: tailscale_ssl_key_before
+    ignore_errors: yes
+
+  - name: Get HTTPS Certificates from tailscale
+    shell: tailscale cert --cert-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.crt --key-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key {{ ansible_hostname }}.fish-alpha.ts.net
+    ignore_errors: yes
+    changed_when: False
+
+  - stat: path=/etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key get_md5=yes
+    register: tailscale_ssl_key_after
+    ignore_errors: yes
+
+  - debug: msg='Notify to Restart NGINX if Tailscale SSL Certificate changed'
+    changed_when: tailscale_ssl_key_before.stat.md5 != tailscale_ssl_key_after.stat.md5
+    notify: Restart nginx
+
   - name: create directory to store certs
     file:
       path: "{{ certs_path }}"
@@ -56,6 +77,7 @@
     openssl_privatekey:
       path: "{{ certs_path }}/cert-priv.pem"
       size: 4096
+    notify: Restart nginx
 
   - name: generate csr
     openssl_csr:
@@ -64,6 +86,7 @@
       common_name: "{{ crt_common_name }}"
       subject_alt_name: "DNS:{{ crt_subject_alt_name | join(',DNS:') }}"
     register: csr_data
+    notify: Restart nginx
 
   - name: create acme challenge
     acme_certificate:
@@ -77,6 +100,7 @@
       remaining_days: 90
     register: challenge
     when: csr_data is changed
+    notify: Restart nginx
 
   - name: Pause 5 sec
     pause:
@@ -115,6 +139,7 @@
       remaining_days: 90
       data: "{{ challenge }}"
     when: challenge is changed
+    notify: Restart nginx
 
   - name: delete cloudflare TXT record
     cloudflare_dns:
@@ -128,3 +153,4 @@
     loop: "{{ challenge.challenge_data_dns | dict2items }}"
     # with_items: "{{ [crt_common_name] }}"
     when: challenge is changed
+
