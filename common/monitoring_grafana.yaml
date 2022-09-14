@@ -100,6 +100,12 @@
         replace: "instance: {{ ansible_hostname }}"
       notify: Restart grafana-agent
 
+    - name: Increase scraping to every 30 seconds
+      replace:
+        path: /etc/grafana-agent.yaml
+        regexp: "scrape_interval: 60s"
+        replace: "scrape_interval: 30s"
+      notify: Restart grafana-agent
     - name: Enable Grafana Agent
       service:
         name: grafana-agent
