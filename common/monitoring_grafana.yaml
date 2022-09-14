@@ -106,6 +106,21 @@
         regexp: "scrape_interval: 60s"
         replace: "scrape_interval: 30s"
       notify: Restart grafana-agent
+
+    - name: Setup process_expoter in Grafana
+      blockinfile:
+        path: /etc/grafana-agent.yaml
+        insertafter: "integrations:"
+        block: |
+          # Process with comment to keep indentation
+            process_exporter:
+              enabled: true
+              process_names:
+              - name: "{{ '{{.Comm}}' }}"
+                cmdline:
+                - '.+'
+      notify: Restart grafana-agent
+
     - name: Enable Grafana Agent
       service:
         name: grafana-agent
