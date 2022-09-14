@@ -283,6 +283,7 @@ user_rules:
 - '@@ow.ly^'
 - '@@tinyurl.com^'
 - '@@s.shopify.com^'
+- '@@||fonts.gstatic.com^'
 - '# EA / Origin uses this'
 - '@@cdn.optimizely.com^'
 - '# Mining XMR'
