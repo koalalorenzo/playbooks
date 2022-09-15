@@ -22,6 +22,7 @@
     crt_common_name: "setale.me"
     crt_subject_alt_name:
       - "dwn.setale.me"
+      - "bt.setale.me"
       - "h.setale.me"
       - "minio.setale.me"
       - "minio-api.setale.me"
