@@ -34,7 +34,7 @@
         block: |
           server {
             listen 443 ssl;
-            server_name dwn.setale.me;
+            server_name dwn.setale.me bt.setale.me;
 
             ssl_certificate      /etc/ssl/setale.me/cert.crt;
             ssl_certificate_key  /etc/ssl/setale.me/cert-priv.pem;
