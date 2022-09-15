@@ -8,12 +8,12 @@ all:
         nas:
     homeautomation:
       hosts:
-        zeroberry.local:
+        zeroberry:
     dns:
       vars:
         tailscale_accept_dns: "false"
       hosts:
-        zeroberry.local:
+        zeroberry:
     nas:
       hosts:
         nasberry:
