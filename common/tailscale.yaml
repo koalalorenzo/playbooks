@@ -4,10 +4,10 @@
   become: yes
   become_user: root
   become_method: sudo
-  vars_prompt:
-    - name: tailscaleauthkey
-      prompt: "Enter Tailscale Auth Key"
-      private: yes
+  # vars_prompt:
+  #   - name: tailscaleauthkey
+  #     prompt: "Enter Tailscale Auth Key"
+  #     private: yes
 
   tasks:
     - apt_key:
@@ -83,12 +83,12 @@
         name: tailscaled
         enabled: yes
 
-    - name: Setup Tailscale Login
-      shell: |
-        tailscale up --authkey "{{ tailscaleauthkey }}" \
-          --accept-dns="{{ tailscale_accept_dns }}" --accept-routes \
-          --advertise-exit-node --advertise-routes="192.168.0.0/24" \
-          --ssh --accept-risk=lose-ssh \
-          --force-reauth
-      ignore_errors: yes
+    # - name: Setup Tailscale Login
+    #   shell: |
+    #     tailscale up --authkey "{{ tailscaleauthkey }}" \
+    #       --accept-dns="{{ tailscale_accept_dns }}" --accept-routes \
+    #       --advertise-exit-node --advertise-routes="192.168.0.0/24" \
+    #       --ssh --accept-risk=lose-ssh \
+    #       --force-reauth
+    #   ignore_errors: yes
 
