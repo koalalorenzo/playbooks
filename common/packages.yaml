@@ -6,8 +6,7 @@
   become_method: sudo
 
   tasks:
-    - name: Update packager cache
-      apt:
+    - apt:
         upgrade: yes
         update_cache: yes
       when: ansible_os_family == "Debian"
@@ -31,3 +30,8 @@
           - podman
           - vim
           - dnsutils
+
+    - name: Upgrade System Packages
+      apt:
+        upgrade: full
+      when: ansible_os_family == "Debian"
