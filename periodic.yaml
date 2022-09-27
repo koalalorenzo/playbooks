@@ -9,5 +9,4 @@
 # NAS
 - import_playbook: nas/packages.yaml
 - import_playbook: nas/restic.yaml
-
 # - import_playbook: common/overlay-on.yaml
