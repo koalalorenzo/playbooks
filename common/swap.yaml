@@ -13,9 +13,6 @@
         state: present
         update_cache: yes
 
-    - name: Stop swap
-      shell: dphys-swapfile swapoff
-
     - name: Makes sure to set a big swap file
       lineinfile:
         path: /etc/dphys-swapfile
@@ -30,11 +27,16 @@
         regexp: '^CONF_MAXSWAP'
         line: 'CONF_MAXSWAP=4096'
         state: present
-      register: swapsize
+      register: maxswap
+
+    - name: Stop swap
+      shell: dphys-swapfile swapoff
+      when: swapsize.changed or maxswap.changed
 
     - name: Create & setup swapfile
       shell: dphys-swapfile setup
-      when: swapsize.changed
+      when: swapsize.changed or maxswap.changed
 
     - name: restart swap
       shell: dphys-swapfile swapon
+      when: swapsize.changed or maxswap.changed
