@@ -35,24 +35,32 @@
   handlers:
     - name: Restart nginx
       service: name=nginx state=restarted
+      when: '"nginx" in services'
 
   tasks:
+  - name: Populate service facts
+    service_facts:
+
   - stat: path=/etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key get_md5=yes
     register: tailscale_ssl_key_before
     ignore_errors: yes
+    when: '"tailscale" in services'
 
   - name: Get HTTPS Certificates from tailscale
     shell: tailscale cert --cert-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.crt --key-file /etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key {{ ansible_hostname }}.fish-alpha.ts.net
     ignore_errors: yes
     changed_when: False
+    when: '"tailscale" in services'
 
   - stat: path=/etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key get_md5=yes
     register: tailscale_ssl_key_after
     ignore_errors: yes
+    when: '"tailscale" in services'
 
   - debug: msg='Notify to Restart NGINX if Tailscale SSL Certificate changed'
     changed_when: tailscale_ssl_key_before.stat.md5 != tailscale_ssl_key_after.stat.md5
     notify: Restart nginx
+    when: '"tailscale" in services'
 
   - name: create directory to store certs
     file:
