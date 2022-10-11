@@ -9,14 +9,6 @@
   become_user: root
   become_method: sudo
   gather_facts: yes
-  vars_prompt:
-    - name: cloudflare_email
-      prompt: "Enter Cloudflare username (Cloudflare - Personal)"
-      private: no
-    - name: cloudflare_api_token
-      prompt: "Enter Cloudflare api_token (Cloudflare - Personal)"
-      private: yes
-
   vars:
     certs_path: /etc/ssl/setale.me/
     crt_common_name: "setale.me"
@@ -38,6 +30,10 @@
       when: '"nginx" in services'
 
   tasks:
+  - name: Load encrypted credentials (SSL)
+    community.sops.load_vars:
+      file: ssl.sops.yaml
+
   - name: Populate service facts
     service_facts:
 
