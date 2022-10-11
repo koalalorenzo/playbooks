@@ -10,15 +10,11 @@
     - name: Restart samba
       service: name=smbd state=restarted
 
-  vars_prompt:
-    - name: samba_username
-      prompt: "Enter Samba Username (Samba - NAS - koalalorenzo)"
-      private: no
-    - name: samba_password
-      prompt: "Enter Samba password (Samba - NAS - koalalorenzo)"
-      private: yes
-
   tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: samba.sops.yaml
+
     - name: "Install packages"
       package:
         name: "{{ packages }}"

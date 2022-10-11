@@ -5,13 +5,6 @@
   become_user: root
   become_method: sudo
   gather_facts: yes
-  vars_prompt:
-    - name: minio_usr
-      prompt: "Enter minio username (Minio Nasberry)"
-      private: no
-    - name: minio_pwd
-      prompt: "Enter minio password (Minio Nasberry)"
-      private: yes
 
   handlers:
     - name: Restart nginx
@@ -20,6 +13,10 @@
       systemd: name=minio state=restarted daemon_reload=true
 
   tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: minio.sops.yaml
+
     - name: Gets binary (arm64)
       get_url:
         url: "https://dl.min.io/server/minio/release/linux-arm64/minio"
