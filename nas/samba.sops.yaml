@@ -1,0 +1,33 @@
+samba_username: ENC[AES256_GCM,data:ofnq6oCWjxDYMIsR,iv:8kqcQJIbaNrOU4sTLSmnq5jBrfnZN8mfqBfKuPtMVUg=,tag:6VybGJOBByuCP4wjvpCs8w==,type:str]
+samba_password: ENC[AES256_GCM,data:GdXrO5V+0pWaUk5g,iv:Msu3iYWzhql3GqEVIFK6wO5GS3ksw/zdUYbXoCESweA=,tag:5ZRayFqFL5SrwDnNbfY8TA==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2022-10-11T08:39:35Z"
+    mac: ENC[AES256_GCM,data:b19mhrq1U0ZU5sMdyw/DWq+uwf6GAP53L0+R3tY/tQIG1BlbwhVVOIW9qH5EaxAHibQNGtZ7zxeZ7/Jb7qtYRW1ynPIo3az8kVky2IFqNh4O7YeqSdk3o9eRkbK13svuceQaANHDUmFZEJw+pbsrKHRhxfVsQS0ZYejYcVhVEV0=,iv:7qcOVzxroVOhNVC/NtdMrK0F5yVwh+RiZCQS8w4/B2c=,tag:2+N4qYSAFS0xcRPbrUl5vg==,type:str]
+    pgp:
+        - created_at: "2022-10-11T08:39:00Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            wcFMAwEkGKbmunUuARAAo7jwgLDWKcVTO+fM14hMVGsBHZoHc1tOcYChXOICaS2D
+            b7cc29Qxls8FF2OM7eclCiT9TihVr3jLkrZvV08HumCo6LvEsIgr5ae7KjnjgrzX
+            roJGNNomOgAJU66EZaWC5SQ5xUv1RTJXKr3keW7BB8e/1E2etJA3HsS+bOC9g/UB
+            7NrsaUuTxIM/XbkV++MN8fmIIDVyYy6vHUGwarPMNTwUnKtfjHeovEIQ2e51sM5o
+            N28QkVvWacrFTL52uQBAgtNFClddfT7AhdAwI7QtzGuTPrt0vwPNE7ClyUbrFVv0
+            xS5Q+Q7cCG8C48uSfVBA3m0rnCvvA61s3Rc4LwPLEklTSyc5s73JIDoB01I8m85E
+            vlDly8LvSuoWtt9hnkAsnd4tTlp0v8Li3mX5FPnSKnjW360wQzhQZerqGkpDwt3V
+            LAdH+uVDOVxE5MZlojXrYlRowXU3CmvsnoF2RXktkEWrxbm/CfALPMWkwRVbW88J
+            SN7abZWrYH1H7RKTjrTGoxZbFDYWb6A8DYD1uQsxixxw1fCZGTFMSmRO/8h4Dfxa
+            3rSuc7jbxZVdGI4hG6TCijC9EEUHeSrq65ah2N4+nt16G+6k3CgaUAMEQCNl4Tvv
+            Jw+v9Tr5PC0O1eRO0TGf0QoCa2vBQlAfcyJPRjp7jiAZB+K20cixOPVfpNsKVOXS
+            UQGphxQ4+XtS47QYBalPCC/tUAtlPtOh1zZHZVr3peQ7+yeXpX+Qz+j9AXc8a5/v
+            vgz9be8/oZVeT0d72irxprkdew9Tl0w3FP+R0+ZHdp8dGg==
+            =mkLz
+            -----END PGP MESSAGE-----
+          fp: 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
+    unencrypted_suffix: _unencrypted
+    version: 3.7.3
