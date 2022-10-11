@@ -6,15 +6,11 @@
   become_user: root
   become_method: sudo
 
-  vars_prompt:
-    - name: zfs_personal_pwd
-      prompt: "Enter OpenZFS Encryption key for Personal volume"
-      private: yes
-    - name: zfs_backups_pwd
-      prompt: "Enter OpenZFS Encryption key for Backups volume"
-      private: yes
-
   tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: openzfs.sops.yaml
+
     - when: ansible_distribution == 'Debian'
       block:
       - name: "Install dependencies"

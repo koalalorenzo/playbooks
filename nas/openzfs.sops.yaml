@@ -1,0 +1,33 @@
+zfs_personal_pwd: ENC[AES256_GCM,data:4IybrW1iSp8Aa5l4mXkzgB+JOPtqhR5Tlf/aPrt6DEm2UdezmxpGjCQ08Il0gVK94uO1RbueTJduc9qzi1MeGQ==,iv:VMNhHK8A5nErS3idvOlAQkuRHXoZzHjngv3EU4HBFbs=,tag:fUO4a7SzpnL7Mzo02S3PvQ==,type:str]
+zfs_backups_pwd: ENC[AES256_GCM,data:8YskPzMaeGReePGIaGv8PupR/RK6sFJ9l60FLCSGvDn72+vNQLJSOcD7tCRPEoy9o/y/DDCmOU4DvSE+fiykMw==,iv:Dl4ZAXnla8ki3GvDOB//fj8ghejZ2Qdh1QIY2XyDG6w=,tag:RgxZEWHfPLsvIiDSynqSmg==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2022-10-11T08:45:00Z"
+    mac: ENC[AES256_GCM,data:sG4U1X37BiDN+xddfEzQtPiYNfwZD7xdDgvP405yPX8SvR3t2qHRDlyxva495sPma8YmSlj18fOFOrQbV45eQZ0y68mYNus6vc6G2q7JvKz/epNyJYcuUhTyiPEO8Gy91KwL9vLf0e8U5IySDxTgvAIgbrwsPOgR0l1OInMwKFw=,iv:mknDNXzaFQ8z/6EmIW3TCDnG/BCK01HL/pnUMRUeA/k=,tag:NRuUOOvDyurQ3JZoowuWpg==,type:str]
+    pgp:
+        - created_at: "2022-10-11T08:44:05Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            wcFMAwEkGKbmunUuAQ//Y7nkWeByYHTMNANEUflsO77wTlbSovNSGSYkFT1/pv3u
+            PnIbn5TvFWaRwuD9n88uz3YXedOxZbpM9E8JDbotyd4+L11D3CzOkd+hNBqDCkh5
+            IJ7IxiYxV6gwrZp5KGRmx1AcVeXPFrrIv7UUxy6m2i1s8gfr87HU8hjGtq4aGRuZ
+            W7WodxDTdEb1O22L1dk0eLLbk1UB/6T7pqaXXs1pAV30KjH/SrrmQXP6PaPUK5TV
+            AAEthiITIooyjMAwtT+Icltf/bOtbYfn3uWgPtxviV9UWsHApBLQC8J9x/o9wR7x
+            lgdcWYoI92hgPAkemsvfOUjTUADjIzIc4vrvC1YrWP5jGuTRSW75AGtCfP47v6Pz
+            Czsmt4thEI2bv1dD7aoWDICpBhjQaX6az/Zc+Gf2kXRuIE1zV7QTwszsaXCs5O+u
+            wrqZ0Do3zJlai0horDeQTVNv4ccJv4+Pcu4XuJ48cB2w3S+19bLMsVyAqDMnTfGV
+            cjOyq9aA7xllhMwkXIsdHkAguVYgbqUkL786cyMXu+xCB4BqB6pMLdB5oPdzN5uh
+            4UUHWpqjkUn2cP0bmRnrdebqc0stB13BOndL9w0pfpCWOga29qtnFSkB8A/e5EGc
+            R4wC5Qrkz+X6dswpn+ib4B/LiAbJ8Gbb1zc6d/IC1lx6MCnjXv2LogrW82JJcjbS
+            UQFp7ZVMU8a0uMsePRabl/Q2Nev++43WxReMqy5zQM74dwTX9QT0nzN0J+RrrO76
+            sZn0fonzcXT3F/pwobNX0cFvao52jV8/jkxHV/7P9eT6vw==
+            =Ifpm
+            -----END PGP MESSAGE-----
+          fp: 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
+    unencrypted_suffix: _unencrypted
+    version: 3.7.3
