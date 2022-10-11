@@ -6,17 +6,6 @@
   become_method: sudo
   gather_facts: no
 
-  vars_prompt:
-    - name: smtp_hostname
-      prompt: "Enter SMTP Hostname (server)"
-      private: no
-    - name: smtp_username
-      prompt: "Enter SMTP username (server)"
-      private: no
-    - name: smtp_password
-      prompt: "Enter SMTP password (server)"
-      private: yes
-
   handlers:
     - name: Restart postfix
       service: name=postfix state=restarted
@@ -26,6 +15,10 @@
       shell: echo "Ansible Email Setup on {{ ansible_host }} completed" | mail -s "Test mail" lorenzo@setale.me
 
   tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: email.sops.yaml
+
     - debconf:
         name: postfix
         question: postfix/main_mailer_type
