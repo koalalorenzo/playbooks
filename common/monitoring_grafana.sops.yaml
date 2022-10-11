@@ -1,0 +1,35 @@
+#ENC[AES256_GCM,data:JCSGRX9DUJi5y6DJtLm8bHLPi+pglbqj,iv:kc8Bot3ARFVPu+f9aCmb2rbHmps9cX2yfo5gK7/VQB4=,tag:GD+0xi9KWxoE+ia0i7q5mw==,type:comment]
+grafana_stack_id: ENC[AES256_GCM,data:a3/OzSU8,iv:rlGNuzlYjtCLZjuw2mjcfPNgANn4Ir90JG910SzgjV8=,tag:ggsYtrxIX4U1HIe54AqARg==,type:str]
+grafana_api_key: ENC[AES256_GCM,data:6Fq/3JaC1ekFVJJEzVEf5TnW3mVWnpof32C8YRDvZnPPtpR4Gw3TMpzwm5Zkx7qH+q0Oj2Mw19Ybfh0hPD8yIn/6BXUif7cLi/YcXGhPVrINIce0c/IVjZjbusmnCosKrsER3aFLM160Te7TsjVBcWAFSpTtSpXJYTEbOnN9Ems=,iv:zBhK9hD/Wtz53BOWkKBHLVOX1is/jqKRpk8uKdp4B2E=,tag:s8+Xs/CYlY+KE+k5JV3BBA==,type:str]
+grafana_api_url: ENC[AES256_GCM,data:t4LlKyWV8CfYamTLWtTotSq6QRQS8wQuKMemomVpR3Jc1C4TsHdncn7uAJM=,iv:6briSO3ctMV10L0H9D67k1joiJ/PZGDIUnPeqFLV5TY=,tag:JPwRvNUg6paIhhSHEMc3og==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2022-10-11T08:36:44Z"
+    mac: ENC[AES256_GCM,data:2lNizHFiQeI4wVe2zjkGcWsXJuq/ir2B7LXpw6kmK8oZRtnBnKHS4lVZndTpa+Nc6cOOYHlN5JgDAXvaUVe/DSnjePZe9s0CxObB3nyFcc/ECwK2A8B2jbvhA+n/2pQ7dCSV67qGu3hWSUBJRDm4JSSwTmS9pPruopVazK2YTQM=,iv:gD2IJh0BgdZ52PuzQvi1cV6ABblSK0NA7Hp8LjEtp+8=,tag:kwAqMULquWQrFa+hVO2b/Q==,type:str]
+    pgp:
+        - created_at: "2022-10-11T08:35:42Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            wcFMAwEkGKbmunUuARAAmT+di2+HrE0us2osxDTPIDmvAdz3EONb6s87JuQxZgTU
+            TfvUE9UWOhcxO8yjA6APVBMhxCL8GlPropDHX1IcM2XjcQDpnVpSvY+9XcDC7uEo
+            8+Z5xj5W80eEosJawhuExc8KakZgGsq3nwk0lhAVG5sruisA48vseWqRa6MXGT3K
+            AwPfrL6Y9mMM5zlQPVMiekjrir9BuH8rRhfzZXEwbDpWKQWXQmTAY1RhgTi0jd/m
+            6/c5oXLJjGX0tn59/njgBuDnvGai0fLwjrNUz3DB2iLXt2EQYU4G11cWwyDHyMKP
+            0YjJnFcbyOMqXyRyjhF1JuAtiAjXtlIvhwSWXKHFVQbKFZJupsBh3ntvk2KAKss+
+            pPoph9upoqkMkIs1ykIUKFuif1iCKfRVEXa2+BW0bOIXJAGG11X846N5HVWb2D2y
+            WuLv4S5hdldrWpqTbIK7fU4XfFFkBV+1tgsxPNdVwgRGhRKrR+pr8A2QtINWaYNR
+            zFYCTcDS4baIG9HFeA4z29qREbwshbHFA6HP0Nj/5A0NPFpgdXm/ERjAHJbJT5W1
+            yi1A+0J1ppz6U1A9nAC7n0vKaj7EsNbGguMKySGsK6U/Po2E0sFYYPRwhRnOaqSr
+            ro/f+9gK8VHAW0CFC8SLSOxex6Af9vzFVB+fAtEBI6izgqE3esYKgXxrt7cn0MfS
+            UQHkIe59e3QFWQqjokqAIZCGXrnGaxmpB1DVc27VhSQr7y2p/De4JK23v9GO9xcv
+            1ytt4zV5Rge7RMp5C5wSIqBizK98aMwXQT6plPxNBlooNQ==
+            =WY3/
+            -----END PGP MESSAGE-----
+          fp: 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
+    unencrypted_suffix: _unencrypted
+    version: 3.7.3
