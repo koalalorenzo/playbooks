@@ -1,0 +1,44 @@
+github_token: ENC[AES256_GCM,data:yVXiJHgaoOZ5vYStJ//K50pQTs99zfjKDKL//uGsohQqQuZtFnfVIA==,iv:XSH2WQF0ZuQnYNw2f1zlid5uGrb3hF+gjV0GAlirHt0=,tag:fhGcpOtZ9GD8ExFzSRW1fg==,type:str]
+gitlab_token: ENC[AES256_GCM,data:miz3UOG+/zWm+2SvcgElxNqQ35RPOd4JQ7U=,iv:/egFKWcezRoqscWPP+Er1+nQdhB+KKM0M0+uTlmGOVA=,tag:fxbSSpY9cfhM8eOYpwb5ug==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2022-10-11T09:10:38Z"
+    mac: ENC[AES256_GCM,data:eZtB/ReSPxRoAxvL975ck3CdBzuRfoAieauB1y2iMeOMGkKwSdUun9sndVLXlWwkcjG9TjjxZbeCEeAdujoTzMONLYrd6G1D8pBCNMVE9pCiF+00M9Mh7hRVyKuW728D8GYI69GnsY184gmQj1E/Nzpk0dEW+dKEFd/Z0QWt3zQ=,iv:7W68zFGisgkjTw30eYEF/+TZfAGDPd7j60LgGIAvE3o=,tag:eYQr6SVpDxgRFrauYRomxg==,type:str]
+    pgp:
+        - created_at: "2022-10-11T09:04:49Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            wcFMAwEkGKbmunUuAQ/+JV6gidWyKwYY2j/VzUgYmWpYnnjxWTHayCiAY6O25oH+
+            80KWOFcv5099qusnsWqe4PxTeShuoAcblqsKIn6fJQdPf1OE/iFHjfH5OstezZrL
+            yfuNGjvR+gEMTJxC4/q5OpZ/UuMznDfHNSpaxlFTRriiu/g4rajGPoiM7sT5Tk2O
+            y2d6i2/sfhvi4C8RpBgSkD6iJE+VgvwjDh/AjtAOvRhkyJvOnO1z7qyIs89bqbVB
+            aRfUFCDDhpbdIa7xMijmGtu1ww3Z2W1ShrjzXvoPwOLmMGGYOxPBDAD3YxQ1V945
+            UNAdxFcRAr3T7Dylj5f12u5+hdSQ9uta/kZA5wdnusZdsRNw23ik9Wlu0wAihG5H
+            hV/xdkTiWRq52f8NVjGYAWclFSNGU3AjEl8ncZTr2BhtBGdJYUwDlAbbfq4dXaA9
+            jUuUrVeKvW+gSf0Rl6SgUGFCno32MF1Sq0oRQ6BuXMlMyVyAPSPQv2jtAcjw2EZg
+            f4Q1QAHGa0XkuCWDzLwPPIQafwslvztJQaBVYHelz732Tb+f3VxPXvB1RWl+mlO5
+            pXrUfwu+6mVOcoUZm3+nn6jY5th4yazQyMly3CciVP2begiCFltkPBUfzDR3UCgn
+            r2ostsCrGqD4/MA01OEQecWdCfUW8IGu8HHMoTlFy9fWojXjfGgjuqjaNegyuKXS
+            UQGluvH/4HZCfXV9kHlagJyTfCvUboDAHUTBIa/QNwyQSkTehCN88/Xy45yy2wxh
+            VGc0AU1CGy6LPWPEI+MEzuiuuaWq+mm+THUNBu7UQ0p5fA==
+            =toBf
+            -----END PGP MESSAGE-----
+          fp: 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
+        - created_at: "2022-10-11T09:04:49Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            wV4DXe1noTiG/OoSAQdAnxGcyTFzq1V0ZolZZU57rTXrqm6b8RnVv1YQOIPnflgw
+            QlIwNyPZV+MaJYi8xfsc9kEfJwdR6E/pPkNjD+5ICu0d6aKs9aiQKkaA/IaP8rYp
+            0lEBvRKVUZo92AZkE33HBbIclykeGKjl+k9Rf8ffi6NOzHIopWVsdQ9N3iv79W59
+            oCYc16+SsMsW3IhBnApS/6DAHRVB8W3EcRuwmn4/6li4JZE=
+            =eZLA
+            -----END PGP MESSAGE-----
+          fp: 55065306FCC6617D4D928B70020F4A4E40F95228
+    unencrypted_suffix: _unencrypted
+    version: 3.7.3

@@ -6,17 +6,13 @@
   become_method: sudo
   gather_facts: yes
 
-  vars_prompt:
-    - name: github_token
-      prompt: "Enter github_token (Nasberry)"
-      private: yes
-    - name: gitlab_token
-      prompt: "Enter gitlab_token (Nasberry)"
-      private: yes
-
   tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: gickup.sops.yaml
+
     - set_fact:
-        gickup_version: "0.10.2"
+        gickup_version: "0.10.4"
 
     - name: Create temporary build directory
       tempfile:
@@ -60,5 +56,7 @@
       cron:
         user: "{{ ansible_user }}"
         name: "Weekly git repos backup"
-        special_time: weekly
+        hour: "15"
+        minute: "30"
+        weekday: "5" # Friday
         job: "/main/system/bin/gickup /main/system/config/gickup.yaml | $GPG_CMD"
