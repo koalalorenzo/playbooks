@@ -5,6 +5,7 @@ Dependencies:
 
 * Ansible
 * GNU Make
+* Mozilla SOPS
 
 **Important**: on macOS / Darwin it will use `caffeinate` command to prevent the
 Mac from sleeping while running the playbooks.
@@ -27,3 +28,6 @@ It is possible to pass arguments to `ansible-playbook` like so:
 # Reboot every DNS server
 make common/reboot -e ARGS="-l dns"
 ```
+
+Secrets are encrypted using PGP/GPG. Please make sure to have your Yubikey handy
+when running to allow your device to decrypt the secrets
