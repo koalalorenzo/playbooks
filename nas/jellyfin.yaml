@@ -16,7 +16,6 @@
         podman run \
           --pod=new:jellyfin -dt \
           --label "io.containers.autoupdate=registry" \
-          --name myjellyfin \
           --publish 8096:8096/tcp \
           --volume /main/system/jellyfin/cache:/cache:Z \
           --volume /main/system/jellyfin/config:/config:Z \
