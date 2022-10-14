@@ -22,6 +22,7 @@
       - "dash.setale.me"
       - "archive.setale.me"
       - "dns.setale.me"
+      - "media.setale.me"
     cloudflare_zone: setale.me
 
   handlers:

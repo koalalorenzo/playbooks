@@ -96,6 +96,8 @@ dns:
       answer: nasberry.fish-alpha.ts.net
     - domain: graph.setale.me
       answer: nasberry.fish-alpha.ts.net
+    - domain: media.setale.me
+      answer: nasberry.fish-alpha.ts.net
   blocked_services:
     - mail_ru
     - vk
