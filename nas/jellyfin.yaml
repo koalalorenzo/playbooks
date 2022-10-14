@@ -5,6 +5,11 @@
   become_user: root
   become_method: sudo
 
+  handlers:
+    - name: Restart nginx
+      service: name=nginx state=restarted
+      when: '"nginx" in services'
+
   tasks:
     - name: Install Podman
       package:
@@ -55,6 +60,7 @@
             }
           }
       notify: Restart nginx
+      when: '"nginx" in services'
 
     - name: Enable jellyfin systemd service
       service:
