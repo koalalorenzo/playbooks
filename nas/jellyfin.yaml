@@ -1,0 +1,64 @@
+---
+- name: Jellyfin via Podman
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: Install Podman
+      package:
+        name: podman
+        state: present
+
+    - name: Create Jellyfin Pod
+      shell: |
+        podman run \
+          --pod=new:jellyfin -dt \
+          --label "io.containers.autoupdate=registry" \
+          --name myjellyfin \
+          --publish 8096:8096/tcp \
+          --volume /main/system/jellyfin/cache:/cache:Z \
+          --volume /main/system/jellyfin/config:/config:Z \
+          --mount type=bind,source=/main/multimedia,destination=/media,ro=true \
+          docker.io/jellyfin/jellyfin:latest
+      ignore_errors: yes
+
+    - name: Create SystemD service for jellyfin Pods
+      shell: |
+        podman generate systemd --files --name jellyfin
+      args:
+        chdir: /etc/systemd/system/
+
+    - name: Set nginx config for jellyfin
+      blockinfile:
+        create: yes
+        path: /etc/nginx/sites-enabled/jellyfin
+        block: |
+          proxy_cache_path /tmp/jellyfin levels=1:2 keys_zone=jellyfin:5m max_size=1g inactive=60m use_temp_path=off;
+
+          server {
+            listen 443 ssl;
+            server_name media.setale.me;
+
+            ssl_certificate      /etc/ssl/setale.me/cert.crt;
+            ssl_certificate_key  /etc/ssl/setale.me/cert-priv.pem;
+            ssl_protocols       TLSv1.2 TLSv1.3;
+
+            ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;
+            ssl_prefer_server_ciphers   on;
+            ssl_ecdh_curve              secp384r1;
+
+            location / {
+              proxy_read_timeout 300;
+              proxy_cache jellyfin;
+              proxy_pass http://localhost:8096;
+            }
+          }
+      notify: Restart nginx
+
+    - name: Enable jellyfin systemd service
+      service:
+        name: pod-jellyfin
+        enabled: yes
+        state: started
