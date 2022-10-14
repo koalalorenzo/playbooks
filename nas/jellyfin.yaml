@@ -39,8 +39,6 @@
         create: yes
         path: /etc/nginx/sites-enabled/jellyfin
         block: |
-          proxy_cache_path /tmp/jellyfin levels=1:2 keys_zone=jellyfin:5m max_size=1g inactive=60m use_temp_path=off;
-
           server {
             listen 443 ssl;
             server_name media.setale.me;
@@ -55,7 +53,6 @@
 
             location / {
               proxy_read_timeout 300;
-              proxy_cache jellyfin;
               proxy_pass http://localhost:8096;
             }
           }
