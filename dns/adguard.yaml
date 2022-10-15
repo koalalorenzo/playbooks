@@ -98,6 +98,12 @@
       args:
         chdir: "/opt/adguard/"
 
+    - name: Starts Adguard if it exists
+      shell: |
+        /opt/adguard/AdGuardHome -s start
+      args:
+        chdir: "/opt/adguard/"
+
     - name: Allow Firewall DNS (UDP)
       ufw:
         rule: allow

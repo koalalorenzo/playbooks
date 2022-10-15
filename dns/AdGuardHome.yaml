@@ -64,7 +64,7 @@ dns:
   ipset_file: ""
   filtering_enabled: true
   filters_update_interval: 72
-  parental_enabled: true
+  parental_enabled: false
   safesearch_enabled: false
   safebrowsing_enabled: false
   safebrowsing_cache_size: 1048576
@@ -80,6 +80,24 @@ dns:
       answer: 100.83.51.127
     - domain: nasberry.fish-alpha.ts.net
       answer: 192.168.197.100
+    - domain: minio-api.setale.me
+      answer: minio.setale.me
+    - domain: minio.setale.me
+      answer: nasberry.fish-alpha.ts.net
+    - domain: archive.setale.me
+      answer: nasberry.fish-alpha.ts.net
+    - domain: h.setale.me
+      answer: nasberry.fish-alpha.ts.net
+    - domain: bt.setale.me
+      answer: nasberry.fish-alpha.ts.net
+    - domain: dwn.setale.me
+      answer: nasberry.fish-alpha.ts.net
+    - domain: dash.setale.me
+      answer: nasberry.fish-alpha.ts.net
+    - domain: graph.setale.me
+      answer: nasberry.fish-alpha.ts.net
+    - domain: media.setale.me
+      answer: nasberry.fish-alpha.ts.net
   blocked_services:
     - mail_ru
     - vk
@@ -93,6 +111,8 @@ dns:
   private_networks: []
   use_private_ptr_resolvers: true
   local_ptr_upstreams: []
+  serve_http3: false
+  use_http3_upstreams: false
 tls:
   enabled: true
   server_name: dns.setale.me
@@ -287,7 +307,7 @@ filters:
     id: 1663228274
   - enabled: false
     url: https://raw.githubusercontent.com/chadmayfield/my-pihole-blocklists/master/lists/pi_blocklist_porn_top1m.list
-    name: Porn
+    name: Porn (too big)
     id: 1663228275
   - enabled: false
     url: https://v.firebog.net/hosts/Prigent-Adult.txt
@@ -307,12 +327,11 @@ user_rules:
   - '@@ow.ly^'
   - '@@tinyurl.com^'
   - '@@s.shopify.com^'
-  - '# EA / Origin uses this'
-  - '@@cdn.optimizely.com^'
-  - '# Mining XMR'
-  - '@@pool.supportxmr.com^'
   - '@@||grafana.org^'
   - '@@||fonts.gstatic.com^'
+  - '@@||recon.com^'
+  - '# EA / Origin uses this'
+  - '@@cdn.optimizely.com^'
 dhcp:
   enabled: false
   interface_name: ""
