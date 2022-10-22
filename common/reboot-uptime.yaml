@@ -1,0 +1,23 @@
+---
+- name:  Restart the server (if uptime is more than 30 days)
+  hosts: all
+  serial: 1
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - name: Check uptime prior reboot
+      shell: cut -d ' ' -f1 /proc/uptime
+      register: UPTIME_PRE_REBOOT
+
+    - name: Setting fact for number of days
+      set_fact:
+        uptime_days: "{ { (UPTIME_PRE_REBOOT.stdout | int / 86400) | round(0) } }"
+
+    - reboot:
+        reboot_timeout: 300
+        post_reboot_delay: 15
+        pre_reboot_delay: 15
+      when: (uptime_days | int) > 30

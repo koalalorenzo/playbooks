@@ -172,6 +172,12 @@
         port: 80
         proto: tcp
 
+    - name: Allow HTTP on any interface
+      ufw:
+        rule: allow
+        port: 80
+        proto: tcp
+
     - name: Allow HTTPS on Tailscale
       ufw:
         rule: allow
@@ -180,3 +186,8 @@
         port: 443
         proto: tcp
 
+    - name: Allow HTTPS on any interface
+      ufw:
+        rule: allow
+        port: 443
+        proto: tcp
