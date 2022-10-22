@@ -76,28 +76,14 @@ dns:
       answer: 192.168.197.110
     - domain: dns.setale.me
       answer: 100.103.44.30
-    - domain: nasberry.fish-alpha.ts.net
+    - domain: nas.setale.me
       answer: 100.83.51.127
-    - domain: nasberry.fish-alpha.ts.net
+    - domain: nas.setale.me
       answer: 192.168.197.100
-    - domain: minio-api.setale.me
-      answer: minio.setale.me
-    - domain: minio.setale.me
-      answer: nasberry.fish-alpha.ts.net
-    - domain: archive.setale.me
-      answer: nasberry.fish-alpha.ts.net
-    - domain: h.setale.me
-      answer: nasberry.fish-alpha.ts.net
-    - domain: bt.setale.me
-      answer: nasberry.fish-alpha.ts.net
-    - domain: dwn.setale.me
-      answer: nasberry.fish-alpha.ts.net
-    - domain: dash.setale.me
-      answer: nasberry.fish-alpha.ts.net
-    - domain: graph.setale.me
-      answer: nasberry.fish-alpha.ts.net
-    - domain: media.setale.me
-      answer: nasberry.fish-alpha.ts.net
+{% for key,value in custom_domains.items() %}
+    - domain: {{ key }}
+      answer: {{ value }}
+{% endfor %}
   blocked_services:
     - mail_ru
     - vk
