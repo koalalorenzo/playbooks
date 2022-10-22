@@ -12,17 +12,6 @@
   vars:
     certs_path: /etc/ssl/setale.me/
     crt_common_name: "setale.me"
-    crt_subject_alt_name:
-      - "dwn.setale.me"
-      - "bt.setale.me"
-      - "h.setale.me"
-      - "minio.setale.me"
-      - "minio-api.setale.me"
-      - "graph.setale.me"
-      - "dash.setale.me"
-      - "archive.setale.me"
-      - "dns.setale.me"
-      - "media.setale.me"
     cloudflare_zone: setale.me
 
   handlers:
@@ -90,7 +79,7 @@
       path: "{{ certs_path }}/cert.csr"
       privatekey_path: "{{ certs_path }}/cert-priv.pem"
       common_name: "{{ crt_common_name }}"
-      subject_alt_name: "DNS:{{ crt_subject_alt_name | join(',DNS:') }}"
+      subject_alt_name: "DNS:{{ ssl_domains | join(',DNS:') }}"
     register: csr_data
     notify: Restart nginx
 
