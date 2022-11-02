@@ -8,6 +8,10 @@
   gather_facts: yes
 
   tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: adguardhome.sops.yaml
+
     - name: Install AdGuard
       block:
       - name: Create temporary build directory
