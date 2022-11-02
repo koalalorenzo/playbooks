@@ -20,14 +20,14 @@
         user: "{{ ansible_user }}"
         name: "Daily Local (/main/restic) cleanup"
         special_time: daily
-        job: "/main/system/bin/restic-local-cleanup | $GPG_CMD"
+        job: "/main/system/bin/restic-local-cleanup"
 
     - name: Weekly cleanup (remote)
       cron:
         user: "{{ ansible_user }}"
         name: "Weekly cleanup (remote)"
         special_time: weekly
-        job: "/main/system/bin/restic-cleanup | $GPG_CMD"
+        job: "/main/system/bin/restic-cleanup"
 
     - name: Daily Backup
       cron:
@@ -35,4 +35,4 @@
         name: "Daily Backup (local to remote)"
         hour: "5"
         minute: "0"
-        job: "/main/system/bin/restic-backup | $GPG_CMD"
+        job: "/main/system/bin/restic-backup"

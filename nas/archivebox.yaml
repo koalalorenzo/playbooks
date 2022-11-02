@@ -48,14 +48,14 @@
         user: "root"
         name: "Monthly Archivebox update"
         special_time: monthly
-        job: "podman run -dt -v /main/downloads/archivebox/:/data/ docker.io/archivebox/archivebox update | $GPG_CMD"
+        job: "podman run -dt -v /main/downloads/archivebox/:/data/ docker.io/archivebox/archivebox update"
 
     - name: Weekly Pocket Archivebox update
       cron:
         user: "root"
         name: "Pocket Archivebox update"
         special_time: weekly
-        job: "podman run -dt -v /main/downloads/archivebox/:/data/ docker.io/archivebox/archivebox add https://getpocket.com/users/koalalorenzo/feed/all --depth=1 --update | $GPG_CMD"
+        job: "podman run -dt -v /main/downloads/archivebox/:/data/ docker.io/archivebox/archivebox add https://getpocket.com/users/koalalorenzo/feed/all --depth=1 --update"
 
     - name: Set nginx config for ArchiveBox
       blockinfile:
