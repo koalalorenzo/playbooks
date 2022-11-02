@@ -59,4 +59,4 @@
         hour: "15"
         minute: "30"
         weekday: "5" # Friday
-        job: "/main/system/bin/gickup /main/system/config/gickup.yaml | $GPG_CMD"
+        job: "/main/system/bin/gickup /main/system/config/gickup.yaml"

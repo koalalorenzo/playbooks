@@ -1,0 +1,16 @@
+---
+- name: Update NextDNS IP link
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: nextdns.cron.sops.yaml
+
+    - cron:
+        name: "Update NextDNS IP endpoint"
+        special_time: daily
+        job: "curl {{ next_dns_endpoint }}"
