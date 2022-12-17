@@ -1,12 +1,13 @@
 nextdns_endpoint_quick: ENC[AES256_GCM,data:WHSEVeDeX9IYPP9pwdOoOkV0yz6z65l5RyRhfg==,iv:U++vOWgUibEuHTaRdQpO0S753tneId20rfaCTyQ6Jsc=,tag:InICmRYHdMbXVDy65LVGUA==,type:str]
+adguard_unencrypted_password: ENC[AES256_GCM,data:2B5SLqHx0ZKG9A==,iv:K59we7+EfxpKssEhn7fUS0atLJaMXcvanU60TjFdju0=,tag:+3n1E98SaZAzI2M6qCLV+w==,type:str]
 sops:
     kms: []
     gcp_kms: []
     azure_kv: []
     hc_vault: []
     age: []
-    lastmodified: "2022-11-02T07:14:46Z"
-    mac: ENC[AES256_GCM,data:UuxfdDZjCmg937CVsC+JqGLBLY5ttn/XTRfBtEBJbQxXCmp9qekdG/VCqRD6g5WJerIBf5bppfaV4gGxdWMaOYQAPC1/nEX8e2pfHCb2z4zxhMgp2WvnP6o8DAA5BmYiSiY4j1xk7hfHxxCkolK7h8wV5voQN+7iGcPloNG7LWg=,iv:xSFVtp5BJ0Ojrj2oenI0ZXSS4GiUBGLadh9BqRy5uhY=,tag:iXpHyi7lW+yr1Vmhk0vD5w==,type:str]
+    lastmodified: "2022-12-17T11:08:36Z"
+    mac: ENC[AES256_GCM,data:mHdsFieJfbwxrHBnR1khGv8QWCLV9Z7bIixDo3QgwPOysWbDVovk7UhPYZUoK3RK7b1Iaqe3Ea9bQvZaMDVcTTsSMQJkX5yQYhKcXQB27/9fTTQkTvYzyfBuVS0udipfOnLGh0OwEEbHmg9pd46y8k9EpTfqcwV3YUj0Plm6jCM=,iv:LwAz1+BUfVMei2kH4qzRvBGLnERuRaLiLp12XnJyrWs=,tag:ZxeY4NPdbnNYkyd22dXD7w==,type:str]
     pgp:
         - created_at: "2022-11-02T07:13:57Z"
           enc: |-
