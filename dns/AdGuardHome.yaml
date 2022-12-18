@@ -3,7 +3,7 @@ bind_port: 80
 beta_bind_port: 0
 users:
   - name: koalalorenzo
-    password: $2a$10$unulMMdAMrMV8bLEAC62fujYb74M3SzjaI425wasxzZaAc57m1yJK
+    password: "$2y$05$oNVBIl7QuJwdU/Y9WhhRjOHHxo5EqC.BOgLKhnpepUYjbdYkP0rsG"
 auth_attempts: 5
 block_auth_min: 5
 http_proxy: ""

@@ -12,6 +12,10 @@
       community.sops.load_vars:
         file: adguardhome.sops.yaml
 
+    - name: Set adguard password fact
+      set_fact:
+        adguard_password: "{{ adguard_unencrypted_password | password_hash('sha256') }}"
+
     - name: Install AdGuard
       block:
       - name: Create temporary build directory
