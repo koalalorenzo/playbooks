@@ -6,11 +6,6 @@ all:
       - username: jakub
         pubkeys_urls: []
         email: ""
-      # - username: lorenzo
-      #   pubkeys_urls:
-      #     - https://gitlab.com/koalalorenzo.keys
-      #     - https://github.com/koalalorenzo.keys
-      #   email: lorenzo@setale.me
     
     gpg_key_fingerprints:
       - 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
