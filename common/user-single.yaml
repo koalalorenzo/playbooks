@@ -6,6 +6,7 @@
     state: present
     system: false
     update_password: on_create
+    shell: /bin/bash
     groups:
       - dialout 
       - cdrom
