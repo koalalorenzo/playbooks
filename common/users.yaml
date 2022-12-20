@@ -1,5 +1,5 @@
 ---
-- name: Sets user access via SSH and cron users settings
+- name: Create users and set SSH keys and GPG keys
   hosts: all
   become: yes
   become_user: root
@@ -11,52 +11,51 @@
       service: name=ssh state=restarted
 
   tasks:
-    - name: Install GnuPG
-      package:
-        name: gnupg
-        state: present
+    # - name: Install GnuPG
+    #   package:
+    #     name: gnupg
+    #     state: present
 
-    - name: Authorize my keys (GitLab)
-      authorized_key:
-        user: "{{ ansible_user }}"
-        state: present
-        key: https://gitlab.com/koalalorenzo.keys
+    - name: Set Up Users
+      include_tasks: user-single.yaml
+      vars:
+        username: "{{ item.username }}"
+        pubkeys_urls: "{{ item.pubkeys_urls }}"
+        email: "{{ item.email }}"
+      loop: "{{ system_users }}"
 
-    - name: Authorize my keys (GitHub)
-      authorized_key:
-        user: "{{ ansible_user }}"
-        state: present
-        key: https://github.com/koalalorenzo.keys
+    - name: Download GPG/PGP Keys ( root )
+      shell: gpg --recv-keys {{ gpg_key_fingerprints | join(' ') }}
+      become: yes
+      become_user: root
 
+
+- name: Sets Root cron jobs
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+  
+  tasks: 
     - name: Uses Bash shell
       cron:
-        user: "{{ ansible_user }}"
+        user: root
         name: SHELL
         env: yes
         job: /bin/bash
 
     - name: Download GPG/PGP Keys ( root )
-      shell: gpg --recv-keys 73880ECAF69EC2ED44CE5889502BFB12D0B5295F 55065306FCC6617D4D928B70020F4A4E40F95228
+      shell: gpg --recv-keys {{ gpg_key_fingerprints | join(' ') }}
       become: yes
       become_user: root
-    - name: Download GPG/PGP Keys ( user )
-      shell: gpg --recv-keys 73880ECAF69EC2ED44CE5889502BFB12D0B5295F 55065306FCC6617D4D928B70020F4A4E40F95228
-      become: yes
-      become_user: "{{ ansible_user }}"
 
-    - name: Adds GPG Key on Cron ( user )
-      cron:
-        user: "{{ ansible_user }}"
-        name: GPG_CMD
-        env: yes
-        job: ifne /usr/bin/gpg --batch --armor --trust-model always --recipient 55065306FCC6617D4D928B70020F4A4E40F95228 --recipient 73880ECAF69EC2ED44CE5889502BFB12D0B5295F --encrypt
-
-    - name: Adds GPG Key on Cron ( root )
+    - name: Adds GPG Key on Cron ( root ) to encrypt messages from cron
       cron:
         user: root
         name: GPG_CMD
         env: yes
-        job: ifne /usr/bin/gpg --batch --armor --trust-model always --recipient 55065306FCC6617D4D928B70020F4A4E40F95228 --recipient 73880ECAF69EC2ED44CE5889502BFB12D0B5295F --encrypt
+        job: ifne /usr/bin/gpg --batch --armor --trust-model always --recipient {{ gpg_key_fingerprints | join (' --recipient ') }} --encrypt
 
     - name: Adds Email notification
       cron:
@@ -65,10 +64,10 @@
         env: yes
         job: lorenzo@setale.me
 
-    - name: Secure SSH by Allowing current user
+    - name: Disable root login
       lineinfile:
         path: /etc/ssh/sshd_config
-        line: AllowUsers {{ ansible_user }}
+        line: PermitRootLogin no
         state: present
         mode: 0644
       notify: Restart ssh

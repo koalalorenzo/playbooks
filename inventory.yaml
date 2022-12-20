@@ -1,6 +1,17 @@
 all:
   vars:
     ansible_user: koalalorenzo
+    
+    system_users:
+      - username: jakub
+        pubkeys_urls: []
+        email: ""
+    
+    gpg_key_fingerprints:
+      - 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
+      - 55065306FCC6617D4D928B70020F4A4E40F95228
+      - 13C6836A224BB603724399C671C9E6BA29324FEE
+    
     tailscale_accept_dns: "true"
     custom_domains:
       minio-api.setale.me: nas.setale.me
