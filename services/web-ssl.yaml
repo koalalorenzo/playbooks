@@ -1,0 +1,136 @@
+---
+- name: Generate a public certificate for *.setale.me web services
+  serial: 1
+  hosts: 
+    #- localhost
+    - web
+#  connection: local 
+  
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+  vars:
+    certs_path: /etc/ssl/web-setale.me/
+    crt_common_name: "setale.me"
+    cloudflare_zone: setale.me
+
+  handlers:
+    - name: Restart nginx
+      service: name=nginx state=restarted
+      when: '"nginx" in services'
+
+  tasks:
+  - name: Load encrypted credentials (SSL)
+    community.sops.load_vars:
+      file: ../common/ssl.sops.yaml
+
+  - name: Populate service facts
+    service_facts:
+
+  - debug: msg='Notify to Restart NGINX if Tailscale SSL Certificate changed'
+    changed_when: tailscale_ssl_key_before.stat.md5 != tailscale_ssl_key_after.stat.md5
+    notify: Restart nginx
+    when: '"tailscaled.service" in services'
+
+  - name: create directory to store certs
+    file:
+      path: "{{ certs_path }}"
+      state: directory
+
+  - name: Install dependencies required
+    package:
+      name: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+        - openssl
+        - python3
+        - python3-openssl
+
+  - name: generate account key
+    openssl_privatekey:
+      path: "{{ certs_path }}/account-key.pem"
+      size: 4096
+
+  - name: generate signing key
+    openssl_privatekey:
+      path: "{{ certs_path }}/cert-priv.pem"
+      size: 4096
+    notify: Restart nginx
+
+  - name: generate csr
+    openssl_csr:
+      path: "{{ certs_path }}/cert.csr"
+      privatekey_path: "{{ certs_path }}/cert-priv.pem"
+      common_name: "{{ crt_common_name }}"
+      subject_alt_name: "DNS:{{ web_ssl_domains | join(',DNS:') }}"
+    register: csr_data
+    notify: Restart nginx
+
+  - name: create acme challenge
+    acme_certificate:
+      acme_version: 2
+      terms_agreed: yes
+      account_key_src: "{{ certs_path }}/account-key.pem"
+      src: "{{ certs_path }}/cert.csr"
+      cert: "{{ certs_path }}/cert.crt"
+      challenge: dns-01
+      acme_directory: https://acme-v02.api.letsencrypt.org/directory
+      remaining_days: 90
+    register: challenge
+    when: csr_data is changed
+    notify: Restart nginx
+
+  - name: Pause 5 sec
+    pause:
+      seconds: "5"
+
+  - name: create cloudflare TXT records
+    cloudflare_dns:
+      api_token: "{{ cloudflare_api_token }}"
+      account_email: "{{ cloudflare_email }}"
+      zone: "{{ cloudflare_zone }}"
+      record: "{{ item.key }}"
+      type: TXT
+      value: "{{ item.value[0] }}"
+      solo: true
+      ttl: 60
+      state: present
+    # Disabled as *.h.setale.me will overwrite h.setale.me
+    loop: "{{ challenge.challenge_data_dns | dict2items }}"
+    # with_items: "{{ [crt_common_name] }}"
+    when: challenge is changed
+
+  - name: Pause
+    pause:
+      seconds: "61"
+
+  - name: validate acme challenge
+    acme_certificate:
+      acme_version: 2
+      account_key_src: "{{ certs_path }}/account-key.pem"
+      src: "{{ certs_path }}/cert.csr"
+      cert: "{{ certs_path }}/cert.crt"
+      fullchain: "{{ certs_path }}/fullchain.crt"
+      chain: "{{ certs_path }}/intermediate.crt"
+      challenge: dns-01
+      acme_directory: https://acme-v02.api.letsencrypt.org/directory
+      remaining_days: 90
+      data: "{{ challenge }}"
+    when: challenge is changed
+    notify: Restart nginx
+
+  - name: delete cloudflare TXT record
+    cloudflare_dns:
+      api_token: "{{ cloudflare_api_token }}"
+      account_email: "{{ cloudflare_email }}"
+      zone: "{{ cloudflare_zone }}"
+      record: "{{ item.key }}"
+      type: TXT
+      state: absent
+    # Disabled as *.h.setale.me will overwrite h.setale.me
+    loop: "{{ challenge.challenge_data_dns | dict2items }}"
+    # with_items: "{{ [crt_common_name] }}"
+    when: challenge is changed
+
