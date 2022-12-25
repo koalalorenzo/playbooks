@@ -24,9 +24,14 @@ all:
       # dash.setale.me: nas.setale.me
       # graph.setale.me: nas.setale.me
   children:
-    web:
+    web: # Public / Web Facing
       children:
         nas:
+      vars:
+        web_ssl_domains:
+          - who.is.lorenzo.setale.me
+          - is.lorenzo.setale.me
+          - who.is.setale.me
     homeautomation:
       hosts:
         zeroberry:
