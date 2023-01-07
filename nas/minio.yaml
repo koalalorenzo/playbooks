@@ -75,6 +75,8 @@
       file:
         path: /main/minio
         owner: "minio"
+        state: directory
+        mode: "0755"
         recurse: no
       notify: Restart minio
 
