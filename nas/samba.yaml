@@ -29,6 +29,7 @@
         path: /etc/samba/smb.conf
         mode: 0644
         marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
+        validate: testparm -s %s
         block: |
           [{{ item.name }}]
             comment = {{ item.name }} Disk
