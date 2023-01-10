@@ -11,10 +11,8 @@
   tasks:
     - name: "Install packages"
       package:
-        name: "{{ packages }}"
         state: present
-      vars:
-        packages:
+        name:
           - unattended-upgrades
           - moreutils
           - jq

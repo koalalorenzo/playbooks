@@ -12,10 +12,8 @@
   tasks:
     - name: Install packages for SSH
       package:
-        name: "{{ packages }}"
         state: present
-      vars:
-        packages:
+        name:
           - openssl
           - mosh
           - ufw

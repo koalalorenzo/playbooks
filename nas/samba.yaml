@@ -17,10 +17,8 @@
 
     - name: "Install packages"
       package:
-        name: "{{ packages }}"
-        state: present
-      vars:
-        packages:
+        state: latest
+        name:
           - samba
           - samba-common-bin
 

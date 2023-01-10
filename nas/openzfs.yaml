@@ -15,10 +15,8 @@
       block:
       - name: "Install dependencies"
         package:
-          name: "{{ packages }}"
           state: present
-        vars:
-          packages:
+          name:
             # - raspberrypi-kernel-headers
             - dpkg-dev
             # Dependencies for rpi-source and rpi-update
@@ -75,10 +73,8 @@
 
     - name: "Install packages (may take a while)"
       package:
-        name: "{{ packages }}"
         state: present
-      vars:
-        packages:
+        name:
           - zfsutils-linux
           - zfs-dkms
           - zfs-auto-snapshot

@@ -15,11 +15,9 @@
   tasks:
     - name: "Install packages"
       package:
-        name: "{{ packages }}"
         update_cache: yes
         state: present
-      vars:
-        packages:
+        name:
           - munin
           - munin-node
           - nginx

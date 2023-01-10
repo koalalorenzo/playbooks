@@ -9,10 +9,7 @@
   tasks:
     - name: "Install packages"
       package:
-        name: "{{ packages }}"
-        state: present
-      vars:
-        packages:
+        name:
           - build-essential
           - crossbuild-essential-amd64
           - crossbuild-essential-arm64
@@ -23,3 +20,4 @@
           - make
           - jq
           - sed
+        state: latest
