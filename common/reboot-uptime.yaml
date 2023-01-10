@@ -1,5 +1,5 @@
 ---
-- name:  Restart the server (if uptime is more than 30 days)
+- name:  Restart the server (if uptime is more than 3 days)
   hosts: all
   serial: 1
   become: yes
@@ -14,10 +14,12 @@
 
     - name: Setting fact for number of days
       set_fact:
-        uptime_days: "{ { (UPTIME_PRE_REBOOT.stdout | int / 86400) | round(0) } }"
+        uptime_days: "{{ (UPTIME_PRE_REBOOT.stdout | int / 86400) | round(0) }}"
 
+    - debug: msg="Pre-reboot uptime is {{ uptime_days }}"
+    
     - reboot:
         reboot_timeout: 300
         post_reboot_delay: 15
         pre_reboot_delay: 15
-      when: (uptime_days | int) > 30
+      when: (uptime_days | int) > 3
