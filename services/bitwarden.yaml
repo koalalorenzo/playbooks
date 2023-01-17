@@ -1,0 +1,66 @@
+---
+- name: Bitwarden (VaultWarden) Setup
+  hosts: bitwarden
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  handlers:
+    - name: Restart nginx
+      service: name=nginx state=restarted
+
+  tasks:
+    - name: Install Podman
+      package:
+        name: podman
+        state: latest
+
+    - name: Create data directory exists
+      file:
+        state: directory
+        path: "/opt/vw-data"
+        owner: root
+        group: root
+        mode: "0755"
+
+    - shell: |
+        podman run -d --name vaultwarden -v /opt/vw-data/:/data/:Z -p 7560:7560 -e ROCKET_PORT=7560 docker.io/vaultwarden/server:alpine
+      ignore_errors: yes
+
+    - name: Create SystemD service
+      shell: |
+        podman generate systemd --new --files --name vaultwarden
+      args:
+        chdir: /etc/systemd/system/
+
+    - name: Start the service at boot
+      service:
+        name: container-vaultwarden
+        state: started
+        enabled: yes
+
+    - name: Set nginx config for ArchiveBox
+      blockinfile:
+        create: yes
+        path: /etc/nginx/sites-enabled/vaultwarden
+        block: |
+          server {
+            listen 443 ssl;
+            server_name bw.setale.me;
+
+            ssl_certificate      /etc/ssl/setale.me/cert.crt;
+            ssl_certificate_key  /etc/ssl/setale.me/cert-priv.pem;
+            ssl_protocols       TLSv1.2 TLSv1.3;
+
+            ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;
+            ssl_prefer_server_ciphers   on;
+            ssl_ecdh_curve              secp384r1;
+
+            location / {
+              proxy_read_timeout 60;
+              proxy_pass http://localhost:7560;
+            }
+          }
+      notify: Restart nginx
+

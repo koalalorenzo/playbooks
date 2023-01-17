@@ -1,2 +1,2 @@
 ---
-- import_playbook: dns/adguard.yaml
+- import_playbook: services/adguard.yaml

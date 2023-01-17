@@ -9,10 +9,8 @@
   tasks:
     - name: "Install packages"
       package:
-        name: "{{ packages }}"
         state: present
-      vars:
-        packages:
+        name:
           - clamav
           - clamav-daemon
 

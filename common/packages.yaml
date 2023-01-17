@@ -13,10 +13,8 @@
 
     - name: "Install packages"
       package:
-        name: "{{ packages }}"
-        state: present
-      vars:
-        packages:
+        state: latest
+        name:
           - software-properties-common
           - ca-certificates
           - openssl

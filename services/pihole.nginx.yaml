@@ -14,10 +14,7 @@
   tasks:
     - name: "Install packages"
       package:
-        name: "{{ packages }}"
-        state: present
-      vars:
-        packages:
+        name:
           - nginx
           - php7.4-fpm
           - php7.4-cgi
@@ -25,6 +22,7 @@
           - php7.4-sqlite3
           - php7.4-intl
           - apache2-utils
+        state: present
 
     - name: Enable PHP FPM service
       service:

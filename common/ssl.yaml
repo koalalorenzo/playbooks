@@ -55,10 +55,8 @@
 
   - name: Install dependencies required
     package:
-      name: "{{ packages }}"
       state: present
-    vars:
-      packages:
+      name:
         - openssl
         - python3
         - python3-openssl

@@ -27,13 +27,19 @@ all:
     homeautomation:
       hosts:
         zeroberry:
+    bitwarden:
+      vars:
+        ssl_domains:
+        - bw.setale.me
+      hosts:
+        zeroberry:
     dns:
       vars:
         tailscale_accept_dns: "false"
         ssl_domains:
           - dns.setale.me
       hosts:
-        zeroberry:
+        # zeroberry:
     nas:
       vars:
         ssl_domains: 

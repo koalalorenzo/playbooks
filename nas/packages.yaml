@@ -11,10 +11,8 @@
   tasks:
     - name: "Install packages"
       package:
-        name: "{{ packages }}"
-        state: present
-      vars:
-        packages:
+        state: latest
+        name:
           - unattended-upgrades
           - moreutils
           - jq
@@ -25,3 +23,11 @@
           - ncdu
           - podman
           - smartmontools
+          - restic
+
+    - name: Checks if restic exists
+      stat:
+        path: /usr/bin/restic
+      register: restic_exists
+    - name: Upgrade restic
+      command: /usr/bin/restic self-update
