@@ -23,6 +23,8 @@ all:
       # dwn.setale.me: nas.setale.me
       # dash.setale.me: nas.setale.me
       # graph.setale.me: nas.setale.me
+      # bw.setale.me: zero.setale.me
+      # dns.setale.me: zero.setale.me
   children:
     homeautomation:
       hosts:
