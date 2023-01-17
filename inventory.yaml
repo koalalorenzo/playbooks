@@ -31,9 +31,11 @@ all:
       hosts:
         zeroberry:
     bitwarden:
-      ssl_domains:
+      vars:
+        ssl_domains:
         - bw.setale.me
-      zeroberry:
+      hosts:
+        zeroberry:
     dns:
       vars:
         tailscale_accept_dns: "false"
