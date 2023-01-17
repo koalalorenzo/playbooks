@@ -13,7 +13,7 @@
 
     - name: "Install packages"
       package:
-        state: present
+        state: latest
         name:
           - software-properties-common
           - ca-certificates

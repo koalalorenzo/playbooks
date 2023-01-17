@@ -11,7 +11,7 @@
   tasks:
     - name: "Install packages"
       package:
-        state: present
+        state: latest
         name:
           - unattended-upgrades
           - moreutils
