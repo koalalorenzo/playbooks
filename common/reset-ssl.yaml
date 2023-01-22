@@ -1,0 +1,25 @@
+---
+- name: Delete SSL Certificates
+  hosts:
+    - nas
+    - web
+    - dns
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+  vars:
+    certs_path: /etc/ssl/setale.me/
+
+  tasks:
+  - file:
+      path: "{{ certs_path }}"
+      state: absent
+
+  - file:
+      path: "/etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.key"
+      state: absent
+
+  - file:
+      path: "/etc/ssl/{{ ansible_hostname }}.fish-alpha.ts.net.crt"
+      state: absent
