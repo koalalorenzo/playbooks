@@ -53,8 +53,10 @@
     - name: Weekly Pocket Archivebox update
       cron:
         user: "root"
-        name: "Pocket Archivebox update"
-        special_time: weekly
+        name: "Pocket Archivebox update every saturday at 6:45"
+        minute: "45"
+        hour: "6"
+        weekday: "6" # Saturday
         job: "podman run -dt -v /main/downloads/archivebox/:/data/ docker.io/archivebox/archivebox add https://getpocket.com/users/koalalorenzo/feed/all --depth=1 --update"
 
     - name: Set nginx config for ArchiveBox
@@ -88,3 +90,19 @@
       service:
         name: pod-archivebox
         enabled: yes
+
+    - name: Stop at midnight archivebox
+      cron:
+        user: root
+        name: stop at midnight archivebox
+        minute: "30"
+        hour: "23"
+        job: service pod-archivebox stop
+
+    - name: Start at 6:30 daily
+      cron:
+        user: root
+        name: start at 6:30 archivebox
+        minute: "30"
+        hour: "6"
+        job: service pod-archivebox start
