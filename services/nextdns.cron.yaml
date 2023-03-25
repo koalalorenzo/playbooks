@@ -19,4 +19,4 @@
         name: "Update NextDNS IP endpoint twice a day"
         minute: "55"
         hour: "11,23"
-        job: "curl {{ next_dns_endpoint }}"
+        job: "curl {{ next_dns_endpoint }} >> /dev/null"
