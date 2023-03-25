@@ -57,7 +57,7 @@
         minute: "45"
         hour: "6"
         weekday: "6" # Saturday
-        job: "podman run -dt -v /main/downloads/archivebox/:/data/ docker.io/archivebox/archivebox add https://getpocket.com/users/koalalorenzo/feed/all --depth=1 --update"
+        job: "podman run -dt -v /main/downloads/archivebox/:/data/ docker.io/archivebox/archivebox add https://getpocket.com/users/koalalorenzo/feed/all --depth=1 --update >> /dev/null"
 
     - name: Set nginx config for ArchiveBox
       blockinfile:
