@@ -18,5 +18,16 @@
         block: |
           client {
             enabled = true
+            servers = [{% for i in groups['nomadServers'] %}"{{ i }}:4647",{% endfor %}]
+
+            options = {
+              "driver.denylist" = "java"
+            }
+          }
+
+          plugin "raw_exec" {
+            config {
+              enabled = true
+            }
           }
       notify: Restart Nomad
