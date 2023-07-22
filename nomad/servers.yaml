@@ -19,5 +19,6 @@
         block: |
           server {
             enabled = true
+            bootstrap_expect = 1 # {{ groups["nomadServers"] | length }}
           }
       notify: Restart Nomad
