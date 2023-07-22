@@ -69,11 +69,10 @@
       ignore_errors: yes
 
     - name: Create SystemD Service
-      blockinfile:
-        path: /etc/systemd/system/nomad.service
-        create: yes
+      copy:
+        dest: /etc/systemd/system/nomad.service
         mode: 0644
-        block: |
+        content: |
           [Unit]
           Description=Nomad
           Documentation=https://www.nomadproject.io/docs/
@@ -94,7 +93,7 @@
           Group=root
 
           ExecReload=/bin/kill -HUP $MAINPID
-          ExecStart=/usr/local/bin/nomad agent -config /etc/nomad.d
+          ExecStart=/usr/bin/nomad agent -config /etc/nomad.d
           KillMode=process
           KillSignal=SIGINT
           LimitNOFILE=65536
@@ -112,7 +111,7 @@
           # StartLimitBurst = 5
 
           ## StartLimitIntervalSec is used for systemd versions >= 230
-          StartLimitIntervalSec = 10s
+          # StartLimitIntervalSec = 10s
 
           ## StartLimitInterval is used for systemd versions < 230
           # StartLimitInterval = 10s
@@ -129,10 +128,10 @@
         enabled: true
 
     - name: Adds Nomad Server configuration
-      blockinfile:
-        path: /etc/nomad.d/nomad.hcl
-        create: yes
+      copy:
+        dest: /etc/nomad.d/nomad.hcl
         mode: 0700
-        block: |
+        content: |
           datacenter = "dc1"
-          data_dir = "/opt/nomad"
+          data_dir  = "/opt/nomad/data"
+          bind_addr = "0.0.0.0"
