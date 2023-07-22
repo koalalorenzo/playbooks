@@ -1,0 +1,5 @@
+---
+- import_playbook: nomad/common.yaml
+- import_playbook: nomad/servers.yaml
+- import_playbook: nomad/clients-docker.yaml
+- import_playbook: nomad/clients.yaml
