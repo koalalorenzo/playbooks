@@ -1,0 +1,23 @@
+---
+- name: Setup Nomad Servers (systemd)
+  hosts: nomadServers
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  handlers:
+    - name: Restart Nomad
+      service: name=nomad state=restarted
+
+  tasks:
+    - name: Adds Nomad Server configuration
+      blockinfile:
+        path: /etc/nomad.d/server.hcl
+        create: yes
+        mode: 0700
+        block: |
+          server {
+            enabled = true
+          }
+      notify: Restart Nomad

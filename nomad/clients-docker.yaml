@@ -1,0 +1,24 @@
+---
+- name: Setup Docker for Nomad Clients
+  hosts: nomadClients
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: "Install install Docker"
+      package:
+        name: docker-ce
+        update_cache: yes
+        state: latest

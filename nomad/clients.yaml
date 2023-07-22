@@ -1,0 +1,22 @@
+---
+- name: Setup Nomad Client
+  hosts: nomadClients
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  handlers:
+    - name: Restart Nomad
+      service: name=nomad state=restarted
+
+  tasks:
+    - blockinfile:
+        path: /etc/nomad.d/client.hcl
+        create: yes
+        mode: 0700
+        block: |
+          client {
+            enabled = true
+          }
+      notify: Restart Nomad
