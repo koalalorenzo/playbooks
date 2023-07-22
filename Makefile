@@ -25,7 +25,11 @@ common:
 	ansible-playbook -i ./inventory.yaml ./common.yaml ${ARGS}
 .PHONY: common
 
-%:
+nomad:
+	ansible-playbook -i ./inventory.yaml nomad.yaml ${ARGS}
+.PHONY: reboot
+
+%.run:
 	ansible-playbook -i ./inventory.yaml $*.yaml ${ARGS}
 
 apt_upgrade:
