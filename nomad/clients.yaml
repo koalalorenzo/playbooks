@@ -22,6 +22,8 @@
             options = {
               "driver.denylist" = "java"
             }
+
+            servers = [{% for i in groups['nomadServers'] %}"{{ i }}:4647",{% endfor %}]
           }
 
           plugin "raw_exec" {

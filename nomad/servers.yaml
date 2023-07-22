@@ -22,12 +22,12 @@
             enabled = true
             bootstrap_expect = 1 # {{ groups["nomadServers"] | length }}
 
-            node_gc_threshold = "3h"
+            node_gc_threshold = "1h"
             
-            server_join {
-              retry_join = [ {% for i in groups['nomadServers'] %}"{{ i }}:4647",{% endfor %} ]
-              retry_max = 3
-              retry_interval = "15s"
-            }
+            # server_join {
+            #   retry_join = [ {% for i in groups['nomadServers'] %}"{{ i }}:4647",{% endfor %} ]
+            #   retry_max = 3
+            #   retry_interval = "15s"
+            # }
           }
       notify: Restart Nomad
