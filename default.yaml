@@ -3,7 +3,7 @@
 - import_playbook: nas.yaml
 
 # Home Automation
-- import: homeauto/hue_exporter.yaml
+# - import: homeauto/hue_exporter.yaml
 
 # Final Setup and reboot
 - import_playbook: common/overlay-on.yaml

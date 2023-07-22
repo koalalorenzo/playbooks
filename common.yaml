@@ -14,7 +14,7 @@
 - import_playbook: common/swap.yaml
 - import_playbook: common/users.yaml
 - import_playbook: common/ssl.yaml
-- import_playbook: common/nginx.yaml
+# - import_playbook: common/nginx.yaml
 
 # Final Setup and reboot
 # - import_playbook: common/overlay-on.yaml
