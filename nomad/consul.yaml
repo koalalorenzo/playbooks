@@ -115,4 +115,8 @@
     - service:
         name: consul
         enabled: true
-        state: restarted
+        state: reloaded
+
+    - service:
+        name: consul
+        state: started

@@ -62,6 +62,7 @@ all:
       children:
         nomadServers:
           hosts:
+            nasberry.local:
             rpi48.local:
           vars:
 
