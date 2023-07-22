@@ -30,20 +30,40 @@
         repo: "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
         state: present
 
-    - name: Add Docker GPG apt Key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Add Docker Repository
-      apt_repository:
-        repo: deb https://download.docker.com/linux/ubuntu focal stable
-        state: present
-
     - name: "Install install Nomad Packages"
       package:
         name:
           - nomad
-          - docker-ce
         update_cache: yes
         state: latest
+
+    - name: Allow Nomad HTTP API
+      ufw:
+        rule: allow
+        port: 4646
+        proto: tcp
+
+    - name: Allows Nomad RPC API
+      ufw:
+        rule: allow
+        port: 4647
+        proto: tcp
+
+    - name: Allows Nomad Serf WAN (gossip)
+      ufw:
+        rule: allow
+        port: 4648
+        proto: any
+
+    - name: Set IP Forward rules for networking
+      block:
+        - sysctl:
+            name: net.bridge.bridge-nf-call-arptables
+            value: "1"
+        - sysctl:
+            name: net.bridge.bridge-nf-call-ip6tables
+            value: "1"
+        - sysctl:
+            name: net.bridge.bridge-nf-call-iptables
+            value: "1"
+      ignore_errors: yes
