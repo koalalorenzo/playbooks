@@ -20,11 +20,14 @@
         block: |
           server {
             enabled = true
-            bootstrap_expect = {{ groups["nomadServers"] | length // 2 | round }}
+            bootstrap_expect = 1 # {{ groups["nomadServers"] | length }}
 
+            node_gc_threshold = "3h"
+            
             server_join {
               retry_join = [ {% for i in groups['nomadServers'] %}"{{ i }}:4647",{% endfor %} ]
-              retry_interval = "5s"
+              retry_max = 3
+              retry_interval = "15s"
             }
           }
       notify: Restart Nomad
