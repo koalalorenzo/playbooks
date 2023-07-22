@@ -89,6 +89,7 @@
           bootstrap_expect = {{ groups["nomad"] | length }}
           bind_addr = "0.0.0.0"
           advertise_addr = "{{ ansible_default_ipv4.address }}"
+
           ui_config {
             enabled = true
           }
