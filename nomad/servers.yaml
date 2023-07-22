@@ -1,6 +1,7 @@
 ---
 - name: Setup Nomad Servers (systemd)
   hosts: nomadServers
+  serial: "20%"
   become: yes
   become_user: root
   become_method: sudo

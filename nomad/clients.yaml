@@ -7,8 +7,8 @@
   gather_facts: no
 
   handlers:
-    - name: Restart Nomad
-      service: name=nomad state=restarted
+    - name: Reload Nomad
+      service: name=nomad state=reloaded
 
   tasks:
     - blockinfile:
@@ -34,4 +34,4 @@
               enabled = true
             }
           }
-      notify: Restart Nomad
+      notify: Reload Nomad
