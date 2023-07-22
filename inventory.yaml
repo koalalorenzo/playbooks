@@ -68,6 +68,5 @@ all:
 
         nomadClients:
           hosts:
-            primary.local:
             rpi48.local:
             nasberry.local:
