@@ -1,5 +1,5 @@
 ---
-- name: Setup Nomad Servers (systemd)
+- name: Setup Nomad Servers
   hosts: nomadServers
   serial: "20%"
   become: yes
