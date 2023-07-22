@@ -22,11 +22,6 @@
             options = {
               "driver.denylist" = "java"
             }
-
-            server_join {
-              retry_join = [ {% for i in groups['nomadServers'] %}"{{ i }}:4647",{% endfor %} ]
-              retry_interval = "15s"
-            }
           }
 
           plugin "raw_exec" {
