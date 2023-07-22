@@ -46,6 +46,7 @@ all:
           - nas.setale.me
       hosts:
         nasberry.local:
+        rpi48.local:
     web: # Public / Web Facing
       children:
         nas:
@@ -61,13 +62,12 @@ all:
       children:
         nomadServers:
           hosts:
-            192.168.64.22:
-            # zeroberry.local:
-            # nasberry.local:
-            # rpi48.local:
+            rpi48.local:
+            nasberry.local:
           vars:
 
         nomadClients:
           hosts:
-            192.168.64.22:
-          vars:
+            primary.local:
+            rpi48.local:
+            nasberry.local:

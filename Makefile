@@ -1,4 +1,4 @@
-ARGS ?=
+ARGS ?=-K
 
 ANSIBLE_CONFIG=facts.cfg
 
