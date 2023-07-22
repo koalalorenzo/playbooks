@@ -20,7 +20,7 @@
         block: |
           server {
             enabled = true
-            bootstrap_expect = {{ bootstrap_expected }}
+            bootstrap_expect = {{ groups["nomadServers"] | length // 2 | round }}
 
             server_join {
               retry_join = [ {% for i in groups['nomadServers'] %}"{{ i }}:4647",{% endfor %} ]
