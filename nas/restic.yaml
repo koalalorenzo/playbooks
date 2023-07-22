@@ -15,27 +15,30 @@
     - name: Get latest version of Restic
       shell: restic self-update
 
-    - name: Cleanup (local)
-      cron:
-        user: "{{ ansible_user }}"
-        name: "Local Restic Cleanup"
-        day: "*/3"
-        hour: "1"
-        minute: "30"
-        job: "/main/system/bin/restic-local-cleanup"
+    # Moved to Nomad
+    # - name: Cleanup (local)
+    #   cron:
+    #     user: "{{ ansible_user }}"
+    #     name: "Local Restic Cleanup"
+    #     day: "*/3"
+    #     hour: "1"
+    #     minute: "30"
+    #     job: "/main/system/bin/restic-local-cleanup"
 
-    - name: Weekly cleanup (remote)
-      cron:
-        user: "{{ ansible_user }}"
-        name: "Remote Restic Cleanup"
-        special_time: weekly
-        job: "/main/system/bin/restic-cleanup"
+    # Moved to Nomad
+    # - name: Weekly cleanup (remote)
+    #   cron:
+    #     user: "{{ ansible_user }}"
+    #     name: "Remote Restic Cleanup"
+    #     special_time: weekly
+    #     job: "/main/system/bin/restic-cleanup"
 
-    - name: Frequent Backup
-      cron:
-        user: "{{ ansible_user }}"
-        name: "Backup (local to remote)"
-        day: "*/2"
-        hour: "4"
-        minute: "5"
-        job: "/main/system/bin/restic-backup"
+    # Moved to Nomad
+    # - name: Frequent Backup
+    #   cron:
+    #     user: "{{ ansible_user }}"
+    #     name: "Backup (local to remote)"
+    #     day: "*/2"
+    #     hour: "4"
+    #     minute: "5"
+    #     job: "/main/system/bin/restic-backup"

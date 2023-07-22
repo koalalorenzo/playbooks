@@ -13,59 +13,59 @@
 
     - when: ansible_distribution == 'Debian'
       block:
-      - name: "Install dependencies"
-        package:
-          state: present
-          name:
-            # - raspberrypi-kernel-headers
-            - dpkg-dev
-            # Dependencies for rpi-source and rpi-update
-            - git
-            - bc
-            - bison
-            - flex
-            - libssl-dev
-            - libncurses5-dev
-            - rpi-update
+        - name: "Install dependencies"
+          package:
+            state: present
+            name:
+              # - raspberrypi-kernel-headers
+              - dpkg-dev
+              # Dependencies for rpi-source and rpi-update
+              - git
+              - bc
+              - bison
+              - flex
+              - libssl-dev
+              - libncurses5-dev
+              - rpi-update
 
-      - name: Install 5.10 kernel
-        shell: BRANCH=oldstable rpi-update
+        - name: Install 5.10 kernel
+          shell: BRANCH=oldstable rpi-update
 
-      - reboot:
-          reboot_timeout: 300
-          post_reboot_delay: 15
-          pre_reboot_delay: 15
+        - reboot:
+            reboot_timeout: 300
+            post_reboot_delay: 15
+            pre_reboot_delay: 15
 
-      - name: Install/Update rpi-source
-        get_url:
-          url: "https://raw.githubusercontent.com/RPi-Distro/rpi-source/master/rpi-source"
-          dest: "/usr/local/bin/rpi-source"
-          mode: 0755
+        - name: Install/Update rpi-source
+          get_url:
+            url: "https://raw.githubusercontent.com/RPi-Distro/rpi-source/master/rpi-source"
+            dest: "/usr/local/bin/rpi-source"
+            mode: 0755
 
-      - shell: /usr/local/bin/rpi-source -q --tag-update
+        - shell: /usr/local/bin/rpi-source -q --tag-update
 
-      - name: Download kernel headers
-        shell: /usr/local/bin/rpi-source
-        ignore_errors: yes
+        - name: Download kernel headers
+          shell: /usr/local/bin/rpi-source
+          ignore_errors: yes
 
-      - name: Add Debian Backports
-        apt_repository:
-          repo: "deb http://deb.debian.org/debian bullseye-backports main contrib"
-          state: present
+        - name: Add Debian Backports
+          apt_repository:
+            repo: "deb http://deb.debian.org/debian bullseye-backports main contrib"
+            state: present
 
-      - name: Add Debian Backports (src)
-        apt_repository:
-          repo: "deb-src http://deb.debian.org/debian bullseye-backports main contrib"
-          state: present
+        - name: Add Debian Backports (src)
+          apt_repository:
+            repo: "deb-src http://deb.debian.org/debian bullseye-backports main contrib"
+            state: present
 
-      - name: Adds APT Preferences for OpenZFS Backports
-        blockinfile:
-          path: /etc/apt/preferences.d/90_zfs
-          create: yes
-          block: |
-            Package: libnvpair1linux libnvpair3linux libuutil1linux libuutil3linux libzfs2linux libzfs4linux libzpool2linux libzpool4linux spl-dkms zfs-dkms zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
-            Pin: release n=bullseye-backports
-            Pin-Priority: 990
+        - name: Adds APT Preferences for OpenZFS Backports
+          blockinfile:
+            path: /etc/apt/preferences.d/90_zfs
+            create: yes
+            block: |
+              Package: libnvpair1linux libnvpair3linux libuutil1linux libuutil3linux libzfs2linux libzfs4linux libzpool2linux libzpool4linux spl-dkms zfs-dkms zfs-test zfsutils-linux zfsutils-linux-dev zfs-zed
+              Pin: release n=bullseye-backports
+              Pin-Priority: 990
 
     - name: Update APT cache with the new rules
       apt:
@@ -95,8 +95,16 @@
         group: root
         mode: "0600"
       loop:
-        - { name: "OpenZFS - NAS - Personal", path: "/boot/values/personal", pwd: "{{ zfs_personal_pwd }}" }
-        - { name: "OpenZFS - NAS - Backup", path: "/boot/values/backups", pwd: "{{ zfs_backups_pwd }}" }
+        - {
+            name: "OpenZFS - NAS - Personal",
+            path: "/boot/values/personal",
+            pwd: "{{ zfs_personal_pwd }}",
+          }
+        - {
+            name: "OpenZFS - NAS - Backup",
+            path: "/boot/values/backups",
+            pwd: "{{ zfs_backups_pwd }}",
+          }
 
     - name: modprobe zfs
       modprobe:
@@ -113,11 +121,12 @@
         special_time: reboot
         job: "sleep 5; /usr/sbin/zpool import -d /dev/ -a; /usr/sbin/zfs load-key -a ; /usr/sbin/zfs mount -a"
 
-    - name: Add cronjob to Scrub disks
-      cron:
-        name: "Scrub disk once a every 2 weeks"
-        user: root
-        hour: "2"
-        minute: "30"
-        day: "2, 16"
-        job: "/usr/sbin/zpool scrub main"
+    # Moved to Nomad
+    # - name: Add cronjob to Scrub disks
+    #   cron:
+    #     name: "Scrub disk once a every 2 weeks"
+    #     user: root
+    #     hour: "2"
+    #     minute: "30"
+    #     day: "2, 16"
+    #     job: "/usr/sbin/zpool scrub main"
