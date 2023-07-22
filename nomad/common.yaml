@@ -47,7 +47,7 @@
       ufw:
         rule: allow
         port: 4647
-        proto: tcp
+        proto: any
 
     - name: Allows Nomad Serf WAN (gossip)
       ufw:
