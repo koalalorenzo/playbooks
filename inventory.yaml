@@ -26,37 +26,48 @@ all:
       # bw.setale.me: zero.setale.me
       # dns.setale.me: zero.setale.me
   children:
-    homeautomation:
-      hosts:
-        zeroberry:
-    bitwarden:
-      vars:
-        ssl_domains:
-        - bw.setale.me
-      hosts:
-        zeroberry:
-    dns:
-      vars:
-        tailscale_accept_dns: "false"
-        ssl_domains:
-          - dns.setale.me
-      hosts:
-        # zeroberry:
+    # homeautomation:
+    #   hosts:
+    #     zeroberry.local:
+    # dns:
+    #   vars:
+    #     tailscale_accept_dns: "false"
+    #     ssl_domains:
+    #       - dns.setale.me
+    #   hosts:
+    #     # zeroberry.local:
     nas:
       vars:
-        ssl_domains: 
+        ssl_domains:
           - minio-api.setale.me
           - minio.setale.me
           - archive.setale.me
           - media.setale.me
           - nas.setale.me
       hosts:
-        nasberry:
+        nasberry.local:
     web: # Public / Web Facing
       children:
         nas:
-      vars: 
+      vars:
         ssl_domains:
           - who.is.lorenzo.setale.me
           - is.lorenzo.setale.me
           - who.is.setale.me
+
+    # Nomad setup
+    nomad:
+      vars:
+      children:
+        nomadServers:
+          hosts:
+            192.168.64.22:
+            # zeroberry.local:
+            # nasberry.local:
+            # rpi48.local:
+          vars:
+
+        nomadClients:
+          hosts:
+            192.168.64.22:
+          vars:
