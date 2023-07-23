@@ -10,13 +10,13 @@
       community.sops.load_vars:
         file: nextdns.cron.sops.yaml
 
-    - cron:
-        name: "Update NextDNS IP endpoint at reboot"
-        special_time: reboot
-        job: "curl {{ next_dns_endpoint }}"
+    # - cron:
+    #     name: "Update NextDNS IP endpoint at reboot"
+    #     special_time: reboot
+    #     job: "curl {{ next_dns_endpoint }}"
 
-    - cron:
-        name: "Update NextDNS IP endpoint twice a day"
-        minute: "55"
-        hour: "11,23"
-        job: "curl -S -s -o /dev/null {{ next_dns_endpoint }}"
+    # - cron:
+    #     name: "Update NextDNS IP endpoint twice a day"
+    #     minute: "55"
+    #     hour: "11,23"
+    #     job: "curl -S -s -o /dev/null {{ next_dns_endpoint }}"
