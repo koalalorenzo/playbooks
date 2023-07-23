@@ -82,12 +82,12 @@
     - name: Makes sure that encryption keys are stored safe in path
       file:
         state: directory
-        path: "/boot/values"
+        path: "/etc/zfsdisks/"
         owner: root
         group: root
         mode: "0655"
 
-    - name: Adds encryption keys ({{ item.name }})
+    - name: Adds encryption keys
       copy:
         dest: item.path
         content: item.pwd
@@ -97,12 +97,12 @@
       loop:
         - {
             name: "OpenZFS - NAS - Personal",
-            path: "/boot/values/personal",
+            path: "/etc/zfsdisks//personal",
             pwd: "{{ zfs_personal_pwd }}",
           }
         - {
             name: "OpenZFS - NAS - Backup",
-            path: "/boot/values/backups",
+            path: "/etc/zfsdisks//backups",
             pwd: "{{ zfs_backups_pwd }}",
           }
 
@@ -111,15 +111,21 @@
         name: zfs
         state: present
 
+    - name: "Reduce RAM usage to 1/3 of memory"
+      sysctl:
+        name: vfs.zfs.arc_max
+        value: "{{(ansible_memtotal_mb / 3) | int}}m"
+      ignore_errors: true
+
     - shell: zfs load-key -a
     - shell: zfs mount -a
 
-    - name: Load Keys at Reboot
-      cron:
-        name: "Load keys and mount at reboot"
-        user: root
-        special_time: reboot
-        job: "sleep 5; /usr/sbin/zpool import -d /dev/ -a; /usr/sbin/zfs load-key -a ; /usr/sbin/zfs mount -a"
+    # - name: Load Keys at Reboot
+    #   cron:
+    #     name: "Load keys and mount at reboot"
+    #     user: root
+    #     special_time: reboot
+    #     job: "sleep 5; /usr/sbin/zpool import -d /dev/ -a; /usr/sbin/zfs load-key -a ; /usr/sbin/zfs mount -a"
 
     # Moved to Nomad
     # - name: Add cronjob to Scrub disks

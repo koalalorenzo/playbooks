@@ -1,7 +1,6 @@
 all:
   vars:
     ansible_user: koalalorenzo
-
     system_users:
       - username: jakub
         pubkeys_urls: []
