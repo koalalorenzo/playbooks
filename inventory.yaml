@@ -1,4 +1,6 @@
 all:
+  hosts:
+    rpiz1.local:
   vars:
     ansible_user: koalalorenzo
     system_users:
