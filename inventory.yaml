@@ -18,44 +18,49 @@ all:
 
     tailscale_accept_dns: "true"
     custom_domains:
-      minio-api.setale.me: nas.setale.me
-      minio.setale.me: nas.setale.me
-      archive.setale.me: nas.setale.me
-      media.setale.me: nas.setale.me
-      # h.setale.me: nas.setale.me
-      # bt.setale.me: nas.setale.me
-      # dwn.setale.me: nas.setale.me
-      # dash.setale.me: nas.setale.me
-      # graph.setale.me: nas.setale.me
-      # bw.setale.me: zero.setale.me
-      # dns.setale.me: zero.setale.me
-  children:
-    web: # Public / Web Facing
-      children:
-        nomadClients:
-      vars:
-        ssl_domains:
-          - who.is.lorenzo.setale.me
-          - is.lorenzo.setale.me
-          - who.is.setale.me
+      minio-api.setale.me: compute1.setale.me
+      minio.setale.me: compute1.setale.me
+      archive.setale.me: compute1.setale.me
+      media.setale.me: compute1.setale.me
+      consul.setale.me: compute1.setale.me
+      nomad.setale.me: compute1.setale.me
+  hosts:
+    storage0.local:
+      extra_ssl_domains:
+        - storage0.home.setale.me
+    compute0.local:
+      extra_ssl_domains:
+        - compute0.home.setale.me
+    compute1.local:
+      extra_ssl_domains:
+        - compute1.home.setale.me
 
-    storage:
+  children:
+    nomadServers:
+      hosts:
+        storage0.local:
+        compute1.local:
       vars:
-    # Nomad setup
-    nomad:
-      vars:
-        ssl_domains:
-          - nomad.setale.me
-          - consul.setale.me
-          - home.setale.me
+
+    nomadClients:
+      hosts:
+        storage0.local:
+          node_class: "storage"
+          host_volumes:
+            - name: "minio"
+              path: "/main/minio"
+            - name: "multimedia"
+              path: "/main/multimedia"
+            - name: "downloads"
+              path: "/main/downloads"
+        compute1.local:
+
+    # Deploys Consul on every Nomad Servers
+    consul:
       children:
         nomadServers:
-          hosts:
-            storage0.local:
-            compute1.local:
-          vars:
 
-        nomadClients:
-          hosts:
-            storage0.local:
-            compute1.local:
+    # Machines that provide storage layer (OpenZFS)
+    storage:
+      hosts:
+        storage0.local:
