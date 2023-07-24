@@ -145,3 +145,10 @@
            publish_node_metrics = true,
            prometheus_metrics = true
           }
+
+          ui {
+            enabled = true
+            consul {
+              ui_url = "http://consul.setale.me/ui"
+            }
+          }
