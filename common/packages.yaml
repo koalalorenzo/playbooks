@@ -39,6 +39,7 @@
         name: snapd
         state: stopped
         enabled: no
+      ignore_errors: true
 
     - name: Uninstall snapd package
       package:
