@@ -60,6 +60,11 @@ all:
       children:
         nomadServers:
 
+    nomad:
+      children:
+        nomadServers:
+        nomadClients:
+
     # Machines that provide storage layer (OpenZFS)
     storage:
       hosts:
