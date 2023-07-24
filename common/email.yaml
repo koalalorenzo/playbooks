@@ -1,0 +1,112 @@
+---
+- name: Set up Email notification
+  hosts: nas
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  handlers:
+    - name: Restart postfix
+      service: name=postfix state=restarted
+      notify: Send test email
+
+    - name: Send test email
+      shell: echo "Ansible Email Setup on {{ ansible_host }} completed" | mail -s "Test mail" lorenzo@setale.me
+
+  tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: email.sops.yaml
+
+    - debconf:
+        name: postfix
+        question: postfix/main_mailer_type
+        value: Satellite system
+        vtype: select
+      notify: Restart postfix
+
+    - debconf:
+        name: postfix
+        question: postfix/mailname
+        value: "{{ ansible_host }}"
+        vtype: string
+      notify: Restart postfix
+
+    - debconf:
+        name: postfix
+        question: postfix/relayhost
+        value: "{{ smtp_hostname }}"
+        vtype: string
+      notify: Restart postfix
+
+    - name: "Install packages"
+      package:
+        update_cache: yes
+        state: present
+        name:
+          - postfix
+          - mailutils
+          - libsasl2-modules
+
+    - shell: dpkg-reconfigure -f noninteractive postfix
+
+    - copy:
+        dest: "/etc/postfix/sasl_passwd"
+        content: |
+          {{ smtp_hostname }} {{ smtp_username }}:{{ smtp_password }}
+        owner: root
+        group: root
+        mode: "0600"
+      notify: Restart postfix
+
+    - shell: postmap /etc/postfix/sasl_passwd
+
+    - name: Update the configuration for postfix
+      blockinfile:
+        path: /etc/postfix/main.cf
+        block: |
+          smtp_sasl_auth_enable = yes
+          smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+          smtp_sasl_security_options = noanonymous
+          smtp_sasl_tls_security_options = noanonymous
+          smtp_sasl_mechanism_filter = AUTH LOGIN
+          smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+          smtp_generic_maps = hash:/etc/postfix/generic
+      notify: Restart postfix
+
+    - name: Ensures the smtp server is correct
+      ansible.builtin.lineinfile:
+        path: /etc/postfix/main.cf
+        regexp: '^relayhost ='
+        line: relayhost = smtp.eu.mailgun.org
+      notify: Restart postfix
+
+    - name: Set generic email aliases
+      blockinfile:
+        create: yes
+        path: /etc/postfix/generic
+        block: |
+          pi@{{ ansible_host }} no-reply@mg.setale.me
+          koalalorenzo@{{ ansible_host }} no-reply@mg.setale.me
+          root@{{ ansible_host }} no-reply@mg.setale.me
+          pi@{{ ansible_host }}.fish-alpha.ts.net no-reply@mg.setale.me
+          koalalorenzo@{{ ansible_host }}.fish-alpha.ts.net no-reply@mg.setale.me
+          root@{{ ansible_host }}.fish-alpha.ts.net no-reply@mg.setale.me
+
+      notify: Restart postfix
+
+    - shell: postmap /etc/postfix/generic
+
+    - name: Enable Postifx to send email on reboot
+      service:
+        name: postfix
+        enabled: yes
+
+    - name: Adds Email notification
+      cron:
+        name: MAILTO
+        user: root
+        env: yes
+        job: lorenzo@setale.me
+      notify: Restart postfix
