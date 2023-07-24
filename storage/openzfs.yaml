@@ -1,7 +1,7 @@
 ---
 # See https://openzfs.github.io/openzfs-docs/Getting%20Started/Debian/index.html
 - name: Setup OpenZFS devices
-  hosts: nas
+  hosts: storage
   become: yes
   become_user: root
   become_method: sudo

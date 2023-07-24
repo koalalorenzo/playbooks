@@ -1,6 +1,6 @@
 ---
 - name: Install Consul on all the machines
-  hosts: nomad
+  hosts: consul
   become: yes
   become_user: root
   become_method: sudo
