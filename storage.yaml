@@ -1,0 +1,3 @@
+---
+- import_playbook: storage/openzfs.yaml
+- import_playbook: storage/samba.yaml
