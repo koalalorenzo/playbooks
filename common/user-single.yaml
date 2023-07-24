@@ -29,7 +29,7 @@
     state: present
     groups:
       - sudo
-  when: { { is_admin } }
+  when: is_admin
 
 - name: Authorize keys
   authorized_key:
