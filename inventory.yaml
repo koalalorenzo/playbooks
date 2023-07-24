@@ -11,9 +11,12 @@ all:
         pubkeys_urls:
           - https://github.com/koalalorenzo.keys
         email: sage.scenery0e@icloud.com
+        is_admin: true
+
       - username: jakub
         pubkeys_urls: []
         email: ""
+        is_admin: false
 
     gpg_key_fingerprints:
       - 73880ECAF69EC2ED44CE5889502BFB12D0B5295F

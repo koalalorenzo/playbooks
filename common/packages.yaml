@@ -25,7 +25,7 @@
           - screen
           - openssh-server
           - golang
-          - podman
+          - ufw
           - vim
           - dnsutils
 

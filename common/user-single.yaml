@@ -8,19 +8,28 @@
     update_password: on_create
     shell: /bin/bash
     groups:
-      - dialout 
+      - audio
       - cdrom
-      - audio 
-      - video
-      - plugdev
+      - dialout
       - games
-      - users
-      - input
-      - render
-      - netdev
       - gpio
-      - spi
       - i2c
+      - input
+      - netdev
+      - plugdev
+      - render
+      - spi
+      - users
+      - video
+
+- name: Ensure user is sudoers
+  user:
+    name: "{{ username }}"
+    append: true
+    state: present
+    groups:
+      - sudo
+  when: { { is_admin } }
 
 - name: Authorize keys
   authorized_key:

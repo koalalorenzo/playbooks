@@ -20,6 +20,7 @@
       include_tasks: user-single.yaml
       vars:
         username: "{{ item.username }}"
+        is_admin: "{{ item.is_admin }}"
         pubkeys_urls: "{{ item.pubkeys_urls }}"
         email: "{{ item.email }}"
       loop: "{{ system_users }}"
