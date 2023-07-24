@@ -33,3 +33,14 @@
       apt:
         upgrade: full
       when: ansible_os_family == "Debian"
+
+    - name: Stop and disable snapd service
+      service:
+        name: snapd
+        state: stopped
+        enabled: no
+
+    - name: Uninstall snapd package
+      package:
+        name: snapd
+        state: absent
