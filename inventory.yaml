@@ -7,6 +7,10 @@ all:
 
     ansible_user: koalalorenzo
     system_users:
+      - username: koalalorenzo
+        pubkeys_urls:
+          - https://github.com/koalalorenzo.keys
+        email: sage.scenery0e@icloud.com
       - username: jakub
         pubkeys_urls: []
         email: ""

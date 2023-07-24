@@ -1,6 +1,6 @@
 ---
 - name: Set up Email notification
-  hosts: nas
+  hosts: all
   become: yes
   become_user: root
   become_method: sudo
@@ -78,7 +78,7 @@
     - name: Ensures the smtp server is correct
       ansible.builtin.lineinfile:
         path: /etc/postfix/main.cf
-        regexp: '^relayhost ='
+        regexp: "^relayhost ="
         line: relayhost = smtp.eu.mailgun.org
       notify: Restart postfix
 

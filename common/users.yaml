@@ -11,10 +11,10 @@
       service: name=ssh state=restarted
 
   tasks:
-    # - name: Install GnuPG
-    #   package:
-    #     name: gnupg
-    #     state: present
+    - name: Install GnuPG
+      package:
+        name: gnupg
+        state: present
 
     - name: Set Up Users
       include_tasks: user-single.yaml
@@ -64,7 +64,7 @@
         user: "{{ ansible_user }}"
         name: MAILTO
         env: yes
-        job: lorenzo@setale.me
+        job: sage.scenery0e@icloud.com
 
     - name: Disable root login
       lineinfile:
