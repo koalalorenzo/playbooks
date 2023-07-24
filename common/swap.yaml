@@ -16,16 +16,16 @@
     - name: Makes sure to set a big swap file
       lineinfile:
         path: /etc/dphys-swapfile
-        regexp: '^CONF_SWAPSIZE'
-        line: 'CONF_SWAPSIZE=4096'
+        regexp: "^CONF_SWAPSIZE"
+        line: "CONF_SWAPSIZE=1024"
         state: present
       register: swapsize
 
     - name: Allows bigger
       lineinfile:
         path: /etc/dphys-swapfile
-        regexp: '^CONF_MAXSWAP'
-        line: 'CONF_MAXSWAP=4096'
+        regexp: "^CONF_MAXSWAP"
+        line: "CONF_MAXSWAP=1024"
         state: present
       register: maxswap
 
