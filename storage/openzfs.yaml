@@ -120,19 +120,18 @@
     - shell: zfs load-key -a
     - shell: zfs mount -a
 
-    # - name: Load Keys at Reboot
-    #   cron:
-    #     name: "Load keys and mount at reboot"
-    #     user: root
-    #     special_time: reboot
-    #     job: "sleep 5; /usr/sbin/zpool import -d /dev/ -a; /usr/sbin/zfs load-key -a ; /usr/sbin/zfs mount -a"
+    - name: Load Keys at Reboot
+      cron:
+        name: "Load keys and mount at reboot"
+        user: root
+        special_time: reboot
+        job: "sleep 5; /usr/sbin/zpool import -d /dev/ -a; /usr/sbin/zfs load-key -a ; /usr/sbin/zfs mount -a"
 
-    # Moved to Nomad
-    # - name: Add cronjob to Scrub disks
-    #   cron:
-    #     name: "Scrub disk once a every 2 weeks"
-    #     user: root
-    #     hour: "2"
-    #     minute: "30"
-    #     day: "2, 16"
-    #     job: "/usr/sbin/zpool scrub main"
+    - name: Add cronjob to Scrub disks
+      cron:
+        name: "Scrub disk once a every 2 weeks"
+        user: root
+        hour: "2"
+        minute: "30"
+        day: "2, 16"
+        job: "/usr/sbin/zpool scrub main"
