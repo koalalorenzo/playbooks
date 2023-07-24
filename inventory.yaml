@@ -1,6 +1,6 @@
 all:
   hosts:
-    rpiz1.local:
+    compute0.local:
   vars:
     ansible_user: koalalorenzo
     system_users:
@@ -27,47 +27,32 @@ all:
       # bw.setale.me: zero.setale.me
       # dns.setale.me: zero.setale.me
   children:
-    # homeautomation:
-    #   hosts:
-    #     zeroberry.local:
-    # dns:
-    #   vars:
-    #     tailscale_accept_dns: "false"
-    #     ssl_domains:
-    #       - dns.setale.me
-    #   hosts:
-    #     # zeroberry.local:
-    nas:
-      vars:
-        ssl_domains:
-          - minio-api.setale.me
-          - minio.setale.me
-          - archive.setale.me
-          - media.setale.me
-          - nas.setale.me
-      hosts:
-        nasberry.local:
-        rpi48.local:
     web: # Public / Web Facing
       children:
-        nas:
+        nomadClients:
       vars:
         ssl_domains:
           - who.is.lorenzo.setale.me
           - is.lorenzo.setale.me
           - who.is.setale.me
 
+    storage:
+      vars:
     # Nomad setup
     nomad:
       vars:
+        ssl_domains:
+          - nomad.setale.me
+          - consul.setale.me
+          - home.setale.me
       children:
         nomadServers:
           hosts:
-            nasberry.local:
-            rpi48.local:
+            storage0.local:
+            compute1.local:
           vars:
 
         nomadClients:
           hosts:
-            rpi48.local:
-            nasberry.local:
+            storage0.local:
+            compute1.local:
