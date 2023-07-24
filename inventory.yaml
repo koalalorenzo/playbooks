@@ -1,7 +1,10 @@
 all:
-  hosts:
-    compute0.local:
   vars:
+    ssl_domains:
+      - nomad.setale.me
+      - consul.setale.me
+    extra_ssl_domains: []
+
     ansible_user: koalalorenzo
     system_users:
       - username: jakub

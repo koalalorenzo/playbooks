@@ -1,10 +1,7 @@
 ---
-- name: SSL Setup
+- name: SSL Setup (letsencrypt - Cloudflare)
   serial: 1
-  hosts:
-    - nas
-    - web
-    - dns
+  hosts: all
   become: yes
   become_user: root
   become_method: sudo
@@ -50,7 +47,7 @@
         path: "{{ certs_path }}/cert.csr"
         privatekey_path: "{{ certs_path }}/cert-priv.pem"
         common_name: "{{ crt_common_name }}"
-        subject_alt_name: "DNS:{{ ssl_domains | join(',DNS:') }}"
+        subject_alt_name: "DNS:{{ (ssl_domains + extra_ssl_domains) | join(',DNS:') }}"
       register: csr_data
 
     - name: create acme challenge
