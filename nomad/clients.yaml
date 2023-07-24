@@ -19,11 +19,37 @@
           client {
             enabled = true
 
+            gc_interval = "5m"
+
+            {% if node_class %}
+            node_class = "{{ node_class }}"
+            {% endif %}
+            
             options = {
               "driver.denylist" = "java"
             }
 
             servers = [{% for i in groups['nomadServers'] %}"{{ i }}:4647",{% endfor %}]
+
+            host_volume "ca-certificates" {
+              path = "/etc/ssl/certs"
+              read_only = true
+            }
+
+            {% for host in host_volumes %}
+            host_volume "{{ host.name }}" {
+              path = "{{ host.path }}"
+              read_only = false
+            }
+            {% endfor %}
+          }
+
+          reserved {
+            {% if node_class == "storage"  %}
+            memory = 1024 # OpenZFS
+            {% else %}
+            memory = 256
+            {% endif %}
           }
 
           plugin "raw_exec" {
