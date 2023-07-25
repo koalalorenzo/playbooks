@@ -1,4 +1,3 @@
-
 ---
 - name: Setup Grafana Agent
   hosts: all
@@ -16,45 +15,18 @@
       community.sops.load_vars:
         file: monitoring_grafana.sops.yaml
 
-    - name: gather installed packages
-      package_facts:
+    - apt_key:
+        url: https://packages.grafana.com/gpg.key
+        state: present
 
-    - when: not "grafana-agent" in ansible_facts.packages
-      block:
-      - uri:
-          url: https://api.github.com/repos/grafana/agent/releases/latest
-          return_content: true
-        register: json_reponse
+    - apt_repository:
+        repo: "deb https://packages.grafana.com/oss/deb stable main"
+        state: present
 
-      - when: ansible_machine == "aarch64"
-        block:
-        - name: Download package (arch64)
-          apt:
-            deb: "{{ item }}"
-          when: (".deb" in item) and ("arm64" in item)
-          with_items:
-            - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
-          notify: Restart grafana-agent
-
-      - when: ansible_machine == "armv6l"
-        block:
-        - name: Download package (armv6l)
-          apt:
-            deb: "{{ item }}"
-          when: (".deb" in item) and ("armv6" in item)
-          with_items:
-            - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
-          notify: Restart grafana-agent
-
-      - when: ansible_machine != "aarch64" and ansible_machine != "armv6"
-        block:
-        - name: Download package (other)
-          apt:
-            deb: "{{ item }}"
-          when: (".deb" in item) and (ansible_machine in item)
-          with_items:
-            - "{{ json_reponse.json.assets | json_query('[].browser_download_url') }}"
-          notify: Restart grafana-agent
+    - package:
+        name: grafana-agent
+        state: latest
+      notify: Restart grafana-agent
 
     - name: Sync Grafana Cloud Agent Config
       when: not "grafana-agent" in ansible_facts.packages
