@@ -5,6 +5,9 @@
   become_user: root
   become_method: sudo
   gather_facts: yes
+  handlers:
+    - name: restart consul
+      service: name=consul state=restarted
 
   tasks:
     - name: Load encrypted credentials
@@ -38,6 +41,7 @@
           - consul
         update_cache: yes
         state: latest
+      notify: restart consul
 
     - file:
         path: /etc/consul.d
@@ -61,6 +65,7 @@
         dest: "/etc/consul.d/certs/{{ item.key }}"
         content: "{{ item.value }}"
       with_dict: "{{ consul_certs }}"
+      notify: restart consul
 
     - ufw:
         proto: "{{ item.proto }}"
@@ -111,12 +116,9 @@
           auto_encrypt {
             allow_tls = true
           }
+      notify: restart consul
 
     - service:
         name: consul
         enabled: true
-        state: reloaded
-
-    - service:
-        name: consul
         state: started
