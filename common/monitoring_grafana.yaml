@@ -37,14 +37,14 @@
           -e "{{ grafana_api_url }}" > /etc/grafana-agent.yaml
       notify: Restart grafana-agent
 
-    - name: Replace NGINX path
+    - name: Replace path
       replace:
         path: /etc/grafana-agent.yaml
         regexp: "<path to json nginx access log>"
         replace: /var/log/nginx/json_access.log
       notify: Restart grafana-agent
 
-    - name: Replace NGINX hostname
+    - name: Replace hostname
       replace:
         path: /etc/grafana-agent.yaml
         regexp: "<http_hostname>"
@@ -65,11 +65,11 @@
         replace: "instance: {{ ansible_hostname }}"
       notify: Restart grafana-agent
 
-    - name: Increase scraping to every 30 seconds
+    - name: Increase scraping to every 60 seconds
       replace:
         path: /etc/grafana-agent.yaml
         regexp: "scrape_interval: 60s"
-        replace: "scrape_interval: 30s"
+        replace: "scrape_interval: 60s"
       notify: Restart grafana-agent
 
     - name: Setup process_expoter in Grafana
