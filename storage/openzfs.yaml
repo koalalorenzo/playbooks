@@ -97,12 +97,12 @@
       loop:
         - {
             name: "OpenZFS - NAS - Personal",
-            path: "/etc/zfsdisks//personal",
+            path: "/etc/zfsdisks/personal",
             pwd: "{{ zfs_personal_pwd }}",
           }
         - {
             name: "OpenZFS - NAS - Backup",
-            path: "/etc/zfsdisks//backups",
+            path: "/etc/zfsdisks/backups",
             pwd: "{{ zfs_backups_pwd }}",
           }
 
