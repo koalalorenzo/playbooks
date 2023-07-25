@@ -29,6 +29,10 @@ nomad:
 	ansible-playbook -i ./inventory.yaml nomad.yaml ${ARGS}
 .PHONY: nomad
 
+storage:
+	ansible-playbook -i ./inventory.yaml nomad.yaml ${ARGS}
+.PHONY: storage
+
 %:
 	ansible-playbook -i ./inventory.yaml $*.yaml ${ARGS}
 
