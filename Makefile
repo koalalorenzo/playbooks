@@ -30,7 +30,7 @@ nomad:
 .PHONY: nomad
 
 storage:
-	ansible-playbook -i ./inventory.yaml nomad.yaml ${ARGS}
+	ansible-playbook -i ./inventory.yaml storage.yaml ${ARGS}
 .PHONY: storage
 
 %:
