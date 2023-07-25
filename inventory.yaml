@@ -50,6 +50,9 @@ all:
       vars:
 
     nomadClients:
+      vars:
+        node_class: ""
+        host_volumes: []
       hosts:
         storage0.local:
           node_class: "storage"
