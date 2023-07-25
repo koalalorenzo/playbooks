@@ -108,5 +108,5 @@
         name: MAILTO
         user: root
         env: yes
-        job: lorenzo@setale.me
+        job: sage.scenery0e@icloud.com
       notify: Restart postfix
