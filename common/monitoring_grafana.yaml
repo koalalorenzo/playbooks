@@ -26,10 +26,11 @@
     - package:
         name: grafana-agent
         state: latest
+      register: grafanapkg
       notify: Restart grafana-agent
 
     - name: Sync Grafana Cloud Agent Config
-      when: not "grafana-agent" in ansible_facts.packages
+      when: grafanapkg.changed
       shell: |
         grafana-agentctl cloud-config \
           -u "{{ grafana_stack_id }}" \
