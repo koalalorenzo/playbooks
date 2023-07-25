@@ -12,7 +12,7 @@
       notify: Send test email
 
     - name: Send test email
-      shell: echo "Ansible Email Setup on {{ ansible_host }} completed" | mail -s "Test mail" lorenzo@setale.me
+      shell: echo "Ansible Email Setup on {{ ansible_host }} completed" | mail -s "Test mail" sage.scenery0e@icloud.com
 
   tasks:
     - name: Load encrypted credentials
