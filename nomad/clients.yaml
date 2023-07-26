@@ -58,3 +58,12 @@
             }
           }
       notify: Restart Nomad
+
+    - ufw:
+        proto: "{{ item.proto }}"
+        port: "{{ item.port }}"
+        rule: allow
+      loop:
+        - { proto: any, port: 80 } # HTTP
+        - { proto: any, port: 443 } # HTTPS
+        - { proto: any, port: 8081 } # Traefik
