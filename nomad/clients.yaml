@@ -7,8 +7,8 @@
   gather_facts: no
 
   handlers:
-    - name: Reload Nomad
-      service: name=nomad state=reloaded
+    - name: Restart Nomad
+      service: name=nomad state=restarted
 
   tasks:
     - blockinfile:
@@ -42,14 +42,14 @@
               read_only = false
             }
             {% endfor %}
-          }
 
-          reserved {
-            {% if node_class == "storage"  %}
-            memory = 1024 # OpenZFS
-            {% else %}
-            memory = 256
-            {% endif %}
+            reserved {
+              {% if node_class == "storage"  %}
+              memory = 1024 # OpenZFS
+              {% else %}
+              memory = 256
+              {% endif %}
+            }
           }
 
           plugin "raw_exec" {
@@ -57,4 +57,4 @@
               enabled = true
             }
           }
-      notify: Reload Nomad
+      notify: Restart Nomad
