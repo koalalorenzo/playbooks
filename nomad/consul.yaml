@@ -122,3 +122,4 @@
         name: consul
         enabled: true
         state: started
+      ignore_errors: true
