@@ -37,23 +37,14 @@
         update_cache: yes
         state: latest
 
-    - name: Allow Nomad HTTP API
-      ufw:
+    - ufw:
+        proto: "{{ item.proto }}"
+        port: "{{ item.port }}"
         rule: allow
-        port: 4646
-        proto: tcp
-
-    - name: Allows Nomad RPC API
-      ufw:
-        rule: allow
-        port: 4647
-        proto: any
-
-    - name: Allows Nomad Serf WAN (gossip)
-      ufw:
-        rule: allow
-        port: 4648
-        proto: any
+      loop:
+        - { proto: tcp, port: 4646 } # HTTP API / UI
+        - { proto: any, port: 4647 } # RPC API
+        - { proto: any, port: 4648 } # WAN (gossip)
 
     - name: Set IP Forward rules for networking
       block:
