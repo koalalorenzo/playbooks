@@ -8,6 +8,10 @@ job "traefik" {
       port "http" {
         static = 80
       }
+      
+      port "https" {
+        static = 443
+      }
 
       port "api" {
         static = 8081
@@ -25,6 +29,12 @@ job "traefik" {
       }
     }
 
+    volume "certs" {
+      type = "host"
+      read_only = true
+      source = "priv-certs"
+    }
+
     task "traefik" {
       driver = "docker"
 
@@ -38,13 +48,36 @@ job "traefik" {
         ]
       }
 
+      volume_mount {
+        volume      = "certs"
+        destination = "/etc/ssl/private/"
+        propagation_mode = "private"
+      }
+
+
       template {
         data = <<EOF
 entryPoints:
   http:
     address: ":80"
+  https:
+    address: ":443"
   traefik:
     address: ":8081"
+
+# certificatesResolvers:
+#   dns-cloudflare:
+#     acme:
+#       caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+#       email: ""
+#       certificatesDuration:
+#       dnsChallenge:
+#         provider: "cloudflare"
+#         resolvers: "1.1.1.1:53,1.0.0.1:53"
+#         delayBeforeCheck=90
+
+metrics:
+  prometheus: {}
 
 api:
   dashboard: true
