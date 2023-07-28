@@ -29,62 +29,119 @@
       register: grafanapkg
       notify: Restart grafana-agent
 
-    - name: Sync Grafana Cloud Agent Config
-      when: grafanapkg.changed
-      shell: |
-        grafana-agentctl cloud-config \
-          -u "{{ grafana_stack_id }}" \
-          -p "{{ grafana_api_key }}" \
-          -e "{{ grafana_api_url }}" > /etc/grafana-agent.yaml
-      notify: Restart grafana-agent
-
-    - name: Replace path
-      replace:
-        path: /etc/grafana-agent.yaml
-        regexp: "<path to json nginx access log>"
-        replace: /var/log/nginx/json_access.log
-      notify: Restart grafana-agent
-
-    - name: Replace hostname
-      replace:
-        path: /etc/grafana-agent.yaml
-        regexp: "<http_hostname>"
-        replace: "{{ ansible_hostname }}"
-      notify: Restart grafana-agent
-
-    - name: Replace node_exporter hostname
-      replace:
-        path: /etc/grafana-agent.yaml
-        regexp: "replacement: hostname"
-        replace: "replacement: {{ ansible_hostname }}"
-      notify: Restart grafana-agent
-
-    - name: Replace hostname to proper value
-      replace:
-        path: /etc/grafana-agent.yaml
-        regexp: "instance: hostname"
-        replace: "instance: {{ ansible_hostname }}"
-      notify: Restart grafana-agent
-
-    - name: Increase scraping to every 60 seconds
-      replace:
-        path: /etc/grafana-agent.yaml
-        regexp: "scrape_interval: 60s"
-        replace: "scrape_interval: 60s"
-      notify: Restart grafana-agent
-
-    - name: Setup process_expoter in Grafana
-      blockinfile:
-        path: /etc/grafana-agent.yaml
-        insertafter: "integrations:"
-        block: |
-          # Process with comment to keep indentation
-            process_exporter:
+    - name: Add Grafana config file
+      copy:
+        dest: /etc/grafana-agent.yaml
+        mode: 0644
+        content: |
+          integrations:
+            prometheus_remote_write:
+            - basic_auth:
+                password: {{ grafana_token }}
+                username: {{ grafana_prometheus_username }}
+              url: {{ grafana_prometheus_url }}
+            agent:
               enabled: true
-              process_names:
-              - name: "{{ '{{.Comm}}' }}"
-                cmdline:
-                - '.+'
+              relabel_configs:
+              - action: replace
+                source_labels:
+                - agent_hostname
+                target_label: instance
+              - action: replace
+                target_label: job
+                replacement: "integrations/agent-check"
+              metric_relabel_configs:
+              - action: keep
+                regex: (prometheus_target_.*|prometheus_sd_discovered_targets|agent_build.*|agent_wal_samples_appended_total|process_start_time_seconds)
+                source_labels:
+                - __name__
+            consul_exporter:
+              enabled: true
+              server: localhost:8500
+            # Add here any snippet that belongs to the `integrations` section.
+            # For a correct indentation, paste snippets copied from Grafana Cloud at the beginning of the line.
+            node_exporter:
+              enabled: true
+              # disable unused collectors
+              disable_collectors:
+                - ipvs #high cardinality on kubelet
+                - btrfs
+                - infiniband
+                - xfs
+                - zfs
+              # exclude dynamic interfaces
+              netclass_ignored_devices: "^(veth.*|cali.*|[a-f0-9]{15})$"
+              netdev_device_exclude: "^(veth.*|cali.*|[a-f0-9]{15})$"
+              # disable tmpfs
+              filesystem_fs_types_exclude: "^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|tmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$"
+              # drop extensive scrape statistics
+              metric_relabel_configs:
+              - action: drop
+                regex: node_scrape_collector_.+
+                source_labels: [__name__]
+              relabel_configs:
+              - replacement: {{ ansible_hostname }}
+                target_label: instance
+          ###
+          logs:
+            configs:
+            - clients:
+              - basic_auth:
+                  password: {{ grafana_token }}
+                  username: {{ grafana_loki_username }}
+                url: {{ grafana_loki_url }}
+              name: integrations
+              positions:
+                filename: /tmp/positions.yaml
+              scrape_configs:
+                # Add here any snippet that belongs to the `logs.configs.scrape_configs` section.
+                # For a correct indentation, paste snippets copied from Grafana Cloud at the beginning of the line.
+                - job_name: integrations/node_exporter_journal_scrape
+                  journal:
+                    max_age: 24h
+                    labels:
+                      instance: {{ ansible_hostname }}
+                      job: integrations/node_exporter
+                  relabel_configs:
+                  - source_labels: ['__journal__systemd_unit']
+                    target_label: 'unit'
+                  - source_labels: ['__journal__boot_id']
+                    target_label: 'boot_id'
+                  - source_labels: ['__journal__transport']
+                    target_label: 'transport'
+                  - source_labels: ['__journal_priority_keyword']
+                    target_label: 'level'
+                - job_name: integrations/node_exporter_direct_scrape
+                  static_configs:
+                  - targets:
+                    - localhost
+                    labels:
+                      instance: {{ ansible_hostname }}
+                      __path__: /var/log/{syslog,messages,*.log}
+                      job: integrations/node_exporter
+          metrics:
+            configs:
+            - name: integrations
+              remote_write:
+              - basic_auth:
+                  password: {{ grafana_token }}
+                  username: {{ grafana_prometheus_username }}
+                url: {{ grafana_prometheus_url }}
+              scrape_configs:
+                # Add here any snippet that belongs to the `metrics.configs.scrape_configs` section.
+                # For a correct indentation, paste snippets copied from Grafana Cloud at the beginning of the line.
+                - job_name: integrations/nomad
+                  metrics_path: /v1/metrics
+                  params:
+                    format: ['prometheus']
+                  static_configs:
+                    - targets: ["{{ ansible_hostname }}:4646"]
+                - job_name: integrations/traefik
+                  static_configs:
+                    - targets: ["{{ ansible_hostname }}:8081"]
+            global:
+              scrape_interval: 60s
+            wal_directory: /tmp/grafana-agent-wal
       notify: Restart grafana-agent
 
     - name: Enable Grafana Agent
