@@ -35,9 +35,9 @@ all:
     storage0.local:
       extra_ssl_domains:
         - storage0.home.setale.me
-    compute0.local:
-      extra_ssl_domains:
-        - compute0.home.setale.me
+    # compute0.local:
+    #   extra_ssl_domains:
+    #     - compute0.home.setale.me
     compute1.local:
       extra_ssl_domains:
         - compute1.home.setale.me
