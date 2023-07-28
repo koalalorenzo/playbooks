@@ -1,13 +1,20 @@
 ---
 - name: Install Consul on all the machines
   hosts: consul
+  serial: 1
   become: yes
   become_user: root
   become_method: sudo
   gather_facts: yes
+
   handlers:
     - name: restart consul
       service: name=consul state=restarted
+      ignore_errors: true
+
+    - name: reload consul
+      command: consul reload
+      ignore_errors: true
 
   tasks:
     - name: Load encrypted credentials
@@ -24,7 +31,7 @@
           - ca-certificates
           - apt-transport-https
         update_cache: yes
-        state: present
+        state: latest
 
     - name: Add Hashicorp GPG Key
       ansible.builtin.get_url:
@@ -65,7 +72,7 @@
         dest: "/etc/consul.d/certs/{{ item.key }}"
         content: "{{ item.value }}"
       with_dict: "{{ consul_certs }}"
-      notify: restart consul
+      notify: reload consul
 
     - ufw:
         proto: "{{ item.proto }}"
