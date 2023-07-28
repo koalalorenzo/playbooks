@@ -106,6 +106,10 @@
             enabled = true
           }
 
+          telemetry { 
+            prometheus_retention_time = "90s"
+          }
+
           tls {
              defaults {
                 ca_file = "/etc/consul.d/certs/consul-agent-ca.pem"
@@ -120,10 +124,20 @@
              }
           }
 
+          acl = {
+            enabled = false
+            default_policy = "allow"
+            enable_token_persistence = true
+          }
+
           auto_encrypt {
             allow_tls = true
           }
-      notify: restart consul
+      notify: reload consul
+
+    # - name: Set ACL token
+    #   command: consul acl set-agent-token agent "{{ tokens[ansible_hostname].SecretID }}"
+    #   notify: reload consul
 
     - service:
         name: consul

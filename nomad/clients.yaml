@@ -36,6 +36,11 @@
               read_only = true
             }
 
+            host_volume "priv-certs" {
+              path = "/etc/ssl/private/"
+              read_only = true
+            }
+
             {% for host in host_volumes %}
             host_volume "{{ host.name }}" {
               path = "{{ host.path }}"
