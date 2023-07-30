@@ -25,6 +25,11 @@ job "archivebox" {
         interval = "60s"
         timeout  = "5s"
       }
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.http.rule=Host(`archive.setale.me`)",
+      ]
     }
 
     task "archivebox" {
