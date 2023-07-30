@@ -12,7 +12,6 @@ job "archivebox" {
 
     volume "archivebox" {
       type = "host"
-      read_only = true
       source = "archivebox"
     }
 
