@@ -35,7 +35,8 @@ job "archivebox" {
       driver = "docker"
 
       config {
-        image        = "archivebox/archivebox"
+        image        = "archivebox/archivebox:latest"
+        image_pull_timeout = "10m"
       }
 
       volume_mount {

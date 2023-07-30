@@ -17,7 +17,7 @@ job "archivebox_update_cron" {
       driver = "docker"
 
       config {
-        image        = "archivebox/archivebox"
+        image        = "archivebox/archivebox:latest"
         args = [
           "add", 
           "https://getpocket.com/users/koalalorenzo/feed/all", 
