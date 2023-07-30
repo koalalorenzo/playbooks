@@ -32,21 +32,21 @@ all:
       consul.setale.me: compute1.setale.me
       nomad.setale.me: compute1.setale.me
   hosts:
-    storage0.local:
+    storage0:
       extra_ssl_domains:
         - storage0.home.setale.me
-    # compute0.local:
+    # compute0:
     #   extra_ssl_domains:
     #     - compute0.home.setale.me
-    compute1.local:
+    compute1:
       extra_ssl_domains:
         - compute1.home.setale.me
 
   children:
     nomadServers:
       hosts:
-        storage0.local:
-        compute1.local:
+        storage0:
+        compute1:
       vars:
 
     nomadClients:
@@ -54,7 +54,7 @@ all:
         node_class: ""
         host_volumes: []
       hosts:
-        storage0.local:
+        storage0:
           node_class: "storage"
           host_volumes:
             - name: "minio"
@@ -63,7 +63,12 @@ all:
               path: "/main/multimedia"
             - name: "downloads"
               path: "/main/downloads"
-        compute1.local:
+            - name: "archivebox"
+              path: "/main/downloads/archivebox"
+            - name: "archivebox"
+              path: "/main/downloads/archivebox"
+
+        compute1:
 
     # Deploys Consul on every Nomad Servers
     consul:
@@ -78,4 +83,4 @@ all:
     # Machines that provide storage layer (OpenZFS)
     storage:
       hosts:
-        storage0.local:
+        storage0:
