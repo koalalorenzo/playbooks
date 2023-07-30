@@ -10,6 +10,12 @@ job "archivebox" {
       }      
     }
 
+    volume "archivebox" {
+      type = "host"
+      read_only = true
+      source = "archivebox"
+    }
+
     service {
       name = "archive"
       check {
@@ -29,18 +35,13 @@ job "archivebox" {
       }
 
       volume_mount {
-        volume      = "downloads"
+        volume      = "archivebox"
         destination = "/data"
-        propagation_mode = "private"
-        read_only = true
       }
 
       resources {
-        cpu    = 150
-        memory = 64
+        memory = 128
       }
     }
   }
 }
-
-
