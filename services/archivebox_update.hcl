@@ -3,17 +3,20 @@ job "archivebox_update_cron" {
   type = "batch"
 
   periodic {
-    cron = "45 6 * * 6"
+    cron = "45 6 * * *"
+    prohibit_overlap = true
+    time_zone = "CET"
   }
+
   group "weekly" {
     volume "archivebox" {
-      type = "host"
-      read_only = true
+      type = "csi"
       source = "archivebox"
+      attachment_mode = "file-system"
+      access_mode = "multi-node-multi-writer"
     }
 
-    
-    task "archivebox" {
+    task "archivebox_update" {
       driver = "docker"
 
       config {
@@ -21,19 +24,18 @@ job "archivebox_update_cron" {
         args = [
           "add", 
           "https://getpocket.com/users/koalalorenzo/feed/all", 
-          "--depth=1", "--update"
+          "--depth=1"
         ]
       }
 
       volume_mount {
         volume      = "archivebox"
         destination = "/data"
-        read_only = false
       }
 
       resources {
-        cpu = 500
-        memory = 512
+        cpu = 1000
+        memory = 1024
       }
     }
   }

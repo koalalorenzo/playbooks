@@ -3,6 +3,10 @@ job "archivebox" {
   datacenters = ["dc1"]
   type        = "service"
 
+  update {
+    min_healthy_time = "30s"
+  }
+
   group "archivebox" {
     network {
       port "http" {
@@ -11,23 +15,29 @@ job "archivebox" {
     }
 
     volume "archivebox" {
-      type = "host"
+      type = "csi"
       source = "archivebox"
+      attachment_mode = "file-system"
+      access_mode = "multi-node-multi-writer"
     }
 
     service {
-      name = "archive"
-      check {
-        name     = "alive"
-        type     = "tcp"
-        port     = "http"
-        interval = "60s"
-        timeout  = "5s"
-      }
+      name = "archivebox"
+      port = "http"
+
+      # check {
+      #   name     = "http_login"
+      #   type     = "http"
+      #   port     = "http"
+      #   path     = "/admin/login"
+      #   interval = "120s"
+      #   timeout  = "60s"
+      # }
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.http.rule=Host(`archive.setale.me`)",
+        "traefik.http.routers.http.rule=Host(`archive.elates.it`)",
+        "traefik.http.routers.http.tls.certresolver=letsencrypt",
       ]
     }
 
@@ -47,7 +57,7 @@ job "archivebox" {
       }
 
       resources {
-        memory = 128
+        memory = 256
       }
     }
   }
