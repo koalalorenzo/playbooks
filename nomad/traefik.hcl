@@ -151,11 +151,11 @@ providers:
       address: http://127.0.0.1:4646
     defaultRule: "Host(`{{"{{"}} .Name {{"}}"}}.elates.it`)"
 
-  # Load config from Consul
-  consul:
-    endpoints: 
-      - "127.0.0.1:8500"
-    rootKey: "traefik"
+  # Load config from Consul. Disable because unstalbe
+  # consul:
+  #   endpoints: 
+  #     - "127.0.0.1:8500"
+  #   rootKey: "traefik"
 
   # Load catalog from Consul
   consulCatalog:
@@ -204,8 +204,8 @@ EOF
 
 
       resources {
-        cpu    = 150
-        memory = 64
+        cpu    = 200
+        memory = 128
       }
     }
   }

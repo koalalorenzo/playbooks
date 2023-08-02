@@ -68,10 +68,6 @@ all:
               path: "/main/multimedia"
             - name: "downloads"
               path: "/main/downloads"
-            - name: "archivebox"
-              path: "/main/downloads/archivebox"
-            - name: "archivebox"
-              path: "/main/downloads/archivebox"
 
         compute1:
 
