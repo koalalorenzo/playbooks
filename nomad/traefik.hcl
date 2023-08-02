@@ -109,12 +109,16 @@ EOF
 http:
   routers:
     nomad:
-      rule: "Host(`nomad.setale.me`)"
+      rule: "Host(`nomad.elates.it`)"
       service: "nomad-service"
+      tls:
+        certresolver: letsencrypt
 
     consul:
-      rule: "Host(`consul.setale.me`)"
+      rule: "Host(`consul.elates.it`)"
       service: "consul-service"
+      tls:
+        certresolver: letsencrypt
 
   services:
     nomad-service:

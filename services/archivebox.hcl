@@ -37,6 +37,8 @@ job "archivebox" {
       config {
         image        = "archivebox/archivebox:latest"
         image_pull_timeout = "10m"
+
+        ports = ["http"]
       }
 
       volume_mount {

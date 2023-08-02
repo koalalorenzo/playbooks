@@ -87,12 +87,12 @@
         create: yes
         path: /etc/postfix/generic
         block: |
-          pi@{{ ansible_host }} no-reply@mg.setale.me
-          koalalorenzo@{{ ansible_host }} no-reply@mg.setale.me
-          root@{{ ansible_host }} no-reply@mg.setale.me
-          pi@{{ ansible_host }}.fish-alpha.ts.net no-reply@mg.setale.me
-          koalalorenzo@{{ ansible_host }}.fish-alpha.ts.net no-reply@mg.setale.me
-          root@{{ ansible_host }}.fish-alpha.ts.net no-reply@mg.setale.me
+          pi@{{ ansible_host }} no-reply@mg.elates.it
+          koalalorenzo@{{ ansible_host }} no-reply@mg.elates.it
+          root@{{ ansible_host }} no-reply@mg.elates.it
+          pi@{{ ansible_host }}.fish-alpha.ts.net no-reply@mg.elates.it
+          koalalorenzo@{{ ansible_host }}.fish-alpha.ts.net no-reply@mg.elates.it
+          root@{{ ansible_host }}.fish-alpha.ts.net no-reply@mg.elates.it
 
       notify: Restart postfix
 

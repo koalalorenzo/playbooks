@@ -1,9 +1,10 @@
 all:
   vars:
     ssl_domains:
-      - nomad.setale.me
-      - consul.setale.me
+      - home.elates.it
     extra_ssl_domains: []
+
+    main_domain: elates.it
 
     ansible_user: koalalorenzo
     system_users:
@@ -25,22 +26,22 @@ all:
 
     tailscale_accept_dns: "true"
     custom_domains:
-      minio-api.setale.me: compute1.setale.me
-      minio.setale.me: compute1.setale.me
-      archive.setale.me: compute1.setale.me
-      media.setale.me: compute1.setale.me
-      consul.setale.me: compute1.setale.me
-      nomad.setale.me: compute1.setale.me
+      minio-api.elates.it: compute1.elates.it
+      minio.elates.it: compute1.elates.it
+      archive.elates.it: compute1.elates.it
+      media.elates.it: compute1.elates.it
+      consul.elates.it: compute1.elates.it
+      nomad.elates.it: compute1.elates.it
   hosts:
     storage0:
       extra_ssl_domains:
-        - storage0.home.setale.me
+        - storage0.home.elates.it
     # compute0:
     #   extra_ssl_domains:
-    #     - compute0.home.setale.me
+    #     - compute0.home.elates.it
     compute1:
       extra_ssl_domains:
-        - compute1.home.setale.me
+        - compute1.home.elates.it
 
   children:
     nomadServers:
