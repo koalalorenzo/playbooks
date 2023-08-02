@@ -78,6 +78,8 @@
           - zfsutils-linux
           - zfs-dkms
           - zfs-auto-snapshot
+          - nfs-kernel-server
+          - nfs-common
 
     - name: Makes sure that encryption keys are stored safe in path
       file:
@@ -127,3 +129,13 @@
         minute: "30"
         day: "2, 16"
         job: "/usr/sbin/zpool scrub main"
+
+    - ufw:
+        proto: "any"
+        port: "nfs"
+        src: "{{ item }}"
+        rule: allow
+      loop:
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16

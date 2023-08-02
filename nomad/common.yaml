@@ -17,6 +17,8 @@
           - software-properties-common
           - ca-certificates
           - apt-transport-https
+          - nfs-kernel-server
+          - nfs-common
         update_cache: yes
         state: present
 
@@ -43,8 +45,10 @@
         rule: allow
       loop:
         - { proto: tcp, port: 4646 } # HTTP API / UI
-        - { proto: any, port: 4647 } # RPC API
-        - { proto: any, port: 4648 } # WAN (gossip)
+        - { proto: tcp, port: 4647 } # RPC API
+        - { proto: udp, port: 4647 } # RPC API
+        - { proto: tcp, port: 4648 } # WAN (gossip)
+        - { proto: udp, port: 4648 } # WAN (gossip)
 
     - name: Set IP Forward rules for networking
       block:
