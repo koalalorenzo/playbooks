@@ -53,11 +53,15 @@ all:
     nomadClients:
       vars:
         node_class: ""
-        host_volumes: []
+        host_volumes:
+          - name: "traefik"
+            path: "/etc/traefik"
       hosts:
         storage0:
           node_class: "storage"
           host_volumes:
+            - name: "traefik"
+              path: "/etc/traefik"
             - name: "minio"
               path: "/main/minio"
             - name: "multimedia"

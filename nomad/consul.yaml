@@ -80,7 +80,8 @@
         rule: allow
       loop:
         - { proto: tcp, port: 8500 } # HTTP
-        - { proto: any, port: 8600 } # DNS
+        - { proto: tcp, port: 8600 } # DNS
+        - { proto: udp, port: 8600 } # DNS
         - { proto: tcp, port: 8501 } # HTTPS
         - { proto: any, port: 8502 } # gRPC
         - { proto: any, port: 8503 } # gRPC TLS

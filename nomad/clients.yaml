@@ -11,6 +11,11 @@
       service: name=nomad state=restarted
 
   tasks:
+    - file:
+        path: "{{ item.path }}"
+        state: directory
+      loop: "{{ host_volumes }}"
+
     - blockinfile:
         path: /etc/nomad.d/client.hcl
         create: yes

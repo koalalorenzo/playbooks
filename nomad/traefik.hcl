@@ -4,6 +4,25 @@ job "traefik" {
   type        = "system"
 
   group "traefik" {
+    # If there the Nomad server is disconected for more than 1 min, and 
+    # allocation does not have a heartbeat for 1 min, then kill it
+    max_client_disconnect = "1m"
+
+    update {
+      max_parallel      = 1
+      health_check      = "checks"
+      min_healthy_time  = "60s"
+      healthy_deadline  = "5m"
+    }
+
+    # restart {
+    #   # Restart every 30 seconds for 3 times, and then wait 1 min to try again
+    #   delay    = "30s"
+    #   interval = "2m"
+    #   attempts = 5
+    #   mode     = "delay" # try again, never fail
+    # }
+
     network {
       port "http" {
         static = 80
@@ -20,21 +39,31 @@ job "traefik" {
 
     service {
       name = "traefik"
+      provider = "nomad"
+
+      port = "api"
+      
       check {
         name     = "alive"
         type     = "tcp"
         port     = "http"
         interval = "60s"
-        timeout  = "2s"
+        timeout  = "10s"
       }
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.http.rule=Host(`traefik.elates.it`)",
+        "traefik.http.routers.traefik.tls.certresolver=letsencrypt",
+      ]
     }
 
-    volume "certs" {
+    
+    volume "config" {
       type = "host"
-      read_only = true
-      source = "priv-certs"
+      source = "traefik"
     }
-
+    
     task "traefik" {
       driver = "docker"
 
@@ -49,32 +78,60 @@ job "traefik" {
       }
 
       volume_mount {
-        volume      = "certs"
-        destination = "/etc/ssl/private/"
-        propagation_mode = "private"
+        volume = "config"
+        destination = "/etc/traefik/"
       }
 
+      template {
+        destination = "${NOMAD_SECRETS_DIR}/env.vars"
+        env         = true
+        change_mode = "restart"
+        data        = <<EOF
+          {{- with nomadVar "nomad/jobs/traefik" -}}
+            CF_DNS_API_TOKEN = "{{ .CF_DNS_API_TOKEN }}"
+            CF_API_EMAIL = "{{ .CF_API_EMAIL }}"
+          {{- end -}}
+        EOF
+      }
 
       template {
         data = <<EOF
 entryPoints:
-  http:
+  web:
     address: ":80"
-  https:
+    http:
+      redirections:
+        entrypoint:
+          to: websecure
+          scheme: https
+
+  websecure:
     address: ":443"
+    http:
+      tls:
+        certResolver: "letsencrypt"
+        domains:
+           - main: elates.it
+           - main: home.elates.it
+             sans: "*.home.elates.it"
+  
   traefik:
     address: ":8081"
 
-# certificatesResolvers:
-#   dns-cloudflare:
-#     acme:
-#       caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
-#       email: ""
-#       certificatesDuration:
-#       dnsChallenge:
-#         provider: "cloudflare"
-#         resolvers: "1.1.1.1:53,1.0.0.1:53"
-#         delayBeforeCheck=90
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      storage: /etc/traefik/acme.json
+      # Production Let's encrypt
+      caServer: "https://acme-v02.api.letsencrypt.org/directory"
+      # Sets the certificate to last 15 days
+      certificatesDuration: 360
+      dnsChallenge:
+        provider: "cloudflare"
+        resolvers: 
+          - "1.1.1.1:53"
+          - "1.0.0.1:53"
+        delayBeforeCheck: 30
 
 metrics:
   prometheus: {}
@@ -82,19 +139,29 @@ metrics:
 api:
   dashboard: true
   insecure: true
+  debug: true
 
 # Enable Consul Catalog configuration backend.
 providers:
   file:
     filename: /etc/traefik/services.yaml
+
   nomad:
     endpoint:
       address: http://127.0.0.1:4646
-    defaultRule: "Host(`{{ .Name }}.setale.me`)"
+    defaultRule: "Host(`{{"{{"}} .Name {{"}}"}}.elates.it`)"
+
+  # Load config from Consul
+  consul:
+    endpoints: 
+      - "127.0.0.1:8500"
+    rootKey: "traefik"
+
+  # Load catalog from Consul
   consulCatalog:
     prefix: "traefik"
     exposedByDefault: false
-    defaultRule: "Host(`{{ .Name }}.setale.me`)"
+    defaultRule: "Host(`{{"{{"}} .Name {{"}}"}}.elates.it`)"
 
     endpoint:
       address: "127.0.0.1:8500"
@@ -137,7 +204,7 @@ EOF
 
 
       resources {
-        cpu    = 100
+        cpu    = 150
         memory = 64
       }
     }

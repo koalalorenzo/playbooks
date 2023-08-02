@@ -6,6 +6,10 @@
   become_method: sudo
   gather_facts: no
 
+  handlers:
+    - name: Restart Nomad
+      service: name=nomad state=restarted
+
   tasks:
     - name: Add Docker GPG apt Key
       apt_key:
@@ -22,3 +26,14 @@
         name: docker-ce
         update_cache: yes
         state: latest
+
+    - blockinfile:
+        path: /etc/nomad.d/client.hcl
+        marker: "# {mark} ANSIBLE MANAGED Docker"
+        block: |
+          plugin "docker" {
+            config {
+              allow_privileged = true
+            }
+          }
+      notify: Restart Nomad
