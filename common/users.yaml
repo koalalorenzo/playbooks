@@ -11,15 +11,16 @@
       service: name=ssh state=restarted
 
   tasks:
-    # - name: Install GnuPG
-    #   package:
-    #     name: gnupg
-    #     state: present
+    - name: Install GnuPG
+      package:
+        name: gnupg
+        state: present
 
     - name: Set Up Users
       include_tasks: user-single.yaml
       vars:
         username: "{{ item.username }}"
+        is_admin: "{{ item.is_admin }}"
         pubkeys_urls: "{{ item.pubkeys_urls }}"
         email: "{{ item.email }}"
       loop: "{{ system_users }}"
@@ -29,15 +30,17 @@
       become: yes
       become_user: root
 
-
 - name: Sets Root cron jobs
   hosts: all
   become: yes
   become_user: root
   become_method: sudo
   gather_facts: no
-  
-  tasks: 
+  handlers:
+    - name: Restart ssh
+      service: name=ssh state=restarted
+
+  tasks:
     - name: Uses Bash shell
       cron:
         user: root
@@ -62,7 +65,7 @@
         user: "{{ ansible_user }}"
         name: MAILTO
         env: yes
-        job: lorenzo@setale.me
+        job: sage.scenery0e@icloud.com
 
     - name: Disable root login
       lineinfile:
@@ -75,7 +78,7 @@
     - name: Secure SSH by denying Pi
       lineinfile:
         path: /etc/ssh/sshd_config
-        line: 'DenyUsers pi'
+        line: "DenyUsers pi"
         state: present
         mode: 0644
       notify: Restart ssh
@@ -83,7 +86,7 @@
     - name: Secure SSH by denying root
       lineinfile:
         path: /etc/ssh/sshd_config
-        line: 'DenyUsers root'
+        line: "DenyUsers root"
         state: present
         mode: 0644
       notify: Restart ssh

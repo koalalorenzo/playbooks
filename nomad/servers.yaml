@@ -1,0 +1,33 @@
+---
+- name: Setup Nomad Servers
+  hosts: nomadServers
+  serial: "20%"
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  handlers:
+    - name: Restart Nomad
+      service: name=nomad state=restarted
+
+  tasks:
+    - name: Adds Nomad Server configuration
+      blockinfile:
+        path: /etc/nomad.d/server.hcl
+        create: yes
+        mode: 0700
+        block: |
+          server {
+            enabled = true
+            bootstrap_expect = {{ groups["nomadServers"] | length }}
+
+            node_gc_threshold = "1h"
+            
+            # server_join {
+            #   retry_join = [ {% for i in groups['nomadServers'] %}"{{ i }}:4647",{% endfor %} ]
+            #   retry_max = 3
+            #   retry_interval = "15s"
+            # }
+          }
+      notify: Restart Nomad

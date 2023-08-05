@@ -1,4 +1,4 @@
-ARGS ?=
+ARGS ?=-K
 
 ANSIBLE_CONFIG=facts.cfg
 
@@ -13,10 +13,6 @@ deps:
 	ansible-galaxy collection install community.sops
 .PHONY: deps
 
-run: deps
-	ansible-playbook -i ./inventory.yaml default.yaml ${ARGS}
-.PHONY: run
-
 reboot:
 	ansible-playbook -i ./inventory.yaml common/reboot.yaml ${ARGS}
 .PHONY: reboot
@@ -24,6 +20,14 @@ reboot:
 common:
 	ansible-playbook -i ./inventory.yaml ./common.yaml ${ARGS}
 .PHONY: common
+
+nomad:
+	ansible-playbook -i ./inventory.yaml nomad.yaml ${ARGS}
+.PHONY: nomad
+
+storage:
+	ansible-playbook -i ./inventory.yaml storage.yaml ${ARGS}
+.PHONY: storage
 
 %:
 	ansible-playbook -i ./inventory.yaml $*.yaml ${ARGS}
@@ -35,4 +39,4 @@ apt_upgrade:
 		-m apt -a "upgrade=yes"
 .PHONY: apt_upgrade
 
-.DEFAULT_GOAL := run
+.DEFAULT_GOAL := common

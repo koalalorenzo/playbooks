@@ -21,3 +21,7 @@
         user: root
         env: yes
         job: /bin/bash
+
+    - name: Set timezone to UTC
+      timezone:
+        name: Etc/UTC

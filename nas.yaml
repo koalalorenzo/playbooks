@@ -1,7 +1,0 @@
----
-- import_playbook: nas/openzfs.yaml
-- import_playbook: nas/email.yaml
-- import_playbook: nas/packages.yaml
-- import_playbook: nas/samba.yaml
-- import_playbook: nas/restic.yaml
-- import_playbook: nas/gickup.yaml

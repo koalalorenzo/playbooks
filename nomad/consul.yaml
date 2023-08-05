@@ -1,0 +1,147 @@
+---
+- name: Install Consul on all the machines
+  hosts: consul
+  serial: 1
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  handlers:
+    - name: restart consul
+      service: name=consul state=restarted
+      ignore_errors: true
+
+    - name: reload consul
+      command: consul reload
+      ignore_errors: true
+
+  tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: consul.sops.yaml
+    - name: "Install dependencies packages"
+      package:
+        name:
+          - wget
+          - gpg
+          - coreutils
+          - openssl
+          - software-properties-common
+          - ca-certificates
+          - apt-transport-https
+        update_cache: yes
+        state: latest
+
+    - name: Add Hashicorp GPG Key
+      ansible.builtin.get_url:
+        url: https://apt.releases.hashicorp.com/gpg
+        dest: /usr/share/keyrings/hashicorp-archive-keyring.asc
+
+    - name: adds Hashicorp Repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+        state: present
+
+    - package:
+        name:
+          - consul
+        update_cache: yes
+        state: latest
+      notify: restart consul
+
+    - file:
+        path: /etc/consul.d
+        state: directory
+        owner: consul
+        group: consul
+        mode: "0700"
+
+    - file:
+        path: /etc/consul.d/certs
+        state: directory
+        owner: consul
+        group: consul
+        mode: "0700"
+
+    - name: Upload certificates
+      copy:
+        mode: 0700
+        owner: consul
+        group: consul
+        dest: "/etc/consul.d/certs/{{ item.key }}"
+        content: "{{ item.value }}"
+      with_dict: "{{ consul_certs }}"
+      notify: reload consul
+
+    - ufw:
+        proto: "{{ item.proto }}"
+        port: "{{ item.port }}"
+        rule: allow
+      loop:
+        - { proto: tcp, port: 8500 } # HTTP
+        - { proto: tcp, port: 8600 } # DNS
+        - { proto: udp, port: 8600 } # DNS
+        - { proto: tcp, port: 8501 } # HTTPS
+        - { proto: any, port: 8502 } # gRPC
+        - { proto: any, port: 8503 } # gRPC TLS
+        - { proto: any, port: 8301 } # LAN Serf
+        - { proto: any, port: 8302 } # WAN Serf
+        - { proto: tcp, port: 8300 } # Server RPC
+        - { proto: tcp, port: "21000:21255" } # Sidecar Proxy
+        - { proto: udp, port: "21000:21255" } # Sidecar Proxy
+
+    - copy:
+        dest: /etc/consul.d/consul.hcl
+        mode: 0700
+        content: |
+          data_dir = "/opt/consul"
+          datacenter = "dc1"
+          encrypt = "{{ consul_gossip_key }}"
+          server = true
+          bootstrap_expect = {{ groups["nomad"] | length }}
+          bind_addr = "0.0.0.0"
+          advertise_addr = "{{ ansible_default_ipv4.address }}"
+
+          ui_config {
+            enabled = true
+          }
+
+          telemetry { 
+            prometheus_retention_time = "90s"
+          }
+
+          tls {
+             defaults {
+                ca_file = "/etc/consul.d/certs/consul-agent-ca.pem"
+                cert_file = "/etc/consul.d/certs/dc1-server-consul-0.pem"
+                key_file = "/etc/consul.d/certs/dc1-server-consul-0-key.pem"
+
+                verify_incoming = true
+                verify_outgoing = true
+             }
+             internal_rpc {
+                verify_server_hostname = true
+             }
+          }
+
+          acl = {
+            enabled = false
+            default_policy = "allow"
+            enable_token_persistence = true
+          }
+
+          auto_encrypt {
+            allow_tls = true
+          }
+      notify: reload consul
+
+    # - name: Set ACL token
+    #   command: consul acl set-agent-token agent "{{ tokens[ansible_hostname].SecretID }}"
+    #   notify: reload consul
+
+    - service:
+        name: consul
+        enabled: true
+        state: started
+      ignore_errors: true

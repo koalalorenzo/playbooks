@@ -1,0 +1,149 @@
+---
+- name: Common setup for Nomad machines
+  hosts: nomad
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  tasks:
+    - name: "Install dependencies packages"
+      package:
+        name:
+          - wget
+          - gpg
+          - coreutils
+          - openssl
+          - software-properties-common
+          - ca-certificates
+          - apt-transport-https
+          - nfs-kernel-server
+          - nfs-common
+        update_cache: yes
+        state: present
+
+    - name: Add Hashicorp GPG Key
+      ansible.builtin.get_url:
+        url: https://apt.releases.hashicorp.com/gpg
+        dest: /usr/share/keyrings/hashicorp-archive-keyring.asc
+
+    - name: adds Hashicorp Repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+        state: present
+
+    - name: "Install install Nomad Packages"
+      package:
+        name:
+          - nomad
+        update_cache: yes
+        state: latest
+
+    - ufw:
+        proto: "{{ item.proto }}"
+        port: "{{ item.port }}"
+        rule: allow
+      loop:
+        - { proto: tcp, port: 4646 } # HTTP API / UI
+        - { proto: tcp, port: 4647 } # RPC API
+        - { proto: udp, port: 4647 } # RPC API
+        - { proto: tcp, port: 4648 } # WAN (gossip)
+        - { proto: udp, port: 4648 } # WAN (gossip)
+
+    - name: Set IP Forward rules for networking
+      block:
+        - sysctl:
+            name: net.bridge.bridge-nf-call-arptables
+            value: "1"
+        - sysctl:
+            name: net.bridge.bridge-nf-call-ip6tables
+            value: "1"
+        - sysctl:
+            name: net.bridge.bridge-nf-call-iptables
+            value: "1"
+      ignore_errors: yes
+
+    - name: Create SystemD Service
+      copy:
+        dest: /etc/systemd/system/nomad.service
+        mode: 0644
+        content: |
+          [Unit]
+          Description=Nomad
+          Documentation=https://www.nomadproject.io/docs/
+          Wants=network-online.target
+          After=network-online.target
+
+          # When using Nomad with Consul it is not necessary to start Consul first. These
+          # lines start Consul before Nomad as an optimization to avoid Nomad logging
+          # that Consul is unavailable at startup.
+          Wants=consul.service
+          After=consul.service
+
+          [Service]
+
+          # Nomad server should be run as the nomad user. Nomad clients
+          # should be run as root
+          User=root
+          Group=root
+
+          ExecReload=/bin/kill -HUP $MAINPID
+          ExecStart=/usr/bin/nomad agent -config /etc/nomad.d
+          KillMode=process
+          KillSignal=SIGINT
+          LimitNOFILE=65536
+          LimitNPROC=infinity
+          Restart=on-failure
+          RestartSec=2
+
+          ## Configure unit start rate limiting. Units which are started more than
+          ## *burst* times within an *interval* time span are not permitted to start any
+          ## more. Use `StartLimitIntervalSec` or `StartLimitInterval` (depending on
+          ## systemd version) to configure the checking interval and `StartLimitBurst`
+          ## to configure how many starts per interval are allowed. The values in the
+          ## commented lines are defaults.
+
+          # StartLimitBurst = 5
+
+          ## StartLimitIntervalSec is used for systemd versions >= 230
+          # StartLimitIntervalSec = 10s
+
+          ## StartLimitInterval is used for systemd versions < 230
+          # StartLimitInterval = 10s
+
+          TasksMax=infinity
+          OOMScoreAdjust=-1000
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Enable Nomad service
+      service:
+        name: nomad
+        enabled: true
+
+    - name: Adds Nomad Server configuration
+      copy:
+        dest: /etc/nomad.d/nomad.hcl
+        mode: 0700
+        content: |
+          datacenter = "dc1"
+          data_dir  = "/opt/nomad/data"
+          bind_addr = "0.0.0.0"
+
+          log_rotate_duration = "48h"
+          log_rotate_max_files = 7
+
+          telemetry {
+           collection_interval = "5s",
+           publish_allocation_metrics = true,
+           publish_node_metrics = true,
+           prometheus_metrics = true
+          }
+
+          ui {
+            enabled = true
+            consul {
+              ui_url = "http://consul.elates.it/ui"
+            }
+          }

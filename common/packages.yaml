@@ -11,25 +11,51 @@
         update_cache: yes
       when: ansible_os_family == "Debian"
 
+    - apt_repository:
+        repo: "ppa:maveonair/helix-editor"
+        state: present
+      when: ansible_os_family == "Debian"
+
     - name: "Install packages"
       package:
         state: latest
         name:
-          - software-properties-common
+          - acl
           - ca-certificates
+          - curl
+          - dnsutils
+          - gnupg
+          - openssh-server
           - openssl
           - python3
-          - gnupg
-          - curl
-          - unzip
           - screen
-          - openssh-server
-          - golang
-          - podman
+          - software-properties-common
+          - ufw
+          - unzip
           - vim
-          - dnsutils
+
+    - name: Install optional packages (ok to fail)
+      package:
+        state: latest
+        name:
+          - golang
+          - tmux
+          - helix
+      ignore_errors: true
 
     - name: Upgrade System Packages
       apt:
         upgrade: full
       when: ansible_os_family == "Debian"
+
+    - name: Stop and disable snapd service
+      service:
+        name: snapd
+        state: stopped
+        enabled: no
+      ignore_errors: true
+
+    - name: Uninstall snapd package
+      package:
+        name: snapd
+        state: absent

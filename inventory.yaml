@@ -1,62 +1,101 @@
 all:
   vars:
+    ssl_domains:
+      - home.elates.it
+    extra_ssl_domains: []
+
+    # Your own domain to set up services
+    main_domain: elates.it
+
+    # Find it in https://login.tailscale.com/admin/dns
+    tailscale_domain: fish-alpha.ts.net
+    tailscale_accept_dns: "true"
+
     ansible_user: koalalorenzo
-    
     system_users:
+      - username: koalalorenzo
+        pubkeys_urls:
+          - https://github.com/koalalorenzo.keys
+        email: sage.scenery0e@icloud.com
+        is_admin: true
+
       - username: jakub
         pubkeys_urls: []
         email: ""
-    
+        is_admin: false
+
+    # This is used to encrypt emails if enabled
     gpg_key_fingerprints:
       - 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
       - 55065306FCC6617D4D928B70020F4A4E40F95228
       - 13C6836A224BB603724399C671C9E6BA29324FEE
-    
-    tailscale_accept_dns: "true"
+
     custom_domains:
-      minio-api.setale.me: nas.setale.me
-      minio.setale.me: nas.setale.me
-      archive.setale.me: nas.setale.me
-      media.setale.me: nas.setale.me
-      # h.setale.me: nas.setale.me
-      # bt.setale.me: nas.setale.me
-      # dwn.setale.me: nas.setale.me
-      # dash.setale.me: nas.setale.me
-      # graph.setale.me: nas.setale.me
-      # bw.setale.me: zero.setale.me
-      # dns.setale.me: zero.setale.me
+      minio-api.elates.it: compute1.elates.it
+      minio.elates.it: compute1.elates.it
+      archive.elates.it: compute1.elates.it
+      media.elates.it: compute1.elates.it
+      consul.elates.it: compute1.elates.it
+      nomad.elates.it: compute1.elates.it
+
+  hosts:
+    storage0:
+      extra_ssl_domains:
+        - storage0.home.elates.it
+    # compute0:
+    #   extra_ssl_domains:
+    #     - compute0.home.elates.it
+    compute1:
+      extra_ssl_domains:
+        - compute1.home.elates.it
+
   children:
-    homeautomation:
+    nomadServers:
       hosts:
-        zeroberry:
-    bitwarden:
+        storage0:
+        compute1:
       vars:
-        ssl_domains:
-        - bw.setale.me
-      hosts:
-        zeroberry:
-    dns:
+
+    nomadClients:
       vars:
-        tailscale_accept_dns: "false"
-        ssl_domains:
-          - dns.setale.me
+        node_class: ""
+        host_volumes:
+          - name: "traefik"
+            path: "/etc/traefik"
+            read_only: false
       hosts:
-        # zeroberry:
-    nas:
-      vars:
-        ssl_domains: 
-          - minio-api.setale.me
-          - minio.setale.me
-          - archive.setale.me
-          - media.setale.me
-          - nas.setale.me
-      hosts:
-        nasberry:
-    web: # Public / Web Facing
+        storage0:
+          node_class: "storage"
+          host_volumes:
+            - name: "traefik"
+              path: "/etc/traefik"
+              read_only: false
+            - name: "multimedia"
+              path: "/main/multimedia"
+              read_only: false
+            - name: "downloads"
+              path: "/main/downloads"
+              read_only: false
+            - name: "backups"
+              path: "/main/backups"
+              read_only: true
+            - name: "personal"
+              path: "/main/personal"
+              read_only: true
+
+        compute1:
+
+    # Deploys Consul on every Nomad Servers
+    consul:
       children:
-        nas:
-      vars: 
-        ssl_domains:
-          - who.is.lorenzo.setale.me
-          - is.lorenzo.setale.me
-          - who.is.setale.me
+        nomadServers:
+
+    nomad:
+      children:
+        nomadServers:
+        nomadClients:
+
+    # Machines that provide storage layer (OpenZFS)
+    storage:
+      hosts:
+        storage0:

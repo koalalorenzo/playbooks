@@ -1,0 +1,81 @@
+---
+- name: Install SAMBA
+  hosts: storage
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  handlers:
+    - name: Restart samba
+      service: name=smbd state=restarted
+
+  tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: samba.sops.yaml
+
+    - name: "Install packages"
+      package:
+        state: latest
+        name:
+          - samba
+          - samba-common-bin
+
+    - name: Adds Samba volumes
+      blockinfile:
+        path: /etc/samba/smb.conf
+        mode: 0644
+        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
+        validate: testparm -s %s
+        block: |
+          [{{ item.name }}]
+            comment = {{ item.name }} Disk
+            path = {{ item.path }}
+            browseable = yes
+            create mask = 0755
+            directory mask = 0777
+
+            {% if item.public %}
+            guest ok = yes
+            read only = yes
+            {% else %}
+            read only = no
+            guest ok = no
+            valid users = {{ samba_username }}
+            {% endif %}
+      loop:
+        - { name: Multimedia, path: /main/multimedia, public: false }
+        - { name: Downloads, path: /main/downloads, public: false }
+        - { name: Personal, path: /main/personal, public: false }
+        - { name: Backups, path: /main/backups, public: false }
+        - { name: System, path: /main/system, public: false }
+
+    - shell: |
+        echo "{{ samba_password }}\n{{ samba_password }}\n" | smbpasswd -sa {{ samba_username }}
+
+    - file:
+        path: /etc/samba/smbusers
+        state: touch
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Restart & Enable Samba (smbd) service
+      service:
+        name: smbd
+        enabled: yes
+
+    - name: Allow Samba on Tailscale
+      ufw:
+        rule: allow
+        port: 445
+        direction: in
+        interface: tailscale0
+
+    - name: Allow Samba on local network
+      ufw:
+        rule: allow
+        proto: tcp
+        from_ip: 192.168.0.0/16
+        port: 445

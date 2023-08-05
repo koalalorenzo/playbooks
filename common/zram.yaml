@@ -1,0 +1,40 @@
+---
+- name: Setup zram
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - name: "Install packages"
+      package:
+        name: zram-tools
+        update_cache: yes
+        state: present
+
+    - name: Restart & Enable zram swap service
+      service:
+        name: zramswap
+        state: restarted
+        enabled: yes
+
+    - sysctl:
+        name: vm.swappiness
+        value: "100"
+        state: present
+
+    - sysctl:
+        name: vm.vfs_cache_pressure
+        value: "500"
+        state: present
+
+    - sysctl:
+        name: vm.dirty_background_ratio
+        value: "1"
+        state: present
+
+    - sysctl:
+        name: vm.dirty_ratio
+        value: "50"
+        state: present
