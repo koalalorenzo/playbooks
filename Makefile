@@ -13,10 +13,6 @@ deps:
 	ansible-galaxy collection install community.sops
 .PHONY: deps
 
-run: deps
-	ansible-playbook -i ./inventory.yaml default.yaml ${ARGS}
-.PHONY: run
-
 reboot:
 	ansible-playbook -i ./inventory.yaml common/reboot.yaml ${ARGS}
 .PHONY: reboot
@@ -43,4 +39,4 @@ apt_upgrade:
 		-m apt -a "upgrade=yes"
 .PHONY: apt_upgrade
 
-.DEFAULT_GOAL := run
+.DEFAULT_GOAL := common

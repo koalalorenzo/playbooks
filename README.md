@@ -17,9 +17,7 @@ Mac from sleeping while running the playbooks. [Read more here](https://blog.set
 You can run all or a specific one:
 
 ```bash
-# All
-make run
-# Specific directory
+# Generic playbooks
 make common
 # Specific playbook
 make common/reboot
@@ -34,3 +32,6 @@ make common/reboot -e ARGS="-l dns"
 
 Secrets are encrypted using PGP/GPG. Please make sure to have your Yubikey handy
 when running to allow your device to decrypt the secrets
+
+This setup is WIP, and uses Nomad to orchestrate the workload. Some of the
+workloads are deployed in .hcl files.
