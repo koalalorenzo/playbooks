@@ -4,7 +4,12 @@ all:
       - home.elates.it
     extra_ssl_domains: []
 
+    # Your own domain to set up services
     main_domain: elates.it
+
+    # Find it in https://login.tailscale.com/admin/dns
+    tailscale_domain: fish-alpha.ts.net
+    tailscale_accept_dns: "true"
 
     ansible_user: koalalorenzo
     system_users:
@@ -19,12 +24,12 @@ all:
         email: ""
         is_admin: false
 
+    # This is used to encrypt emails if enabled
     gpg_key_fingerprints:
       - 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
       - 55065306FCC6617D4D928B70020F4A4E40F95228
       - 13C6836A224BB603724399C671C9E6BA29324FEE
 
-    tailscale_accept_dns: "true"
     custom_domains:
       minio-api.elates.it: compute1.elates.it
       minio.elates.it: compute1.elates.it
@@ -32,6 +37,7 @@ all:
       media.elates.it: compute1.elates.it
       consul.elates.it: compute1.elates.it
       nomad.elates.it: compute1.elates.it
+
   hosts:
     storage0:
       extra_ssl_domains:
