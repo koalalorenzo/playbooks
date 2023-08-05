@@ -11,6 +11,11 @@
         update_cache: yes
       when: ansible_os_family == "Debian"
 
+    - apt_repository:
+        repo: "ppa:maveonair/helix-editor"
+        state: present
+      when: ansible_os_family == "Debian"
+
     - name: "Install packages"
       package:
         state: latest
@@ -24,10 +29,17 @@
           - unzip
           - screen
           - openssh-server
-          - golang
           - ufw
           - vim
           - dnsutils
+
+    - name: Install optional packages (ok to fail)
+      package:
+        state: latest
+        name:
+          - golang
+          - helix
+      ignore_errors: true
 
     - name: Upgrade System Packages
       apt:
