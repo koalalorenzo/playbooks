@@ -20,19 +20,19 @@
       package:
         state: latest
         name:
-          - software-properties-common
+          - acl
           - ca-certificates
+          - curl
+          - dnsutils
+          - gnupg
+          - openssh-server
           - openssl
           - python3
-          - gnupg
-          - curl
-          - unzip
           - screen
-          - openssh-server
+          - software-properties-common
           - ufw
+          - unzip
           - vim
-          - setfacl
-          - dnsutils
 
     - name: Install optional packages (ok to fail)
       package:
