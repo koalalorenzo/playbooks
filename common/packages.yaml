@@ -39,6 +39,7 @@
         state: latest
         name:
           - golang
+          - tmux
           - helix
       ignore_errors: true
 
