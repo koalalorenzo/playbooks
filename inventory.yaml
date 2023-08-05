@@ -62,18 +62,26 @@ all:
         host_volumes:
           - name: "traefik"
             path: "/etc/traefik"
+            read_only: false
       hosts:
         storage0:
           node_class: "storage"
           host_volumes:
             - name: "traefik"
               path: "/etc/traefik"
-            - name: "minio"
-              path: "/main/minio"
+              read_only: false
             - name: "multimedia"
               path: "/main/multimedia"
+              read_only: false
             - name: "downloads"
               path: "/main/downloads"
+              read_only: false
+            - name: "backups"
+              path: "/main/backups"
+              read_only: true
+            - name: "personal"
+              path: "/main/personal"
+              read_only: true
 
         compute1:
 

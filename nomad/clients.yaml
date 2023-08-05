@@ -49,7 +49,7 @@
             {% for host in host_volumes %}
             host_volume "{{ host.name }}" {
               path = "{{ host.path }}"
-              read_only = false
+              read_only = {% if host.read_only %}true{% else %}false{% endif %}
             }
             {% endfor %}
 
