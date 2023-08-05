@@ -31,6 +31,7 @@
           - openssh-server
           - ufw
           - vim
+          - setfacl
           - dnsutils
 
     - name: Install optional packages (ok to fail)
