@@ -46,19 +46,19 @@ job "restic_cleanup" {
           ./restic snapshots
           
           echo "Clean old backups"
-          # ./restic forget \
-          #   --no-cache \
-          #   --keep-last 1 \
-          #   --keep-hourly 48 \
-          #   --keep-daily 7 \
-          #   --keep-weekly 12 \
-          #   --keep-monthly 12 \
-          #   --keep-yearly 5 \
-          #   --keep-tag keep \
-          #   --cleanup-cache
+          ./restic forget \
+            --no-cache \
+            --keep-last 1 \
+            --keep-hourly 48 \
+            --keep-daily 7 \
+            --keep-weekly 12 \
+            --keep-monthly 12 \
+            --keep-yearly 5 \
+            --keep-tag keep \
+            --cleanup-cache
 
           echo "Check integrity"
-          # ./restic check --read-data-subset=0.1%
+          ./restic check --read-data-subset=0.1%
         EOF
       }
 
