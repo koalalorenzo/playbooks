@@ -144,6 +144,22 @@
             wal_directory: /tmp/grafana-agent-wal
       notify: Restart grafana-agent
 
+    - name: Set ACL for Grafana Agent's user on various files
+      ansible.builtin.acl:
+        path: "{{ item }}"
+        entity: "grafana-agent"
+        etype: user
+        permissions: r
+        state: present
+      loop:
+        - /var/log/boot.log
+        - /var/log/syslog
+        - /var/log/auth.log
+        - /var/log/ufw.log
+        - /var/log/kern.log
+        - /var/log/fail2ban.log
+      notify: Restart grafana-agent
+
     - name: Enable Grafana Agent
       service:
         name: grafana-agent
