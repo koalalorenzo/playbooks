@@ -2,6 +2,7 @@
 job "nfs-storage-node" {
   datacenters = ["dc1"]
   type        = "system"
+  priority = 100
 
   group "node" {
     task "node" {

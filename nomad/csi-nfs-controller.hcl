@@ -2,6 +2,8 @@
 job "nfs-storage-controller" {
   datacenters = ["dc1"]
   type        = "service"
+  priority = 100
+
 
   group "controller" {
     task "controller" {
