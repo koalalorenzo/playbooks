@@ -52,8 +52,7 @@ job "restic_cleanup" {
             --keep-weekly 12 \
             --keep-monthly 12 \
             --keep-yearly 5 \
-            --keep-tag keep \
-            --cleanup-cache
+            --keep-tag keep 
 
           echo "Check integrity"
           ./restic check --read-data-subset=0.1%
