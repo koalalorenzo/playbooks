@@ -44,8 +44,6 @@ job "restic_cleanup" {
           # Use a single hostname
           export RESTIC_HOSTNAME="nas.elates.it"
 
-          ./restic snapshots
-          
           echo "Clean old backups"
           ./restic forget \
             --no-cache \

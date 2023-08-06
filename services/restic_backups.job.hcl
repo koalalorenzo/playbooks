@@ -54,8 +54,6 @@ job "restic_backups" {
           # Use a single hostname
           export RESTIC_HOSTNAME="nas.elates.it"
           
-          ./restic snapshots
-
           echo "Start the backups"
           ./restic backup /main/backups --host $RESTIC_HOSTNAME
           sleep 5
