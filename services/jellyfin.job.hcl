@@ -7,6 +7,7 @@ job "jellyfin" {
     network {
       port "http" {
         to = 8096
+        static = 28480
       }
       port "dlna" {
         static = 1900
