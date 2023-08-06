@@ -1,6 +1,6 @@
-id = "jellyfin"
-name = "jellyfin"
-type = "csi"
+id        = "jellyfin"
+name      = "jellyfin"
+type      = "csi"
 plugin_id = "nfs"
 
 capability {
