@@ -57,7 +57,7 @@
                 - __name__
             consul_exporter:
               enabled: true
-              server: localhost:8500
+              server: "{{ ansible_hostname }}:8500"
             # Add here any snippet that belongs to the `integrations` section.
             # For a correct indentation, paste snippets copied from Grafana Cloud at the beginning of the line.
             node_exporter:
