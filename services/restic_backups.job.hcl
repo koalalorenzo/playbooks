@@ -3,7 +3,7 @@ job "restic_backups" {
   priority = 70
 
   periodic {
-    cron             = "0 2 * * *"
+    cron             = "0 2 * * 1,5"
     time_zone        = "CET"
     prohibit_overlap = true
   }

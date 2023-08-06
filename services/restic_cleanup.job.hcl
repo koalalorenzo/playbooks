@@ -46,7 +46,6 @@ job "restic_cleanup" {
 
           echo "Clean old backups"
           ./restic forget \
-            --no-cache \
             --keep-last 1 \
             --keep-hourly 48 \
             --keep-daily 7 \
