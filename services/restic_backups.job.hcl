@@ -1,19 +1,19 @@
 job "restic_backups" {
   type = "batch"
-  
+
   periodic {
-    cron = "0 2 * * *"
-    time_zone = "CET"
+    cron             = "0 2 * * *"
+    time_zone        = "CET"
     prohibit_overlap = true
   }
 
-  group "restic" {    
+  group "restic" {
     task "restic" {
       driver = "exec"
 
       config {
         command = "/bin/bash"
-        args = ["local/backup.sh"]
+        args    = ["local/backup.sh"]
       }
 
       volume_mount {
@@ -25,12 +25,12 @@ job "restic_backups" {
         volume      = "backups"
         destination = "/main/backups"
       }
-      
+
       template {
         destination   = "local/backup.sh"
         change_mode   = "signal"
         change_signal = "SIGINT"
-        perms = "0755"
+        perms         = "0755"
 
         data = <<EOF
           #!/bin/bash -ex
@@ -67,7 +67,7 @@ job "restic_backups" {
         memory = 512
       }
     }
-    
+
     volume "backups" {
       type      = "host"
       source    = "backups"
@@ -78,6 +78,6 @@ job "restic_backups" {
       type      = "host"
       source    = "personal"
       read_only = true
-    }    
+    }
   }
 }
