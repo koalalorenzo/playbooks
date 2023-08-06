@@ -32,8 +32,8 @@ job "nfs-storage-controller" {
       }
 
       resources {
-        cpu    = 500
-        memory = 256
+        cpu    = 100
+        memory = 128
       }
 
     }
