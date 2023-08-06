@@ -1,5 +1,6 @@
 job "restic_cleanup" {
-  type = "batch"
+  type     = "batch"
+  priority = 60
 
   periodic {
     cron             = "@daily"
@@ -63,7 +64,7 @@ job "restic_cleanup" {
       }
 
       resources {
-        cpu    = 2000
+        cpu    = 1000
         memory = 512
       }
     }

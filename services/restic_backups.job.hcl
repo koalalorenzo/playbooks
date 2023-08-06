@@ -1,5 +1,6 @@
 job "restic_backups" {
-  type = "batch"
+  type     = "batch"
+  priority = 70
 
   periodic {
     cron             = "0 2 * * *"
