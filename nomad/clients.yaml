@@ -55,8 +55,10 @@
 
             reserved {
               {% if node_class == "storage"  %}
+              cpu    = 500  # OpenZFS
               memory = 1024 # OpenZFS
               {% else %}
+              cpu    = 250
               memory = 256
               {% endif %}
             }
@@ -77,3 +79,5 @@
         - { proto: any, port: 80 } # HTTP
         - { proto: any, port: 443 } # HTTPS
         - { proto: any, port: 8081 } # Traefik
+        - { proto: any, port: 1900 } # Jellyfin DLNA / upnp
+        - { proto: any, port: 7359 } # Jellyfin autodiscovery

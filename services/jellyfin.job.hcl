@@ -7,19 +7,25 @@ job "jellyfin" {
     network {
       port "http" {
         to = 8096
-      }      
+      }
+      port "dlna" {
+        static = 1900
+      }
+      port "autodiscovery" {
+        static = 7359
+      }
     }
 
     volume "jellyfin" {
-      type = "csi"
-      source = "jellyfin"
+      type            = "csi"
+      source          = "jellyfin"
       attachment_mode = "file-system"
-      access_mode = "multi-node-multi-writer"
+      access_mode     = "multi-node-multi-writer"
     }
 
     volume "multimedia" {
-      type = "host"
-      source = "multimedia"
+      type      = "host"
+      source    = "multimedia"
       read_only = true
     }
 
@@ -32,14 +38,15 @@ job "jellyfin" {
         "traefik.http.routers.jellyfin.rule=Host(`media.elates.it`)",
         "traefik.http.routers.jellyfin.tls.certresolver=letsencrypt",
       ]
- 
+
     }
 
     task "jellyfin" {
       driver = "docker"
 
       config {
-        image        = "jellyfin/jellyfin"
+        image = "jellyfin/jellyfin"
+        ports = ["http", "dlna", "autodiscovery"]
       }
 
       template {
@@ -48,6 +55,7 @@ job "jellyfin" {
         change_mode = "restart"
         data        = <<EOF
           JELLYFIN_DATA_DIR = "/data"
+          JELLYFIN_PublishedServerUrl = "media.elates.it"
         EOF
       }
 
@@ -55,7 +63,7 @@ job "jellyfin" {
       volume_mount {
         volume      = "multimedia"
         destination = "/media"
-        read_only = true
+        read_only   = true
       }
 
       volume_mount {

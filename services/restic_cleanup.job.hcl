@@ -1,26 +1,27 @@
 job "restic_cleanup" {
-  type = "batch"
-  
+  type     = "batch"
+  priority = 60
+
   periodic {
-    cron = "@daily"
-    time_zone = "CET"
+    cron             = "@daily"
+    time_zone        = "CET"
     prohibit_overlap = true
   }
 
-  group "restic" {    
+  group "restic" {
     task "restic" {
       driver = "exec"
 
       config {
         command = "/bin/bash"
-        args = ["local/backup.sh"]
+        args    = ["local/backup.sh"]
       }
-      
+
       template {
         destination   = "local/backup.sh"
         change_mode   = "signal"
         change_signal = "SIGINT"
-        perms = "0755"
+        perms         = "0755"
 
         data = <<EOF
           #!/bin/bash -ex
@@ -63,9 +64,9 @@ job "restic_cleanup" {
       }
 
       resources {
-        cpu    = 2000
+        cpu    = 1000
         memory = 512
       }
-    }    
+    }
   }
 }

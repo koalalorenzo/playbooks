@@ -7,18 +7,25 @@ job "archivebox" {
     min_healthy_time = "30s"
   }
 
+  # Prefer but not enforce to run on compute1
+  affinity {
+    attribute = "${attr.unique.hostname}"
+    value     = "compute1"
+    weight    = 100
+  }
+
   group "archivebox" {
     network {
       port "http" {
         to = 8000
-      }      
+      }
     }
 
     volume "archivebox" {
-      type = "csi"
-      source = "archivebox"
+      type            = "csi"
+      source          = "archivebox"
       attachment_mode = "file-system"
-      access_mode = "multi-node-multi-writer"
+      access_mode     = "multi-node-multi-writer"
     }
 
     service {
@@ -45,7 +52,7 @@ job "archivebox" {
       driver = "docker"
 
       config {
-        image        = "archivebox/archivebox:latest"
+        image              = "archivebox/archivebox:latest"
         image_pull_timeout = "10m"
 
         ports = ["http"]
@@ -57,7 +64,8 @@ job "archivebox" {
       }
 
       resources {
-        memory = 256
+        cpu    = 500
+        memory = 1024
       }
     }
   }

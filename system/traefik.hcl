@@ -2,6 +2,8 @@ job "traefik" {
   region      = "global"
   datacenters = ["dc1"]
   type        = "system"
+  priority = 90
+
 
   group "traefik" {
     # If there the Nomad server is disconected for more than 1 min, and 

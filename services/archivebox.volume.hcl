@@ -1,6 +1,6 @@
-id = "jellyfin"
-name = "jellyfin"
-type = "csi"
+id        = "archivebox"
+name      = "archivebox"
+type      = "csi"
 plugin_id = "nfs"
 
 capability {

@@ -1,17 +1,18 @@
 # From: https://gitlab.com/rocketduck/csi-plugin-nfs
-job "nfs-storage-controller" {
+job "nfs-storage-node" {
   datacenters = ["dc1"]
-  type        = "service"
+  type        = "system"
+  priority = 100
 
-  group "controller" {
-    task "controller" {
+  group "node" {
+    task "node" {
       driver = "docker"
 
       config {
         image = "registry.gitlab.com/rocketduck/csi-plugin-nfs:0.7.0"
 
         args = [
-          "--type=controller",
+          "--type=node",
           "--node-id=${attr.unique.hostname}",
           "--nfs-server=192.168.197.151:/main/nfs",
           "--mount-options=defaults",
@@ -25,16 +26,15 @@ job "nfs-storage-controller" {
 
       csi_plugin {
         id        = "nfs"
-        type      = "controller"
+        type      = "node"
         mount_dir = "/csi"
       }
 
       resources {
-        cpu    = 500
-        memory = 256
+        cpu    = 100
+        memory = 128
       }
 
     }
   }
 }
-

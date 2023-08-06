@@ -18,9 +18,9 @@ You can run all or a specific one:
 
 ```bash
 # Generic playbooks
-make common
+make common.yaml
 # Specific playbook
-make common/reboot
+make common/reboot.yaml
 ```
 
 It is possible to pass arguments to `ansible-playbook` like so:
@@ -35,3 +35,27 @@ when running to allow your device to decrypt the secrets
 
 This setup is WIP, and uses Nomad to orchestrate the workload. Some of the
 workloads are deployed in .hcl files.
+
+## Nomad Workloads
+After the Ansible playbook install, there are some system services/tools needed
+to run the main services in my home lab. To deploy you need first to install
+these services by running:
+
+```bash
+cd system
+make
+```
+
+Please makesure that `NOMAD_ADDR` env variable is pointing to the right endpoint
+
+After that you should be able to access `nomad.{{ main_domain }}` (in my case
+nomad.elates.it). Check that all the jobs are running correctly and volumes 
+plugins are operational. If all looks good you can create the volumes and 
+deploy the new services:
+
+```bash
+cd services
+make 
+```
+
+Et voila! 
