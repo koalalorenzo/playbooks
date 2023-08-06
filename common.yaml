@@ -6,10 +6,8 @@
 - import_playbook: common/ssh-secure.yaml
 - import_playbook: common/tailscale.yaml
 - import_playbook: common/swap.yaml
-# - import_playbook: common/reboot.yaml
 
 - import_playbook: common/email.yaml
 - import_playbook: common/monitoring_grafana.yaml
-- import_playbook: common/ssl.yaml
-# Final Setup and reboot
-#- import_playbook: common/reboot.yaml
+- import_playbook: common/dns.yaml
+- import_playbook: common/wifi.yaml
