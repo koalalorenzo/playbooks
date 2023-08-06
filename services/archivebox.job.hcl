@@ -7,6 +7,13 @@ job "archivebox" {
     min_healthy_time = "30s"
   }
 
+  # Prefer but not enforce to run on compute1
+  affinity {
+    attribute = "${attr.unique.hostname}"
+    value     = "compute1"
+    weight    = 100
+  }
+
   group "archivebox" {
     network {
       port "http" {
@@ -57,7 +64,8 @@ job "archivebox" {
       }
 
       resources {
-        memory = 256
+        cpu    = 500
+        memory = 1024
       }
     }
   }
