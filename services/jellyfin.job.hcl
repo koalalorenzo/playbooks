@@ -6,8 +6,14 @@ job "jellyfin" {
   group "jellyfin" {
     network {
       port "http" {
-        to = 8096
+        static = 8096
       }      
+      port "dlna" {
+        static = 1900
+      }
+      port "autodiscovery" {
+        static = 7359
+      }
     }
 
     volume "jellyfin" {
