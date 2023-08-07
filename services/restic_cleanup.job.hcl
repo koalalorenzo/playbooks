@@ -44,19 +44,15 @@ job "restic_cleanup" {
           # Use a single hostname
           export RESTIC_HOSTNAME="nas.elates.it"
 
-          ./restic snapshots
-          
           echo "Clean old backups"
           ./restic forget \
-            --no-cache \
             --keep-last 1 \
             --keep-hourly 48 \
             --keep-daily 7 \
             --keep-weekly 12 \
             --keep-monthly 12 \
             --keep-yearly 5 \
-            --keep-tag keep \
-            --cleanup-cache
+            --keep-tag keep 
 
           echo "Check integrity"
           ./restic check --read-data-subset=0.1%

@@ -1,9 +1,9 @@
-job "restic_backups" {
+job "restic-remote-cleanup" {
   type     = "batch"
-  priority = 70
+  priority = 60
 
   periodic {
-    cron             = "0 2 * * 1,5"
+    cron             = "@daily"
     time_zone        = "CET"
     prohibit_overlap = true
   }
@@ -15,16 +15,6 @@ job "restic_backups" {
       config {
         command = "/bin/bash"
         args    = ["local/backup.sh"]
-      }
-
-      volume_mount {
-        volume      = "personal"
-        destination = "/main/personal"
-      }
-
-      volume_mount {
-        volume      = "backups"
-        destination = "/main/backups"
       }
 
       template {
@@ -42,9 +32,9 @@ job "restic_backups" {
           chmod +x ./restic
 
           ./restic self-update
-          sleep 5
+          sleep 3
 
-          {{ with nomadVar "nomad/jobs/restic_backups" }}
+          {{ with nomadVar "nomad/jobs/restic" }}
           export RESTIC_REPOSITORY="{{ .RESTIC_REPOSITORY }}"
           export RESTIC_PASSWORD="{{ .RESTIC_PASSWORD }}"
           export B2_ACCOUNT_ID="{{ .B2_ACCOUNT_ID }}"
@@ -53,30 +43,23 @@ job "restic_backups" {
 
           # Use a single hostname
           export RESTIC_HOSTNAME="nas.elates.it"
-          
-          echo "Start the backups"
-          ./restic backup /main/backups --host $RESTIC_HOSTNAME
-          sleep 5
-          ./restic backup /main/personal --host $RESTIC_HOSTNAME
+
+          echo "Clean old backups"
+          ./restic forget \
+            --keep-last 1 \
+            --keep-hourly 48 \
+            --keep-daily 7 \
+            --keep-weekly 12 \
+            --keep-monthly 12 \
+            --keep-yearly 5 \
+            --keep-tag keep
         EOF
       }
 
       resources {
-        cpu    = 2000
+        cpu    = 1000
         memory = 512
       }
-    }
-
-    volume "backups" {
-      type      = "host"
-      source    = "backups"
-      read_only = true
-    }
-
-    volume "personal" {
-      type      = "host"
-      source    = "personal"
-      read_only = true
     }
   }
 }

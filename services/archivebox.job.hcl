@@ -16,7 +16,9 @@ job "archivebox" {
 
   group "archivebox" {
     network {
-      port "http" {
+      port "http" {}
+
+      port "archivebox"{
         to = 8000
       }
     }
@@ -28,24 +30,51 @@ job "archivebox" {
       access_mode     = "multi-node-multi-writer"
     }
 
-    service {
-      name = "archivebox"
-      port = "http"
+    task "cache" {
+      driver = "docker"
+      config {
+        image = "nginx:alpine"
 
-      # check {
-      #   name     = "http_login"
-      #   type     = "http"
-      #   port     = "http"
-      #   path     = "/admin/login"
-      #   interval = "120s"
-      #   timeout  = "60s"
-      # }
+        volumes = ["local/default:/etc/nginx/conf.d/default.conf"]
+        ports = ["http"]
+      }
 
-      tags = [
-        "traefik.enable=true",
-        "traefik.http.routers.http.rule=Host(`archive.elates.it`)",
-        "traefik.http.routers.http.tls.certresolver=letsencrypt",
-      ]
+      template {
+        destination = "local/default"
+        change_mode = "restart"
+        data        = <<EOF
+          proxy_cache_path /tmp/archivebox levels=1:2 keys_zone=archivebox:5m max_size=128m inactive=60m use_temp_path=off;
+        
+          server {
+            listen {{ env "NOMAD_PORT_http" }};
+            # To disable buffering
+            proxy_buffering off;
+
+            location / {
+              proxy_read_timeout 300s;
+              proxy_connect_timeout 120s;
+              proxy_cache archivebox;
+              proxy_pass http://{{ env "NOMAD_ADDR_archivebox" }};
+            }
+          }
+
+        EOF
+      }
+
+      
+      service {
+        name = "archivebox-cache"
+        port = "http"
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.http.rule=Host(`archive.elates.it`)",
+          "traefik.http.routers.http.tls.certresolver=letsencrypt",
+        ]
+      }
+
+      resources {
+        memory = 128
+      }
     }
 
     task "archivebox" {
@@ -55,8 +84,15 @@ job "archivebox" {
         image              = "archivebox/archivebox:latest"
         image_pull_timeout = "10m"
 
-        ports = ["http"]
+        ports = ["archivebox"]
       }
+
+      
+    service {
+      name = "archivebox"
+      port = "archivebox"
+    }
+
 
       volume_mount {
         volume      = "archivebox"
@@ -65,7 +101,7 @@ job "archivebox" {
 
       resources {
         cpu    = 500
-        memory = 1024
+        memory = 512
       }
     }
   }

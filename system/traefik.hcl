@@ -73,6 +73,8 @@ job "traefik" {
         image        = "traefik:v2.10"
         network_mode = "host"
 
+        ports = ["http", "https", "api"]
+        
         volumes = [
           "local/traefik.yaml:/etc/traefik/traefik.yaml",
           "local/services.yaml:/etc/traefik/services.yaml",

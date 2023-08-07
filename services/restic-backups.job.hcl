@@ -1,4 +1,4 @@
-job "restic_backups" {
+job "restic-backups" {
   type     = "batch"
   priority = 70
 
@@ -42,9 +42,9 @@ job "restic_backups" {
           chmod +x ./restic
 
           ./restic self-update
-          sleep 5
+          sleep 3
 
-          {{ with nomadVar "nomad/jobs/restic_backups" }}
+          {{ with nomadVar "nomad/jobs/restic" }}
           export RESTIC_REPOSITORY="{{ .RESTIC_REPOSITORY }}"
           export RESTIC_PASSWORD="{{ .RESTIC_PASSWORD }}"
           export B2_ACCOUNT_ID="{{ .B2_ACCOUNT_ID }}"
@@ -54,9 +54,10 @@ job "restic_backups" {
           # Use a single hostname
           export RESTIC_HOSTNAME="nas.elates.it"
           
-          echo "Start the backups"
+          echo "Startint backing up the backups"
           ./restic backup /main/backups --host $RESTIC_HOSTNAME
           sleep 5
+          echo "Starting backing up personal files"
           ./restic backup /main/personal --host $RESTIC_HOSTNAME
         EOF
       }

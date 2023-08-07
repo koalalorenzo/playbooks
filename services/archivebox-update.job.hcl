@@ -1,4 +1,4 @@
-job "archivebox_update_cron" {
+job "archivebox-update" {
   datacenters = ["dc1"]
   type        = "batch"
 

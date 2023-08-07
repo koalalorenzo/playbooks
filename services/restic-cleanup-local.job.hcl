@@ -1,30 +1,27 @@
-job "restic_backups" {
+job "restic-cleanup-local" {
   type     = "batch"
-  priority = 70
+  priority = 60
 
   periodic {
-    cron             = "0 2 * * 1,5"
+    cron             = "@daily"
     time_zone        = "CET"
     prohibit_overlap = true
   }
 
   group "restic" {
+    volume "restic" {
+      type            = "csi"
+      source          = "restic"
+      attachment_mode = "file-system"
+      access_mode     = "single-node-writer"
+    }
+    
     task "restic" {
       driver = "exec"
 
       config {
         command = "/bin/bash"
         args    = ["local/backup.sh"]
-      }
-
-      volume_mount {
-        volume      = "personal"
-        destination = "/main/personal"
-      }
-
-      volume_mount {
-        volume      = "backups"
-        destination = "/main/backups"
       }
 
       template {
@@ -42,10 +39,12 @@ job "restic_backups" {
           chmod +x ./restic
 
           ./restic self-update
-          sleep 5
+          sleep 3
 
-          {{ with nomadVar "nomad/jobs/restic_backups" }}
-          export RESTIC_REPOSITORY="{{ .RESTIC_REPOSITORY }}"
+          # Uses local NFS file
+          export RESTIC_REPOSITORY="/main/nfs/restic"
+        
+          {{ with nomadVar "nomad/jobs/restic" }}
           export RESTIC_PASSWORD="{{ .RESTIC_PASSWORD }}"
           export B2_ACCOUNT_ID="{{ .B2_ACCOUNT_ID }}"
           export B2_ACCOUNT_KEY="{{ .B2_ACCOUNT_KEY }}"
@@ -53,30 +52,28 @@ job "restic_backups" {
 
           # Use a single hostname
           export RESTIC_HOSTNAME="nas.elates.it"
-          
-          echo "Start the backups"
-          ./restic backup /main/backups --host $RESTIC_HOSTNAME
-          sleep 5
-          ./restic backup /main/personal --host $RESTIC_HOSTNAME
+
+          echo "Clean old backups"
+          ./restic forget \
+            --keep-last 1 \
+            --keep-hourly 24 \
+            --keep-daily 7 \
+            --keep-weekly 12 \
+            --keep-monthly 12 \
+            --keep-yearly 5 \
+            --keep-tag keep 
         EOF
       }
 
-      resources {
-        cpu    = 2000
-        memory = 512
+      volume_mount {
+        volume      = "restic"
+        destination = "/main/nfs/restic"
       }
-    }
 
-    volume "backups" {
-      type      = "host"
-      source    = "backups"
-      read_only = true
-    }
-
-    volume "personal" {
-      type      = "host"
-      source    = "personal"
-      read_only = true
+      resources {
+        cpu    = 1000
+        memory = 256
+      }
     }
   }
 }
