@@ -35,4 +35,29 @@ apt_upgrade:
 		-m apt -a "upgrade=yes"
 .PHONY: apt_upgrade
 
+################################################################################
+# Nomad
+################################################################################
+NOMAD_ARGS ?=
+NOMAD_JOB_CMD ?= plan
+NOMAD_JOBS := $(wildcard */*.job.hcl)
+NOMAD_VOLUMES := $(wildcard */*.volume.hcl)
+NOMAD_VARIABLES := $(wildcard */*.vars.sops.hcl)
+
+$(NOMAD_VARIABLES):
+	sops -d $@ | nomad var put -in=hcl -force ${NOMAD_ARGS} -
+.PHONY: $(NOMAD_VARIABLES)
+
+$(NOMAD_VOLUMES):
+	-nomad volume create ${NOMAD_ARGS} $@
+.PHONY: $(NOMAD_VOLUMES)
+
+$(NOMAD_JOBS):
+	nomad $(NOMAD_JOB_CMD) $@
+.PHONY: $(NOMAD_JOBS)
+
+nomad_variables: $(NOMAD_VARIABLES)
+nomad_volumes: $(NOMAD_VOLUMES)
+nomad_jobs: $(NOMAD_JOBS)
+
 .DEFAULT_GOAL := all
