@@ -1,10 +1,10 @@
 JOB_CMD ?= plan
 JOBS := $(wildcard *.job.hcl)
 VOLUMES := $(wildcard *.volume.hcl)
-VARIABLES := $(wildcard *.vars.hcl.asc)
+VARIABLES := $(wildcard *.vars.sops.hcl)
 
 $(VARIABLES):
-	gpg -q --decrypt restic.vars.hcl.asc | nomad var put -in=hcl -force -
+	sops -d $@ | nomad var put -in=hcl -force -
 .PHONY: $(VARIABLES)
 
 $(VOLUMES):
