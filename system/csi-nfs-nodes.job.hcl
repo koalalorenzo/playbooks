@@ -5,6 +5,14 @@ job "nfs-storage-node" {
   priority = 100
 
   group "node" {
+    restart {
+      # Restart every 30 seconds for 3 times, and then wait 1 min to try again
+      delay    = "15s"
+      interval = "60s"
+      attempts = 4
+      mode     = "delay" # try again, never fail
+    }
+    
     task "node" {
       driver = "docker"
 

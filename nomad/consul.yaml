@@ -111,6 +111,8 @@
             prometheus_retention_time = "90s"
           }
 
+          retry_join = [{% for i in groups['nomadServers'] %}"{{ i }}",{% endfor %}]
+
           tls {
              defaults {
                 ca_file = "/etc/consul.d/certs/consul-agent-ca.pem"
@@ -134,7 +136,7 @@
           auto_encrypt {
             allow_tls = true
           }
-      notify: reload consul
+      notify: restart consul
 
     # - name: Set ACL token
     #   command: consul acl set-agent-token agent "{{ tokens[ansible_hostname].SecretID }}"

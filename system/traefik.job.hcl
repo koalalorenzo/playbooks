@@ -17,13 +17,13 @@ job "traefik" {
       healthy_deadline  = "5m"
     }
 
-    # restart {
-    #   # Restart every 30 seconds for 3 times, and then wait 1 min to try again
-    #   delay    = "30s"
-    #   interval = "2m"
-    #   attempts = 5
-    #   mode     = "delay" # try again, never fail
-    # }
+    restart {
+      # Restart every 30 seconds for 3 times, and then wait 1 min to try again
+      delay    = "15s"
+      interval = "1m"
+      attempts = 4
+      mode     = "delay" # try again, never fail
+    }
 
     network {
       port "http" {
