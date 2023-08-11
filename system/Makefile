@@ -2,7 +2,7 @@ JOBS := $(wildcard *.job.hcl)
 VARIABLES := $(wildcard *.vars.sops.hcl)
 
 $(VARIABLES):
-    sops -d $@ | nomad var put -in=hcl -force -
+	sops -d $@ | nomad var put -in=hcl -force -
 .PHONY: $(VARIABLES)
 
 $(JOBS):
