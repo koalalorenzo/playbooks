@@ -73,10 +73,10 @@ job "postgres" {
   
   group "pgweb" {
     network {
-      port "http" {}
+      port "pgweb" {}
     }
 
-    task "pgadmin" {
+    task "pgweb" {
       driver = "exec"
 
       config {
@@ -93,27 +93,40 @@ job "postgres" {
 
         data = <<EOF
           #!/bin/bash
-          curl -L \
-            --output pgweb_{{ env "attr.kernel.name"}}_{{ env "attr.cpu.arch" }}.zip \
-           https://github.com/sosedoff/pgweb/releases/download/v0.14.1/pgweb_{{ env "attr.kernel.name"}}_{{ env "attr.cpu.arch" }}.zip
-          unzip ./pgweb_{{ env "attr.kernel.name"}}_{{ env "attr.cpu.arch" }}.zip
-          mv pgweb_{{ env "attr.kernel.name"}}_{{ env "attr.cpu.arch" }} ./pgweb
+          curl -s -L https://api.github.com/repos/sosedoff/pgweb/releases/latest \
+            | grep {{ env "attr.kernel.name"}}_{{ env "attr.cpu.arch" }}.zip \
+            | grep download \
+            | cut -d '"' -f 4 \
+            | wget -qi - \
+            && unzip pgweb_{{ env "attr.kernel.name"}}_{{ env "attr.cpu.arch" }}.zip \
+            && rm pgweb_{{ env "attr.kernel.name"}}_{{ env "attr.cpu.arch" }}.zip \
+            && mv pgweb_{{ env "attr.kernel.name"}}_{{ env "attr.cpu.arch" }} ./pgweb
           chmod +x ./pgweb
-
+          
+          {{ range service "postgres" }}
+          export POSTGRES_HOST={{ .Address }}:{{ .Port }}
+          {{ end }}
+          
           {{ with nomadVar "nomad/jobs/postgres" }}
-          ./pgweb --listen={{ env "NOMAD_PORT_http" }} --bind="0.0.0.0" --auth-user={{ .username }} --auth-pass="{{ .password }}"
+          POSTGRES_USER={{ .username }}
+          POSTGRES_PASSWORD={{ .password }}
+          
+          ./pgweb \
+            --listen={{ env "NOMAD_PORT_pgweb" }} --bind="0.0.0.0" --skip-open \
+            --auth-user={{ .username }} --auth-pass="{{ .password }}" \
+            --url="postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST/?sslmode=disable"
           {{ end }}
         EOF
       }
 
       resources {
         cpu    = 500
-        memory = 250
+        memory = 64
       }
       
       service {
         name     = "pgweb"
-        port     = "http"
+        port     = "pgweb"
 
         tags = [
           "traefik.enable=true",
