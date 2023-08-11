@@ -1,7 +1,8 @@
-ARGS ?=-K
+ANSIBLE_ARGS ?=-K
 
 PLAYBOOKS := $(wildcard *.yaml)
 ALL_PLAYBOOKS := $(wildcard */*.yaml)
+
 ANSIBLE_CONFIG=facts.cfg
 
 # Add some caffeine to prevent sleep while running
@@ -16,15 +17,15 @@ deps:
 .PHONY: deps
 
 reboot:
-	ansible-playbook -i ./inventory.yml common/reboot.yaml ${ARGS}
+	ansible-playbook -i ./inventory.yml common/reboot.yaml ${ANSIBLE_ARGS}
 .PHONY: reboot
 
 $(ALL_PLAYBOOKS) $(PLAYBOOKS): deps
-	ansible-playbook -i ./inventory.yml $@ ${ARGS}
+	ansible-playbook -i ./inventory.yml $@ ${ANSIBLE_ARGS}
 .PHONY: $(ALL_PLAYBOOKS) $(PLAYBOOKS)
 
 all: deps
-	ansible-playbook -i ./inventory.yml $(PLAYBOOKS) common/reboot-uptime.yaml ${ARGS}
+	ansible-playbook -i ./inventory.yml $(PLAYBOOKS) common/reboot-uptime.yaml ${ANSIBLE_ARGS}
 .PHONY: all
 
 apt_upgrade:
