@@ -7,7 +7,7 @@
   gather_facts: yes
 
   tasks:
-    - name: Load encrypted credentials (SSL)
+    - name: Load encrypted credentials
       community.sops.load_vars:
         file: cloudflare.sops.yaml
 
