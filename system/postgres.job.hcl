@@ -2,7 +2,7 @@ job "postgres" {
   region      = "global"
   datacenters = ["dc1"]
   type        = "service"
-  priority = 80
+  priority    = 80
 
   # Prefer but not enforce to run on compute1
   affinity {
@@ -10,7 +10,7 @@ job "postgres" {
     value     = "compute1"
     weight    = 100
   }
-  
+
   group "postgres" {
     restart {
       attempts = 5
@@ -18,25 +18,27 @@ job "postgres" {
       delay    = "20s"
       mode     = "fail"
     }
-    
+
     volume "postgres" {
-      type      = "csi"
+      type            = "csi"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
-      source    = "postgres"    
+      source          = "postgres"
     }
 
     network {
       port "postgres" { to = 5432 }
     }
-    
+
     task "postgres" {
       driver = "docker"
-      user = "1000"
+      user   = "1000"
+
       config {
         image = "postgres:15-alpine"
         ports = ["postgres"]
       }
+
       template {
         destination = "${NOMAD_SECRETS_DIR}/env.vars"
         env         = true
@@ -48,19 +50,20 @@ job "postgres" {
           {{- end -}}
         EOH
       }
+
       volume_mount {
         volume      = "postgres"
         destination = "/var/lib/postgresql/data"
         read_only   = false
       }
       resources {
-        cpu    = 120
+        cpu    = 500
         memory = 250
       }
       service {
-        name     = "postgres"
-        port     = "postgres"
-        
+        name = "postgres"
+        port = "postgres"
+
         check {
           name     = "alive"
           type     = "tcp"

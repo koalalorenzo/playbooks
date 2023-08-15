@@ -2,7 +2,7 @@ job "traefik" {
   region      = "global"
   datacenters = ["dc1"]
   type        = "system"
-  priority = 90
+  priority    = 90
 
 
   group "traefik" {
@@ -11,10 +11,10 @@ job "traefik" {
     max_client_disconnect = "1m"
 
     update {
-      max_parallel      = 1
-      health_check      = "checks"
-      min_healthy_time  = "60s"
-      healthy_deadline  = "5m"
+      max_parallel     = 1
+      health_check     = "checks"
+      min_healthy_time = "60s"
+      healthy_deadline = "5m"
     }
 
     restart {
@@ -29,7 +29,7 @@ job "traefik" {
       port "http" {
         static = 80
       }
-      
+
       port "https" {
         static = 443
       }
@@ -40,11 +40,11 @@ job "traefik" {
     }
 
     service {
-      name = "traefik"
+      name     = "traefik"
       provider = "nomad"
 
       port = "api"
-      
+
       check {
         name     = "alive"
         type     = "tcp"
@@ -60,12 +60,12 @@ job "traefik" {
       ]
     }
 
-    
+
     volume "config" {
-      type = "host"
+      type   = "host"
       source = "traefik"
     }
-    
+
     task "traefik" {
       driver = "docker"
 
@@ -74,7 +74,7 @@ job "traefik" {
         network_mode = "host"
 
         ports = ["http", "https", "api"]
-        
+
         volumes = [
           "local/traefik.yaml:/etc/traefik/traefik.yaml",
           "local/services.yaml:/etc/traefik/services.yaml",
@@ -82,7 +82,7 @@ job "traefik" {
       }
 
       volume_mount {
-        volume = "config"
+        volume      = "config"
         destination = "/etc/traefik/"
       }
 
@@ -174,7 +174,7 @@ EOF
 
         destination = "local/traefik.yaml"
       }
-      
+
       template {
         data = <<EOF
 http:

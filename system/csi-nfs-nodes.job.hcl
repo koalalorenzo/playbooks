@@ -2,7 +2,7 @@
 job "nfs-storage-node" {
   datacenters = ["dc1"]
   type        = "system"
-  priority = 100
+  priority    = 100
 
   group "node" {
     restart {
@@ -12,7 +12,7 @@ job "nfs-storage-node" {
       attempts = 4
       mode     = "delay" # try again, never fail
     }
-    
+
     task "node" {
       driver = "docker"
 
@@ -28,8 +28,8 @@ job "nfs-storage-node" {
           "--log-level=DEBUG",
         ]
 
-        network_mode = "host" 
-        privileged = true
+        network_mode = "host"
+        privileged   = true
       }
 
       csi_plugin {
