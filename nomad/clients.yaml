@@ -34,7 +34,7 @@
               "driver.denylist" = "java"
             }
 
-            servers = [{% for i in groups['nomadServers'] %}"{{ i }}:4647",{% endfor %}]
+            servers = [{% for i in groups['nomadServers'] %}"{{ i }}",{% endfor %}]
 
             host_volume "ca-certificates" {
               path = "/etc/ssl/certs"
