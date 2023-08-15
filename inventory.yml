@@ -8,7 +8,7 @@ all:
     main_domain: elates.it
 
     # Find it in https://login.tailscale.com/admin/dns
-    tailscale_domain: fish-alpha.ts.net
+    tailscale_domain: burro-great.ts.net
     tailscale_accept_dns: "true"
 
     ansible_user: koalalorenzo
