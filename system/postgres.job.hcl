@@ -111,8 +111,8 @@ job "postgres" {
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.http.rule=Host(`postgres.elates.it`)",
-          "traefik.http.routers.http.tls.certresolver=letsencrypt",
+          "traefik.http.routers.pgweb.rule=Host(`postgres.elates.it`)",
+          "traefik.http.routers.pgweb.tls.certresolver=letsencrypt",
         ]
       }
     }

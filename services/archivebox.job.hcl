@@ -67,8 +67,8 @@ job "archivebox" {
         port = "http"
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.http.rule=Host(`archive.elates.it`)",
-          "traefik.http.routers.http.tls.certresolver=letsencrypt",
+          "traefik.http.routers.archivebox.rule=Host(`archive.elates.it`)",
+          "traefik.http.routers.archivebox.tls.certresolver=letsencrypt",
         ]
       }
 
