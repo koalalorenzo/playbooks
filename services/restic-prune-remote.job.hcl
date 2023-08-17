@@ -1,4 +1,4 @@
-job "restic-prune-local" {
+job "restic-prune-remote" {
   type     = "batch"
   priority = 60
 
@@ -34,9 +34,8 @@ job "restic-prune-local" {
           ./restic self-update
           sleep 5
 
-          export RESTIC_REPOSITORY="rest:https://restic.elates.it"
-        
           {{ with nomadVar "nomad/jobs/restic" }}
+          export RESTIC_REPOSITORY="{{ .RESTIC_REPOSITORY }}"
           export RESTIC_PASSWORD="{{ .RESTIC_PASSWORD }}"
           export B2_ACCOUNT_ID="{{ .B2_ACCOUNT_ID }}"
           export B2_ACCOUNT_KEY="{{ .B2_ACCOUNT_KEY }}"
@@ -49,7 +48,7 @@ job "restic-prune-local" {
           # ./restic repair index
           # ./restic repair snapshots --forget
         
-          restic prune
+          restic prune --max-unused=2%
         EOF
       }
 
