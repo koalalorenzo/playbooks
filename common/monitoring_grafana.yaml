@@ -73,7 +73,7 @@
                 - meminfo_numa
                 - processes
                 - systemd
-                - zfs
+                # - zfs
               # exclude dynamic interfaces
               netclass_ignored_devices: "^(veth.*|cali.*|[a-f0-9]{15})$"
               netdev_device_exclude: "^(veth.*|cali.*|[a-f0-9]{15})$"
