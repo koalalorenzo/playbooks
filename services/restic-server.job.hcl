@@ -28,12 +28,12 @@ job "restic-server" {
 
     task "restic-server" {
       driver = "docker"
+      user   = "1000"
 
       config {
         image = "restic/rest-server"
         ports = ["http"]
       }
-
       template {
         destination = "${NOMAD_SECRETS_DIR}/env.vars"
         env         = true
@@ -49,8 +49,8 @@ job "restic-server" {
       }
 
       resources {
-        cpu    = 250
-        memory = 128
+        cpu    = 500
+        memory = 256
       }
     }
   }
