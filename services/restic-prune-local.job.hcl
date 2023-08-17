@@ -45,9 +45,11 @@ job "restic-prune-local" {
           # Use a single hostname
           export RESTIC_HOSTNAME="nas.elates.it"
 
-          echo "Repair the index if needed"
-          ./restic repair index
-          ./restic repair snapshots --forget
+          # echo "Repair the index if needed"
+          # ./restic repair index
+          # ./restic repair snapshots --forget
+        
+          restic prune
         EOF
       }
 
