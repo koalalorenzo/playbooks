@@ -55,6 +55,12 @@
         enabled: no
       ignore_errors: true
 
+    - service:
+        name: snap.lxd.activate.service
+        state: stopped
+        enabled: no
+      ignore_errors: true
+
     - name: Uninstall snapd package
       package:
         name: snapd
