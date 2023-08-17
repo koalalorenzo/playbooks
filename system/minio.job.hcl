@@ -29,6 +29,10 @@ job "minio" {
       config {
         image = "quay.io/minio/minio"
         ports = ["minioadm", "minio"]
+        args = [
+          "server",
+          "/data",
+        ]
       }
 
       template {
