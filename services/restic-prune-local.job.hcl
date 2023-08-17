@@ -3,7 +3,7 @@ job "restic-prune-local" {
   priority = 60
 
   periodic {
-    cron             = "@daily"
+    cron             = "@weekly"
     time_zone        = "CET"
     prohibit_overlap = true
   }
@@ -32,7 +32,7 @@ job "restic-prune-local" {
           chmod +x ./restic
 
           ./restic self-update
-          sleep 3
+          sleep 5
 
           export RESTIC_REPOSITORY="rest:https://restic.elates.it"
         
