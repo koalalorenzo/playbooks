@@ -9,13 +9,6 @@ job "restic-prune-local" {
   }
 
   group "restic" {
-    volume "restic" {
-      type            = "csi"
-      source          = "restic"
-      attachment_mode = "file-system"
-      access_mode     = "single-node-writer"
-    }
-    
     task "restic" {
       driver = "exec"
 
@@ -41,8 +34,7 @@ job "restic-prune-local" {
           ./restic self-update
           sleep 3
 
-          # Uses local NFS file
-          export RESTIC_REPOSITORY="/main/nfs/restic"
+          export RESTIC_REPOSITORY="rest:https://restic.elates.it"
         
           {{ with nomadVar "nomad/jobs/restic" }}
           export RESTIC_PASSWORD="{{ .RESTIC_PASSWORD }}"
@@ -57,11 +49,6 @@ job "restic-prune-local" {
           ./restic repair index
           ./restic repair snapshots --forget
         EOF
-      }
-
-      volume_mount {
-        volume      = "restic"
-        destination = "/main/nfs/restic"
       }
 
       resources {

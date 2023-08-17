@@ -57,11 +57,6 @@ job "restic-cleanup-local" {
         EOF
       }
 
-      volume_mount {
-        volume      = "restic"
-        destination = "/main/nfs/restic"
-      }
-
       resources {
         cpu    = 1000
         memory = 256
