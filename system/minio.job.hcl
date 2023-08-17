@@ -24,7 +24,6 @@ job "minio" {
 
     task "minio" {
       driver = "docker"
-      user   = "1000"
 
       config {
         image = "quay.io/minio/minio"
