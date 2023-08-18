@@ -1,6 +1,6 @@
 job "restic-prune-remote" {
   type     = "batch"
-  priority = 60
+  priority = 65
 
   periodic {
     cron             = "@weekly"
@@ -48,7 +48,7 @@ job "restic-prune-remote" {
           # ./restic repair index
           # ./restic repair snapshots --forget
         
-          restic prune --max-unused=2%
+          restic prune
         EOF
       }
 
