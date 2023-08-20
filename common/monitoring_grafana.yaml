@@ -68,6 +68,11 @@
                 - btrfs
                 - infiniband
                 - xfs
+                - nfs
+              enable_collectors:
+                - meminfo_numa
+                - processes
+                - systemd
                 - zfs
               # exclude dynamic interfaces
               netclass_ignored_devices: "^(veth.*|cali.*|[a-f0-9]{15})$"
