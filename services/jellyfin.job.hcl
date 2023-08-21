@@ -68,23 +68,23 @@ job "jellyfin" {
         image = "linuxserver/jellyfin"
         ports = ["http", "dlna", "autodiscovery"]
 
-
         devices = [for s in local.devices : {
           host_path      = s
           container_path = s
         }]
       }
-
       template {
         destination = "${NOMAD_SECRETS_DIR}/env.vars"
         env         = true
         change_mode = "restart"
         data        = <<EOF
+          PUID                        = "1000"
+          PGID                        = "1000"
           JELLYFIN_PublishedServerUrl = "media.elates.it"
         EOF
       }
 
-
+      
       volume_mount {
         volume      = "multimedia"
         destination = "/data"
