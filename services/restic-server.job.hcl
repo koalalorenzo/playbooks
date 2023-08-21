@@ -2,6 +2,13 @@ job "restic-server" {
   type     = "service"
   priority = 60
 
+  # Prefer to deploy this on storage
+  affinity {
+    attribute = "${attr.unique.hostname}"
+    value     = "storage0"
+    weight    = 100
+  }
+
   group "main" {
     network {
       port "http" {}
