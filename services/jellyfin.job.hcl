@@ -62,7 +62,6 @@ job "jellyfin" {
 
     task "jellyfin" {
       driver = "docker"
-      user   = "1000:1000"
 
       config {
         image = "linuxserver/jellyfin"
