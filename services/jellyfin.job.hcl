@@ -1,3 +1,22 @@
+locals {
+  devices = [
+    "/dev/video10",
+    "/dev/video11",
+    "/dev/video12",
+    "/dev/video13",
+    "/dev/video14",
+    "/dev/video15",
+    "/dev/video16",
+    "/dev/video18",
+    "/dev/video19",
+    "/dev/video20",
+    "/dev/video21",
+    "/dev/video22",
+    "/dev/video23",
+    "/dev/video31",
+  ]
+}
+
 job "jellyfin" {
   region      = "global"
   datacenters = ["dc1"]
@@ -46,8 +65,14 @@ job "jellyfin" {
       driver = "docker"
 
       config {
-        image = "jellyfin/jellyfin"
+        image = "linuxserver/jellyfin"
         ports = ["http", "dlna", "autodiscovery"]
+
+
+        devices = [for s in local.devices : {
+          host_path      = s
+          container_path = s
+        }]
       }
 
       template {
