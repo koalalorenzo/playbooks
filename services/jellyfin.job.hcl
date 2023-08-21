@@ -40,12 +40,12 @@ job "jellyfin" {
       type            = "csi"
       source          = "jellyfin"
       attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      access_mode     = "single-node-writer"
     }
 
     volume "multimedia" {
-      type      = "host"
-      source    = "multimedia"
+      type   = "host"
+      source = "multimedia"
     }
 
     service {
@@ -62,6 +62,7 @@ job "jellyfin" {
 
     task "jellyfin" {
       driver = "docker"
+      user   = "1000:1000"
 
       config {
         image = "linuxserver/jellyfin"
@@ -79,7 +80,6 @@ job "jellyfin" {
         env         = true
         change_mode = "restart"
         data        = <<EOF
-          JELLYFIN_DATA_DIR = "/data"
           JELLYFIN_PublishedServerUrl = "media.elates.it"
         EOF
       }
@@ -87,12 +87,12 @@ job "jellyfin" {
 
       volume_mount {
         volume      = "multimedia"
-        destination = "/media"
+        destination = "/data"
       }
 
       volume_mount {
         volume      = "jellyfin"
-        destination = "/data"
+        destination = "/config"
       }
 
       resources {
