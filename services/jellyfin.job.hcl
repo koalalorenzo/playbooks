@@ -25,7 +25,7 @@ job "jellyfin" {
   group "jellyfin" {
     network {
       port "http" {
-        to = 8096
+        to     = 8096
         static = 28480
       }
       port "dlna" {
@@ -46,7 +46,6 @@ job "jellyfin" {
     volume "multimedia" {
       type      = "host"
       source    = "multimedia"
-      read_only = true
     }
 
     service {
@@ -89,7 +88,6 @@ job "jellyfin" {
       volume_mount {
         volume      = "multimedia"
         destination = "/media"
-        read_only   = true
       }
 
       volume_mount {
