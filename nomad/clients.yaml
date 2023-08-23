@@ -91,9 +91,3 @@
         rule: allow
         proto: udp
         port: "20000:32000"
-        direction: in
-        interface: "{{ item }}"
-      loop:
-        - eth0
-        - wlan0
-        - tailscale0
