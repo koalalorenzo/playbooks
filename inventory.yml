@@ -34,7 +34,7 @@ all:
     storage0:
       extra_ssl_domains:
         - storage0.home.elates.it
-    compute0.local:
+    compute0:
       extra_ssl_domains:
         - compute0.home.elates.it
     compute1:
