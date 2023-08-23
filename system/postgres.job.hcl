@@ -77,6 +77,13 @@ job "postgres" {
       port "pgweb" { to = 8081 }
     }
 
+    restart {
+      delay    = "10s"
+      interval = "30s"
+      attempts = 3
+      mode     = "delay" 
+    }
+
     task "pgweb" {
       driver = "docker"
 
