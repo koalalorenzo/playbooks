@@ -1,0 +1,37 @@
+---
+- name: Configure WiFi and Ethernet
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: wifi.sops.yaml
+
+    - package:
+        name:
+          - wireless-tools
+          - wpasupplicant
+          - netplan.io
+        state: present
+
+    - copy:
+        dest: /etc/netplan/00-main.yaml
+        content: |
+          network:
+            version: 2
+            renderer: networkd
+            ethernets:
+              eth0:
+                dhcp4: true
+                dhcp6: true
+            wifis:
+              wlan0:
+                dhcp4: true
+                dhcp6: true
+                access-points:
+                  {{ wifi_networks | to_nice_yaml }}
+
+    - command: sudo netplan apply
+      async: 45
+      poll: 0
