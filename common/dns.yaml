@@ -11,14 +11,22 @@
       community.sops.load_vars:
         file: cloudflare.sops.yaml
 
+    - name: Deletes the old IPv4 address if present
+      cloudflare_dns:
+        api_token: "{{ cloudflare_api_token }}"
+        account_email: "{{ cloudflare_email }}"
+        zone: "{{ main_domain }}"
+        type: A
+        record: "{{ ansible_host }}.home.{{ main_domain }}"
+        state: absent
+
     - name: Create cloudflare CNAME records to tailscale
       cloudflare_dns:
         api_token: "{{ cloudflare_api_token }}"
         account_email: "{{ cloudflare_email }}"
         zone: "{{ main_domain }}"
-        record: "{{ ansible_host }}.{{ tailscale_domain }}"
-
         type: CNAME
+        record: "{{ ansible_host }}.{{ tailscale_domain }}"
         value: "{{ ansible_host }}.ts.{{ main_domain }}"
         ttl: 300
         state: present
