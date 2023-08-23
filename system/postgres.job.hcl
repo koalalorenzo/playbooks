@@ -4,11 +4,9 @@ job "postgres" {
   type        = "service"
   priority    = 80
 
-  # Prefer but not enforce to run on compute1
-  affinity {
-    attribute = "${attr.unique.hostname}"
-    value     = "compute1"
-    weight    = 100
+  constraint {
+    attribute = "${node.class}"
+    value     = "compute"
   }
 
   group "postgres" {
