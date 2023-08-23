@@ -8,6 +8,11 @@ job "restic-prune-remote" {
     prohibit_overlap = true
   }
 
+  constraint {
+    attribute = "${node.class}"
+    value     = "compute"
+  }
+
   group "restic" {
     task "restic" {
       driver = "exec"

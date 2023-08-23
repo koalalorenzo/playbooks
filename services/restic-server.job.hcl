@@ -9,6 +9,11 @@ job "restic-server" {
     weight    = 100
   }
 
+  constraint {
+    attribute = "${node.class}"
+    value     = "compute"
+  }
+
   group "main" {
     network {
       port "http" {}
