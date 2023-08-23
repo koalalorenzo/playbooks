@@ -55,8 +55,8 @@ job "postgres" {
         read_only   = false
       }
       resources {
-        cpu    = 500
-        memory = 250
+        cpu    = 1000
+        memory = 512
       }
       service {
         name = "postgres"
@@ -106,8 +106,8 @@ job "postgres" {
       }
 
       resources {
-        cpu    = 250
-        memory = 64
+        cpu    = 500
+        memory = 128
       }
 
       service {
