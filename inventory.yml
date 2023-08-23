@@ -51,7 +51,7 @@ all:
 
     nomadClients:
       vars:
-        node_class: ""
+        node_class: "compute"
         host_volumes:
           - name: "traefik"
             path: "/etc/traefik"
