@@ -24,7 +24,7 @@ job "nfs-storage-controller" {
         args = [
           "--type=controller",
           "--node-id=${attr.unique.hostname}",
-          "--nfs-server=192.168.197.151:/main/nfs",
+          "--nfs-server=192.168.197.125:/main/nfs",
           "--mount-options=defaults",
           "--allow-nested-volumes",
           "--log-level=DEBUG",
