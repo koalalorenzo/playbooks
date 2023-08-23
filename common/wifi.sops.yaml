@@ -1,16 +1,16 @@
 wifi_networks:
-    - ssid: ENC[AES256_GCM,data:kFOTSDywJJkyvF3tmHLawQ==,iv:EO/lxcHU1hQgBJ55+4U31bSICNFC+3/BpKDtmHaEdZI=,tag:qQZPTYSAvpdyPIVYlzICIg==,type:str]
-      psk: ENC[AES256_GCM,data:RrJH5ZKzqaBzxw==,iv:5wLiA9JJavD38jtKtNJaSXXvVDF/YDU2+69pR8c5gqo=,tag:lT6tpGi8yL2OF1zVn0AgNg==,type:str]
-    - ssid: ENC[AES256_GCM,data:aGVRHRlUNj8B/bKn/b+K2lAl,iv:x5nSwCdSiSqC2eySccTca7TI/EQU3pB6evAU+EPd2+c=,tag:+YWq+5c1BBgrkDIepEjKdA==,type:str]
-      psk: ENC[AES256_GCM,data:RrJH5ZKzqaBzxw==,iv:5wLiA9JJavD38jtKtNJaSXXvVDF/YDU2+69pR8c5gqo=,tag:lT6tpGi8yL2OF1zVn0AgNg==,type:str]
+    Look Ma No Wires:
+        password: ENC[AES256_GCM,data:FlIB0Axz2RacxA==,iv:QL3ueA78MGc4+bzv/az9qEBuR56faK4P79QjLYuEZh4=,tag:ozDz2+sPwW8ERla6s7hO7g==,type:str]
+    Look Ma, No Wires!:
+        password: ENC[AES256_GCM,data:qk3qRwRFK76i1g==,iv:xzbH4qiJ2f7o2MfGsKagW6YC4DVO15I7o3sKErAbLGM=,tag:p6YgPFTZnp8oKeXX68c4mQ==,type:str]
 sops:
     kms: []
     gcp_kms: []
     azure_kv: []
     hc_vault: []
     age: []
-    lastmodified: "2023-08-11T14:47:42Z"
-    mac: ENC[AES256_GCM,data:rcgkbke7SZktHjjaHO72yyQtyKBCCi+Ap+IiRpXM26LaTG2NToYAWEJBSu+w13cPgR3i9/2bi8UuF93q5pzQzTyNejOa0e9F0LwZ4+KmyIL+uaS6MgUaF2GrjRxWxKPU/wAgdkqFpoqfMCdk0KiSSxPZR0mLkw+bKKpWWIQFJwo=,iv:fzqTbTcegErilwc+8I3g1Ktudl7/HBktr8uLpR406E0=,tag:PXeIMbIFTtzceMEFT6sydA==,type:str]
+    lastmodified: "2023-08-23T18:35:58Z"
+    mac: ENC[AES256_GCM,data:SXhd4SKg0tl6xvGuQHkCjyAwLhbSFTAVGQEaj/VlJjA022gKQx6I7g9HAIfx4E/qE74RTH8Zfia6IzJe3V0zKaX3bPG0zRYkx+TD62R0zEKWp+gSe3vITvRPJ1/QYEsxQauw0gtGJU4W5EN4rShudBeF9sNuev0JXUII5pt6dU0=,iv:RoPhod+xjFdJzBbL44hIwBYek0/VcK1IZ4ucvavKBX4=,tag:MoJN393CLxzdxQ23FUwJnA==,type:str]
     pgp:
         - created_at: "2023-07-24T20:56:02Z"
           enc: |-

@@ -55,11 +55,11 @@
 
             reserved {
               {% if node_class == "storage"  %}
-              cpu    = 500  # OpenZFS
-              memory = 1024 # OpenZFS
+              cpu    = 1000 # OpenZFS
+              memory = 2048 # OpenZFS
               {% else %}
-              cpu    = 250
-              memory = 256
+              cpu    = 500
+              memory = 512
               {% endif %}
             }
           }
@@ -81,3 +81,13 @@
         - { proto: any, port: 8081 } # Traefik
         - { proto: any, port: 1900 } # Jellyfin DLNA / upnp
         - { proto: any, port: 7359 } # Jellyfin autodiscovery
+
+    - ufw:
+        rule: allow
+        proto: tcp
+        port: "20000:32000"
+
+    - ufw:
+        rule: allow
+        proto: udp
+        port: "20000:32000"
