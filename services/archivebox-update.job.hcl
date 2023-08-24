@@ -1,5 +1,4 @@
 job "archivebox-update" {
-  datacenters = ["dc1"]
   type        = "batch"
 
   periodic {
