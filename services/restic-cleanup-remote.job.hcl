@@ -1,4 +1,4 @@
-job "restic-remote-cleanup" {
+job "restic-cleanup-remote" {
   type     = "batch"
   priority = 60
 

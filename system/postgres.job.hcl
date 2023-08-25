@@ -98,7 +98,7 @@ job "postgres" {
         change_mode = "restart"
         data        = <<EOH
           {{- with nomadVar "nomad/jobs/postgres" -}}
-          PGWEB_DATABASE_URL=postgresql://{{ .username }}:{{ .password }}@{{ range service "postgres" }}{{ .Address }}:{{ .Port }}{{ end}}/?sslmode=disable
+          PGWEB_DATABASE_URL=postgresql://{{ .username }}:{{ .password }}@{{ range service "postgres" }}{{ .Address }}:{{ .Port }}{{ end }}/?sslmode=disable
           PGWEB_AUTH_USER={{ .username }}
           PGWEB_AUTH_PASS={{ .password }}
           {{- end -}}
