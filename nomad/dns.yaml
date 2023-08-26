@@ -1,6 +1,6 @@
 ---
 - name: Sets DNS records for hostname
-  hosts: all
+  hosts: nomadClients
   become: yes
   become_user: root
   become_method: sudo
@@ -9,7 +9,7 @@
   tasks:
     - name: Load encrypted credentials
       community.sops.load_vars:
-        file: cloudflare.sops.yaml
+        file: ../common/cloudflare.sops.yaml
 
     - name: Deletes the old IPv4 address if present (host)
       cloudflare_dns:

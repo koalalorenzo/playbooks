@@ -8,7 +8,6 @@ locals {
     "/dev/video15",
     "/dev/video16",
     "/dev/video18",
-    "/dev/video19",
     "/dev/video20",
     "/dev/video21",
     "/dev/video22",

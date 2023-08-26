@@ -4,3 +4,4 @@
 - import_playbook: nomad/servers.yaml
 - import_playbook: nomad/clients.yaml
 - import_playbook: nomad/clients-docker.yaml
+- import_playbook: nomad/dns.yaml

@@ -1,7 +1,6 @@
 ---
 - name: Common setup for Nomad machines
   hosts: nomad
-  serial: "20%"
   become: yes
   become_user: root
   become_method: sudo

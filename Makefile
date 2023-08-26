@@ -29,17 +29,17 @@ all: deps
 .PHONY: all
 
 apt_upgrade:
-	ansible all -i ./inventory.yaml --become \
-		-m apt -a "update_cache=yes cache_valid_time=86400"
-	ansible all -i ./inventory.yaml --become \
-		-m apt -a "upgrade=yes"
+	ansible all -i ./inventory.yml --become \
+		-m apt -a "update_cache=yes cache_valid_time=86400" ${ANSIBLE_ARGS}
+	ansible all -i ./inventory.yml --become \
+		-m apt -a "upgrade=full autoremove=true" ${ANSIBLE_ARGS}
 .PHONY: apt_upgrade
 
 ################################################################################
 # Nomad
 ################################################################################
 NOMAD_ARGS ?=
-NOMAD_JOB_CMD ?= plan
+NOMAD_JOB_CMD ?= run
 NOMAD_JOBS := $(wildcard */*.job.hcl)
 NOMAD_VOLUMES := $(wildcard */*.volume.hcl)
 NOMAD_VARIABLES := $(wildcard */*.vars.sops.hcl)

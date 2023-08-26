@@ -10,13 +10,11 @@
 
     - package:
         name:
-          - wireless-tools
-          - wpasupplicant
           - netplan.io
         state: present
 
     - copy:
-        dest: /etc/netplan/00-main.yaml
+        dest: /etc/netplan/80-eth0.yaml
         content: |
           network:
             version: 2
@@ -24,13 +22,18 @@
             ethernets:
               eth0:
                 dhcp4: true
-                dhcp6: true
+
+    - copy:
+        dest: /etc/netplan/80-wifi.yaml
+        content: |
+          network:
+            version: 2
+            renderer: networkd
             wifis:
               wlan0:
                 dhcp4: true
-                dhcp6: true
                 access-points:
-                  {{ wifi_networks | to_nice_yaml }}
+                  {{ wifi_networks | to_nice_yaml(indent=8) }}
 
     - command: sudo netplan apply
       async: 45
