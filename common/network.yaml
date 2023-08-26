@@ -10,8 +10,6 @@
 
     - package:
         name:
-          - wireless-tools
-          - wpasupplicant
           - netplan.io
         state: present
 
@@ -24,13 +22,6 @@
             ethernets:
               eth0:
                 dhcp4: true
-                dhcp6: true
-            wifis:
-              wlan0:
-                dhcp4: true
-                dhcp6: true
-                access-points:
-                  {{ wifi_networks | to_nice_yaml }}
 
     - copy:
         dest: /etc/netplan/80-wifi.yaml
@@ -41,7 +32,6 @@
             wifis:
               wlan0:
                 dhcp4: true
-                dhcp6: true
                 access-points:
                   {{ wifi_networks | to_nice_yaml }}
 
