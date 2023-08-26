@@ -32,6 +32,19 @@
                 access-points:
                   {{ wifi_networks | to_nice_yaml }}
 
+    - copy:
+        dest: /etc/netplan/80-wifi.yaml
+        content: |
+          network:
+            version: 2
+            renderer: networkd
+            wifis:
+              wlan0:
+                dhcp4: true
+                dhcp6: true
+                access-points:
+                  {{ wifi_networks | to_nice_yaml }}
+
     - command: sudo netplan apply
       async: 45
       poll: 0
