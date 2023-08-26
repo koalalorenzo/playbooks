@@ -16,7 +16,7 @@
         state: present
 
     - copy:
-        dest: /etc/netplan/00-main.yaml
+        dest: /etc/netplan/80-eth0.yaml
         content: |
           network:
             version: 2
