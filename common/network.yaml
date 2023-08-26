@@ -33,7 +33,7 @@
               wlan0:
                 dhcp4: true
                 access-points:
-                  {{ wifi_networks | to_nice_yaml }}
+                  {{ wifi_networks | to_nice_yaml(indent=8) }}
 
     - command: sudo netplan apply
       async: 45
