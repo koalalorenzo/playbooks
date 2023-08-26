@@ -26,8 +26,13 @@
             job_gc_interval = "15m"
             csi_volume_claim_gc_interval = "15m"
 
-            job_gc_threshold = "12h"
+            job_gc_threshold = "48h"
+
+            default_scheduler_config {
+              scheduler_algorithm = "spread"
+            }
             
+            # Delegated  to Consul
             # server_join {
             #   retry_join = [ {% for i in groups['nomadServers'] %}"{{ i }}:4647",{% endfor %} ]
             #   retry_max = 3
