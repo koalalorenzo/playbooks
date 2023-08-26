@@ -39,7 +39,7 @@ apt_upgrade:
 # Nomad
 ################################################################################
 NOMAD_ARGS ?=
-NOMAD_JOB_CMD ?= plan
+NOMAD_JOB_CMD ?= run
 NOMAD_JOBS := $(wildcard */*.job.hcl)
 NOMAD_VOLUMES := $(wildcard */*.volume.hcl)
 NOMAD_VARIABLES := $(wildcard */*.vars.sops.hcl)
