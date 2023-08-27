@@ -1,0 +1,50 @@
+---
+- name: Setup Nomad Jobs
+  hosts: nomadClients
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - file:
+        path: /tmp/nomad-services/
+        state: directory
+        mode: "0755"
+      run_once: true
+
+    - copy:
+        src: "{{ item }}"
+        dest: "/tmp/nomad-services/"
+      with_fileglob: "*.hcl"
+      run_once: true
+
+    - copy:
+        content: "{{ lookup('community.sops.sops', item) }}"
+        dest: "/tmp/nomad-services/{{ item | basename }}"
+      with_fileglob: "*.vars.sops.hcl"
+      run_once: true
+
+    - name: Setup Variables
+      shell: cat /tmp/nomad-services/{{ item | basename }} | nomad var put -in=hcl -force -
+      run_once: true
+      with_fileglob: "*.vars.sops.hcl"
+
+    - name: Setup Volumes
+      shell: nomad volume create /tmp/nomad-services/{{ item | basename }}
+      run_once: true
+      with_fileglob: "*.volume.hcl"
+
+    - name: Ensures healthchecks and GC ran
+      pause:
+        seconds: 16
+
+    - name: Set up Jobs
+      command: nomad run /tmp/nomad-services/{{ item | basename }}
+      run_once: true
+      with_fileglob: "*.job.hcl"
+      ignore_errors: true # Some job fails no matter what
+
+    - file:
+        path: /tmp/nomad-services/
+        state: absent
