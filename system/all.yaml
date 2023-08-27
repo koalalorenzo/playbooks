@@ -1,0 +1,61 @@
+---
+- name: Setup Basic System Nomad Jobs
+  hosts: nomadClients
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - file:
+        path: /tmp/nomad/
+        state: directory
+        mode: "0755"
+
+    - copy:
+        src: "{{ item }}"
+        dest: "/tmp/nomad/"
+      with_fileglob: "*.job.hcl"
+
+    - copy:
+        src: "{{ item }}"
+        dest: "/tmp/nomad/"
+      with_fileglob: "*.volume.hcl"
+
+    - copy:
+        content: "{{ lookup('community.sops.sops', item) }}"
+        dest: "/tmp/nomad/{{ item | basename }}"
+      with_fileglob: "*.vars.sops.hcl"
+
+    - name: Setup Variables
+      shell: cat /tmp/nomad/{{ item | basename }} | nomad var put -in=hcl -force -
+      run_once: true
+      with_fileglob: "*.vars.sops.hcl"
+
+    - name: Set up NFS CSI plugin (Controller)
+      command: nomad run /tmp/nomad/csi-nfs-controller.job.hcl
+      run_once: true
+
+    - name: Set up NFS CSI plugin (nodes)
+      command: nomad run /tmp/nomad/csi-nfs-nodes.job.hcl
+      run_once: true
+
+    - name: Set up Traefik
+      command: nomad run /tmp/nomad/traefik.job.hcl
+      run_once: true
+
+    - name: Ensures healthchecks are running and successfull
+      pause:
+        seconds: 15
+
+    - name: Set up Postgres Volume
+      command: nomad volume create /tmp/nomad/postgres.volume.hcl
+      run_once: true
+
+    - name: Set up Postgres
+      command: nomad run /tmp/nomad/postgres.job.hcl
+      run_once: true
+
+    - file:
+        path: /tmp/nomad
+        state: absent
