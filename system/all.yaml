@@ -11,21 +11,25 @@
         path: /tmp/nomad/
         state: directory
         mode: "0755"
+      run_once: true
 
     - copy:
         src: "{{ item }}"
         dest: "/tmp/nomad/"
       with_fileglob: "*.job.hcl"
+      run_once: true
 
     - copy:
         src: "{{ item }}"
         dest: "/tmp/nomad/"
       with_fileglob: "*.volume.hcl"
+      run_once: true
 
     - copy:
         content: "{{ lookup('community.sops.sops', item) }}"
         dest: "/tmp/nomad/{{ item | basename }}"
       with_fileglob: "*.vars.sops.hcl"
+      run_once: true
 
     - name: Setup Variables
       shell: cat /tmp/nomad/{{ item | basename }} | nomad var put -in=hcl -force -
