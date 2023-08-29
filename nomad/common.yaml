@@ -23,6 +23,7 @@
           - apt-transport-https
           - nfs-kernel-server
           - nfs-common
+          - bzip2
         update_cache: yes
         state: latest
 
