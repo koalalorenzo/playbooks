@@ -15,6 +15,7 @@
 
     - copy:
         dest: /etc/netplan/80-eth0.yaml
+        mode: "0600"
         content: |
           network:
             version: 2
@@ -25,6 +26,7 @@
 
     - copy:
         dest: /etc/netplan/80-wifi.yaml
+        mode: "0600"
         content: |
           network:
             version: 2
@@ -33,7 +35,12 @@
               wlan0:
                 dhcp4: true
                 access-points:
-                  {{ wifi_networks | to_nice_yaml(indent=8) }}
+                  {{ wifi_networks | to_nice_yaml(indent=8) | indent(8) }}
+
+    - name: Delete cloud-init netplan config
+      file:
+        state: absent
+        path: /etc/netplan/50-cloud-init.yaml
 
     - command: sudo netplan apply
       async: 45
