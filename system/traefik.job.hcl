@@ -118,6 +118,11 @@ entryPoints:
            - main: elates.it
            - main: home.elates.it
              sans: "*.home.elates.it"
+
+  dns:
+    address: ":53/tcp"
+  dns-udp:
+    address: ":53/udp"
   
   traefik:
     address: ":8081"
