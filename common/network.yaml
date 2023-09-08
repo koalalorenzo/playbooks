@@ -36,6 +36,8 @@
             ethernets:
               eth0:
                 dhcp4: true
+                nameservers:
+                  addresses: [1.1.1.1, 1.0.0.1]
       notify: Reconfigure netplan
 
     - copy:
@@ -48,6 +50,8 @@
             wifis:
               wlan0:
                 dhcp4: true
+                nameservers:
+                  addresses: [1.1.1.1, 1.0.0.1]
                 access-points:
                   {{ wifi_networks | to_nice_yaml(indent=8) | indent(8) }}
       notify: Reconfigure netplan
