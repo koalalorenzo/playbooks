@@ -92,3 +92,10 @@
         rule: allow
         proto: udp
         port: "20000:32000"
+
+    - name: Stop and disable systemd-resolved service
+      service:
+        name: systemd-resolved
+        state: stopped
+        enabled: no
+      ignore_errors: true
