@@ -3,6 +3,18 @@
   hosts: all
   become: yes
 
+  handlers:
+    - name: Reconfigure netplan
+      command: sudo netplan apply
+      async: 45
+      poll: 0
+
+    - name: Restsart resolved
+      service:
+        name: systemd-resolved
+        state: restarted
+        enabled: yes
+
   tasks:
     - name: Load encrypted credentials
       community.sops.load_vars:
@@ -12,6 +24,7 @@
         name:
           - netplan.io
         state: present
+      notify: Reconfigure netplan
 
     - copy:
         dest: /etc/netplan/80-eth0.yaml
@@ -23,6 +36,7 @@
             ethernets:
               eth0:
                 dhcp4: true
+      notify: Reconfigure netplan
 
     - copy:
         dest: /etc/netplan/80-wifi.yaml
