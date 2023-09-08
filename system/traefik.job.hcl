@@ -26,6 +26,10 @@ job "traefik" {
     }
 
     network {
+      port "dns" {
+        static = 53
+      }
+      
       port "http" {
         static = 80
       }
@@ -33,6 +37,11 @@ job "traefik" {
       port "https" {
         static = 443
       }
+
+      port "dns-tls" {
+        static = 853
+      }
+
 
       port "api" {
         static = 8081
@@ -123,6 +132,10 @@ entryPoints:
     address: ":53/tcp"
   dns-udp:
     address: ":53/udp"
+  dns-tls:
+    address: ":853/tcp"
+  dns-quick:
+    address: ":853/udp"
   
   traefik:
     address: ":8081"
