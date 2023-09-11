@@ -2,8 +2,16 @@ job "adguard" {
   type        = "service"
 
   group "home" {
+    restart {
+      delay = "5s"
+      interval = "30s"
+      attempts = 3
+      mode = "delay"
+    }
+
     network {
       port "http" {
+        # Note that after the initial config, we need to set the port to 3000
         to = 3000
       }
       
