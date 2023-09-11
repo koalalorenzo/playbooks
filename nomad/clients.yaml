@@ -76,8 +76,10 @@
         port: "{{ item.port }}"
         rule: allow
       loop:
+        - { proto: any, port: 53 } # DNS / PiHole, AdGuard or Unbound
         - { proto: any, port: 80 } # HTTP
         - { proto: any, port: 443 } # HTTPS
+        - { proto: any, port: 853 } # DNS over TLS / QUIC
         - { proto: any, port: 8081 } # Traefik
         - { proto: any, port: 1900 } # Jellyfin DLNA / upnp
         - { proto: any, port: 7359 } # Jellyfin autodiscovery

@@ -26,6 +26,10 @@ job "traefik" {
     }
 
     network {
+      port "dns" {
+        static = 53
+      }
+      
       port "http" {
         static = 80
       }
@@ -33,6 +37,7 @@ job "traefik" {
       port "https" {
         static = 443
       }
+
 
       port "api" {
         static = 8081
@@ -118,6 +123,9 @@ entryPoints:
            - main: elates.it
            - main: home.elates.it
              sans: "*.home.elates.it"
+
+  dns-udp:
+    address: ":53/udp"
   
   traefik:
     address: ":8081"

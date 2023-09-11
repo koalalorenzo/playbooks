@@ -57,7 +57,9 @@
                 - __name__
             consul_exporter:
               enabled: true
-              server: "{{ ansible_hostname }}:8500"
+              relabel_configs:
+                - replacement: {{ ansible_hostname }}
+                  target_label: instance
             # Add here any snippet that belongs to the `integrations` section.
             # For a correct indentation, paste snippets copied from Grafana Cloud at the beginning of the line.
             node_exporter:

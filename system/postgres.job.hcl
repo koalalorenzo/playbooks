@@ -4,12 +4,12 @@ job "postgres" {
   type        = "service"
   priority    = 80
 
-  constraint {
-    attribute = "${node.class}"
-    value     = "compute"
-  }
-
   group "postgres" {
+    constraint {
+      attribute = "${node.class}"
+      value     = "storage"
+    }
+
     restart {
       attempts = 5
       interval = "30m"
@@ -73,6 +73,11 @@ job "postgres" {
   }
 
   group "pgweb" {
+    constraint {
+      attribute = "${node.class}"
+      value     = "compute"
+    }
+    
     network {
       port "pgweb" { to = 8081 }
     }
