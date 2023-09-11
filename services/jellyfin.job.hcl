@@ -82,7 +82,7 @@ job "jellyfin" {
         EOF
       }
 
-      
+
       volume_mount {
         volume      = "multimedia"
         destination = "/data"

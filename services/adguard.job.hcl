@@ -67,7 +67,7 @@ job "adguard" {
         interval = "10s"
         timeout  = "2s"
 
-        success_before_passing = 1
+        success_before_passing   = 1
         failures_before_critical = 3
       }
     }

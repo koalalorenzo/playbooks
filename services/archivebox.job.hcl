@@ -16,7 +16,7 @@ job "archivebox" {
     network {
       port "http" {}
 
-      port "archivebox"{
+      port "archivebox" {
         to = 8000
       }
     }
@@ -34,7 +34,7 @@ job "archivebox" {
         image = "nginx:alpine"
 
         volumes = ["local/default:/etc/nginx/conf.d/default.conf"]
-        ports = ["http"]
+        ports   = ["http"]
       }
 
       template {
@@ -59,7 +59,7 @@ job "archivebox" {
         EOF
       }
 
-      
+
       service {
         name = "archivebox-cache"
         port = "http"
@@ -85,11 +85,11 @@ job "archivebox" {
         ports = ["archivebox"]
       }
 
-      
-    service {
-      name = "archivebox"
-      port = "archivebox"
-    }
+
+      service {
+        name = "archivebox"
+        port = "archivebox"
+      }
 
 
       volume_mount {
