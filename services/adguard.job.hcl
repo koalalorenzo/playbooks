@@ -24,9 +24,16 @@ job "adguard" {
       }
     }
 
-    volume "adguard" {
+    volume "work" {
       type            = "csi"
-      source          = "adguard"
+      source          = "adguard-work"
+      attachment_mode = "file-system"
+      access_mode     = "single-node-writer"
+    }
+
+    volume "config" {
+      type            = "csi"
+      source          = "adguard-config"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
@@ -62,8 +69,13 @@ job "adguard" {
       }
       
       volume_mount {
-        volume      = "adguard"
-        destination = "/config"
+        volume      = "work"
+        destination = "/opt/adguardhome/work"
+      }
+      
+      volume_mount {
+        volume      = "config"
+        destination = "/opt/adguardhome/conf"
       }
 
       resources {
