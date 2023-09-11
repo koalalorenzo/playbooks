@@ -4,7 +4,7 @@ job "adguard" {
   group "home" {
     network {
       port "http" {
-        to = 80
+        to = 3000
       }
       
       port "dns" {
@@ -29,8 +29,31 @@ job "adguard" {
 
       tags = [
         "traefik.enable=true",
+        "traefik.tcp.routers.adguard-dns-tls.entrypoints=dns-tls",
         "traefik.http.routers.adguard.rule=Host(`dns.elates.it`)",
         "traefik.http.routers.adguard.tls.certresolver=letsencrypt",
+      ]
+    }
+    
+    service {
+      name = "adguard-dns-tls"
+      port = "dns-tls"
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.tcp.routers.adguard-dns-tls.entrypoints=dns-quic,dns-tls",
+        "traefik.tcp.routers.adguard-dns-tls.rule=HostSNI(`dns.elates.it`)",
+        "traefik.tcp.routers.adguard-dns-tls.tls.certresolver=letsencrypt",
+      ]
+    }
+
+    service {
+      name = "adguard-dns"
+      port = "dns"
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.udp.routers.adguard-dns.entrypoints=dns-udp",
       ]
     }
 

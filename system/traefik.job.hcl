@@ -134,7 +134,7 @@ entryPoints:
     address: ":53/udp"
   dns-tls:
     address: ":853/tcp"
-  dns-quick:
+  dns-quic:
     address: ":853/udp"
   
   traefik:
