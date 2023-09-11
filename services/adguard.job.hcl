@@ -44,10 +44,22 @@ job "adguard" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.adguard-dns-tls.entrypoints=web,websecure",
+        "traefik.http.routers.adguard.entrypoints=web,websecure",
         "traefik.http.routers.adguard.rule=Host(`dns.elates.it`)",
         "traefik.http.routers.adguard.tls.certresolver=letsencrypt",
       ]
+
+      check {
+        name     = "adguard-http"
+        type     = "http"
+        interval = "10s"
+        timeout  = "2s"
+
+        check_restart {
+          limit = 3
+          grace = "30s"
+        }
+      }
     }
     
     service {
