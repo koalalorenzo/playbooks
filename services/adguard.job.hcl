@@ -29,24 +29,12 @@ job "adguard" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.tcp.routers.adguard-dns-tls.entrypoints=dns-tls",
+        "traefik.http.routers.adguard-dns-tls.entrypoints=web,websecure",
         "traefik.http.routers.adguard.rule=Host(`dns.elates.it`)",
         "traefik.http.routers.adguard.tls.certresolver=letsencrypt",
       ]
     }
     
-    service {
-      name = "adguard-dns-tls"
-      port = "dns-tls"
-
-      tags = [
-        "traefik.enable=true",
-        "traefik.tcp.routers.adguard-dns-tls.entrypoints=dns-quic,dns-tls",
-        "traefik.tcp.routers.adguard-dns-tls.rule=HostSNI(`dns.elates.it`)",
-        "traefik.tcp.routers.adguard-dns-tls.tls.certresolver=letsencrypt",
-      ]
-    }
-
     service {
       name = "adguard-dns"
       port = "dns"

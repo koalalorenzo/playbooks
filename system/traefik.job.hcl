@@ -38,10 +38,6 @@ job "traefik" {
         static = 443
       }
 
-      port "dns-tls" {
-        static = 853
-      }
-
 
       port "api" {
         static = 8081
@@ -128,14 +124,8 @@ entryPoints:
            - main: home.elates.it
              sans: "*.home.elates.it"
 
-  dns:
-    address: ":53/tcp"
   dns-udp:
     address: ":53/udp"
-  dns-tls:
-    address: ":853/tcp"
-  dns-quic:
-    address: ":853/udp"
   
   traefik:
     address: ":8081"
