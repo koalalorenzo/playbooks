@@ -39,18 +39,9 @@ job "shiori" {
         env         = true
         change_mode = "restart"
         data        = <<EOH
-          SHIORI_DBMS=postgresql
-          {{ with nomadVar "nomad/jobs/shiori" }}
-          SHIORI_PG_USER={{ .SHIORI_PG_USER }}
-          SHIORI_PG_PASS={{ .SHIORI_PG_PASS }}
-          SHIORI_PG_NAME={{ .SHIORI_PG_NAME }}
-          {{ end }}
-
           {{ range service "postgres" }}
-          SHIORI_PG_HOST={{ .Address }}
-          SHIORI_PG_PORT={{ .Port }}
+            SHIORI_DATABASE_URL=postgres://{{ with nomadVar "nomad/jobs/shiori" }}{{ .POSTGRES_USERNAME }}:{{ .POSTGRES_PASSWORD }}{{ end }}@{{ .Address }}:{{ .Port }}/shiori?sslmode=disable
           {{ end }}
-          SHIORI_PG_SSLMODE=disable
         EOH
       }
 
