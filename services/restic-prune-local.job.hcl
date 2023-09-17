@@ -54,7 +54,7 @@ job "restic-prune-local" {
           # ./restic repair index
           # ./restic repair snapshots --forget
         
-          restic prune
+          ./restic prune
         EOF
       }
 

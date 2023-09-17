@@ -53,7 +53,7 @@ job "restic-prune-remote" {
           # ./restic repair index
           # ./restic repair snapshots --forget
         
-          restic prune
+          ./restic prune
         EOF
       }
 
