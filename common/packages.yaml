@@ -30,6 +30,7 @@
           - vim
           - scdaemon
           - pcsc-tools
+          - tmux
 
     - name: Upgrade System Packages
       apt:
