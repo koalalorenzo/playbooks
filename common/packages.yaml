@@ -23,7 +23,6 @@
           - openssh-server
           - openssl
           - python3
-          - screen
           - software-properties-common
           - ufw
           - unzip
