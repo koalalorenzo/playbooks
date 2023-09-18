@@ -33,6 +33,7 @@
           - ufw
           - unzip
           - vim
+          - scdaemon
 
     - name: Install optional packages (ok to fail)
       package:
