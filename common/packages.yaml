@@ -27,9 +27,8 @@
           - ufw
           - unzip
           - vim
-          - scdaemon
-          - pcsc-tools
           - tmux
+          - yubikey-manager
 
     - name: Upgrade System Packages
       apt:
