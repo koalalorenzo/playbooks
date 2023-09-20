@@ -97,6 +97,7 @@ job "adguard" {
     }
   }
 
+  # Manual updates 
   update {
     max_parallel     = 1
     canary           = 1
@@ -104,6 +105,14 @@ job "adguard" {
     healthy_deadline = "1m"
     auto_revert      = true
     auto_promote     = true
+  }
+
+  # Migrations during node draining
+  migrate {
+    max_parallel     = 1
+    health_check     = "checks"
+    min_healthy_time = "30s"
+    healthy_deadline = "1m"
   }
 }
 
