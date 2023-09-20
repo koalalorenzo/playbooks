@@ -54,8 +54,8 @@ job "nix-serve" {
 
       config {
         image = "nixos/nix"
-        command = "/run/current-system/sw/bin/nix"
-        args    = ["run","github:edolstra/nix-serve"]
+        command = "/bin/sh"
+        args    = ["local/start.sh"]
         ports = ["http"]
       }
 
