@@ -60,16 +60,6 @@ job "adguard" {
         "traefik.enable=true",
         "traefik.udp.routers.adguard-dns.entrypoints=dns-udp",
       ]
-
-      check {
-        name     = "adguard-http"
-        type     = "tcp"
-        interval = "10s"
-        timeout  = "2s"
-
-        success_before_passing   = 1
-        failures_before_critical = 3
-      }
     }
 
     task "resolver" {
