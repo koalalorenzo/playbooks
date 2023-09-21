@@ -30,14 +30,14 @@ job "adguard" {
       type            = "csi"
       source          = "adguard-work"
       attachment_mode = "file-system"
-      access_mode     = "single-node-writer"
+      access_mode     = "multi-node-multi-writer"
     }
 
     volume "config" {
       type            = "csi"
       source          = "adguard-config"
       attachment_mode = "file-system"
-      access_mode     = "single-node-writer"
+      access_mode     = "multi-node-multi-writer"
     }
 
     service {
