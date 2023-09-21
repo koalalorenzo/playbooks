@@ -1,5 +1,6 @@
 job "adguard" {
   type = "service"
+  priority = 90
 
   constraint {
     attribute = "${node.class}"
