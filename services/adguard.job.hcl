@@ -31,16 +31,9 @@ job "adguard" {
       }
     }
 
-    volume "work" {
+    volume "data" {
       type            = "csi"
-      source          = "adguard-work"
-      attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
-    }
-
-    volume "config" {
-      type            = "csi"
-      source          = "adguard-config"
+      source          = "adguard"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
@@ -96,10 +89,11 @@ job "adguard" {
         image = "adguard/adguardhome"
         volumes = ["local:/opt/adguardhome/conf"]
         ports = ["http", "dns"]
+        dns_servers = ["1.1.1.1","1.0.0.1"]
       }
 
       volume_mount {
-        volume      = "work"
+        volume      = "data"
         destination = "/opt/adguardhome/work"
       }
 
@@ -119,7 +113,7 @@ users:
     password: {{ .PASSWORD }}
 {{ end }}
 auth_attempts: 5
-block_auth_min: 15
+block_auth_min: 1
 http_proxy: ""
 language: ""
 theme: auto
@@ -128,7 +122,7 @@ dns:
     - 0.0.0.0
   port: 53
   anonymize_client_ip: false
-  ratelimit: 20
+  ratelimit: 60
   ratelimit_whitelist: []
   refuse_any: true
   upstream_dns:
@@ -196,8 +190,8 @@ tls:
   strict_sni_check: false
 querylog:
   ignored: []
-  interval: 720h
-  size_memory:1000
+  interval: 168h
+  size_memory: 1000
   enabled: true
   file_enabled: true
 statistics:
