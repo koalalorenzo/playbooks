@@ -42,21 +42,19 @@ job "nix-serve" {
         type = "http"
         path = "/nix-cache-info"
 
-        interval                 = "120s"
+        interval                 = "300s"
         timeout                  = "10s"
         success_before_passing   = 1
         failures_before_critical = 3
       }
     }
 
-    task "resolver" {
-      driver = "docker"
+    task "serve" {
+      driver = "exec"
 
       config {
-        image = "nixos/nix"
-        command = "/bin/sh"
+        command = "/bin/bash"
         args    = ["local/start.sh"]
-        ports = ["http"]
       }
 
       volume_mount {
@@ -68,7 +66,7 @@ job "nix-serve" {
         destination   = "local/start.sh"
         change_mode   = "signal"
         change_signal = "SIGINT"
-        perms         = "0755"
+        perms         = "0777"
 
         data = <<EOF
           #!/usr/bin/env bash
@@ -80,7 +78,7 @@ job "nix-serve" {
 
       resources {
         cpu    = 1000
-        memory = 1024
+        memory = 512
       }
     }
   }
