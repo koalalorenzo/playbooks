@@ -15,6 +15,10 @@ job "adguard" {
     }
 
     network {
+      dns {
+        servers = ["1.1.1.1", "1.0.0.1"]
+      }
+
       port "http" {
         # Note that after the initial config, 
         # we need to set the port to 3000
@@ -50,6 +54,18 @@ job "adguard" {
         "traefik.http.routers.adguard.rule=Host(`dns.elates.it`)",
         "traefik.http.routers.adguard.tls.certresolver=letsencrypt",
       ]
+
+      check {
+        name     = "adguard-http"
+        type     = "http"
+        path     = "/"
+        interval = "30s"
+        timeout  = "5s"
+
+        success_before_passing   = 1
+        failures_before_critical = 3
+      }
+      
     }
 
     service {
@@ -62,7 +78,7 @@ job "adguard" {
       ]
 
       check {
-        name     = "adguard-http"
+        name     = "adguard-dns"
         type     = "tcp"
         interval = "10s"
         timeout  = "2s"
