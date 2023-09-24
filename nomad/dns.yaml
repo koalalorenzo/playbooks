@@ -49,7 +49,7 @@
         value: "{{ item }}"
         type: A
         record: "home.{{ main_domain }}"
-        ttl: 60
+        ttl: 1800
         state: present
       loop: "{{ (ansible_all_ipv4_addresses | ansible.utils.ipaddr('192.168.0.0/16')) + (ansible_all_ipv4_addresses | ansible.utils.ipaddr('100.64.0.0/10')) }}"
       when: item | ansible.utils.ipv4
@@ -62,7 +62,7 @@
         value: "{{ item }}"
         type: A
         record: "{{ ansible_host }}.home.{{ main_domain }}"
-        ttl: 60
+        ttl: 900
         state: present
       loop: "{{ (ansible_all_ipv4_addresses | ansible.utils.ipaddr('192.168.0.0/16')) + (ansible_all_ipv4_addresses | ansible.utils.ipaddr('100.64.0.0/10')) }}"
       when: item | ansible.utils.ipv4
