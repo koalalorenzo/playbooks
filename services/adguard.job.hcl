@@ -46,7 +46,7 @@ job "adguard" {
         name     = "adguard-http"
         type     = "http"
         path     = "/"
-        interval = "30s"
+        interval = "60s"
         timeout  = "5s"
 
         success_before_passing   = 1
@@ -141,7 +141,7 @@ dns:
   cache_size: 4194304
   cache_ttl_min: 60
   cache_ttl_max: 43200
-  cache_optimistic: true
+  cache_optimistic: false
   bogus_nxdomain: []
   aaaa_disabled: true
   enable_dnssec: true
