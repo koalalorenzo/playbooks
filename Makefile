@@ -58,7 +58,7 @@ $(NOMAD_JOBS):
 
 nomad_system:
 	$(MAKE) $(wildcard system/*.job.hcl) -e NOMAD_ARGS="-detach"
-	sleep 5
+	sleep 30
 	$(MAKE) $(wildcard system/*.volume.hcl)
 	$(MAKE) $(wildcard system/*.vars.sops.hcl)
 
