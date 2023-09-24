@@ -31,13 +31,6 @@ job "adguard" {
       }
     }
 
-    volume "data" {
-      type            = "csi"
-      source          = "adguard"
-      attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
-    }
-
     service {
       name = "adguard-http"
       port = "http"
@@ -87,14 +80,10 @@ job "adguard" {
 
       config {
         image = "adguard/adguardhome"
+        force_pull = false
         volumes = ["local:/opt/adguardhome/conf"]
         ports = ["http", "dns"]
         dns_servers = ["1.1.1.1","1.0.0.1"]
-      }
-
-      volume_mount {
-        volume      = "data"
-        destination = "/opt/adguardhome/work"
       }
 
       template {
@@ -171,8 +160,8 @@ dns:
   local_ptr_upstreams: []
   use_dns64: false
   dns64_prefixes: []
-  serve_http3: false
-  use_http3_upstreams: false
+  serve_http3: true
+  use_http3_upstreams: true
 tls:
   enabled: false
   server_name: dns.elates.it
@@ -203,150 +192,126 @@ filters:
     url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
     name: AdGuard DNS filter
     id: 1
+  # Suspicious
   - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt
-    name: AdAway Default Blocklist
-    id: 2
+    url: https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
+    name: KADHosts
+    id: 3
   - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_44.txt
-    name: HaGeZi's Threat Intelligence Feeds
-    id: 1694430533
+    url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
+    name: FadeMind-hosts
+    id: 4
   - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_12.txt
-    name: Dandelion Sprout's Anti-Malware List
-    id: 1694430534
+    url: https://v.firebog.net/hosts/static/w3kbl.txt
+    name: firebog.net-w3kbl
+    id: 5
   - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_18.txt
-    name: Phishing Army
-    id: 1694430535
+    url: https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
+    name: Matomo spam list
+    id: 6
   - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_30.txt
-    name: Phishing URL Blocklist (PhishTank and OpenPhish)
-    id: 1694430536
+    url: https://v.firebog.net/hosts/neohostsbasic.txt
+    name: Firebog-NeoHostsBasic
+    id: 7
+  # Advertising
   - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_10.txt
-    name: Scam Blocklist by DurableNapkin
-    id: 1694430537
+    url: https://adaway.org/hosts.txt
+    id: 8
+    name: adaway
   - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_8.txt
-    name: NoCoin Filter List
-    id: 1694430538
+    url: https://v.firebog.net/hosts/Admiral.txt
+    id: 9 
+    name: Admiral
   - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_23.txt
-    name: WindowsSpyBlocker - Hosts spy rules
-    id: 1694430539
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_31.txt
-    name: Stalkerware Indicators List
-    id: 1694430540
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_9.txt
-    name: The Big List of Hacked Malware Web Sites
-    id: 1694430541
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_34.txt
-    name: HaGeZi Multi NORMAL
-    id: 1694430542
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_42.txt
-    name: ShadowWhisperer's Malware List
-    id: 1694430543
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_11.txt
-    name: Malicious URL Blocklist (URLHaus)
-    id: 1694430544
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_32.txt
-    name: The NoTracking blocklist
-    id: 1694430545
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_38.txt
-    name: 1Hosts (mini)
-    id: 1694452742
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_47.txt
-    name: HaGeZi's Gambling Blocklist
-    id: 1694452743
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_7.txt
-    name: Perflyst and Dandelion Sprout's Smart-TV Blocklist
-    id: 1694452744
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_27.txt
-    name: OISD Blocklist Big
-    id: 1694452745
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_6.txt
-    name: Dandelion Sprout's Game Console Adblock List
-    id: 1694452746
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_5.txt
-    name: OISD Blocklist Small
-    id: 1694452747
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_4.txt
-    name: Dan Pollock's List
-    id: 1694544263
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_24.txt
-    name: 1Hosts (Lite)
-    id: 1694544264
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_33.txt
-    name: Steven Black's List
-    id: 1694544265
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_3.txt
-    name: Peter Lowe's Blocklist
-    id: 1694544266
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_46.txt
-    name: HaGeZi's Anti-Piracy Blocklist
-    id: 1694544267
-  - enabled: true
-    url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_17.txt
-    name: "SWE: Frellwit's Swedish Hosts File"
-    id: 1694544268
+    url: https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
+    id: 10
+    name: anudeepND
   - enabled: true
     url: https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
-    name: disconnect.me
-    id: 1695046789
+    id: 11
+    name: disconnect-simplead
   - enabled: true
-    url: https://raw.githubusercontent.com/AdguardTeam/AdguardFilters/master/MobileFilter/sections/specific_app.txt
-    name: AdguardTeam Mobile Ad
-    id: 1695046790
+    url: https://v.firebog.net/hosts/Easylist.txt
+    id: 12
+    name: Easylist
   - enabled: true
-    url: https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Formats/GoodbyeAds-AdBlock-Filter.txt
-    name: Goodbye Ads - Generic
-    id: 1695046791
+    url: https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+    id: 13
+    name: yoyo-ads
   - enabled: true
-    url: https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Formats/GoodbyeAds-YouTube-AdBlock-Filter.txt
-    name: Goodbye Ads - Youtube
-    id: 1695046792
+    url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
+    id: 14
+    name: Fademind
   - enabled: true
-    url: https://raw.githubusercontent.com/DandelionSprout/adfilt/master/NorwegianExperimentalList%20alternate%20versions/NordicFiltersAdGuardHome.txt
-    name: Nordic filter
-    id: 1695281457
+    url: https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
+    id: 15
+    name: bigdargon
   - enabled: true
-    url: https://raw.githubusercontent.com/AdguardTeam/cname-trackers/master/data/combined_disguised_trackers.txt
-    name: AdGuard CNAME disguised trackers list
-    id: 1695281458
+    url: https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts
+    id: 16
+    name: jdlingyu
+  # Tracking
   - enabled: true
-    url: https://raw.githubusercontent.com/nextdns/native-tracking-domains/main/domains/windows
-    name: NextDNS - Windows Privacy
-    id: 1695281459
+    url: https://v.firebog.net/hosts/Easyprivacy.txt
+    name: firebog-easyprivacy
+    id: 17
   - enabled: true
-    url: https://raw.githubusercontent.com/nextdns/native-tracking-domains/main/domains/samsung
-    name: NextDNS - Samsung
-    id: 1695281460
+    url: https://v.firebog.net/hosts/Prigent-Ads.txt
+    name: firebog-prigent-ads
+    id: 18
   - enabled: true
-    url: https://easylist-downloads.adblockplus.org/antiadblockfilters.txt
-    name: Adblock Warning Removal List
-    id: 1695281461
+    url: https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
+    name: add-2o7Net
+    id: 19
+  - enabled: true
+    url: https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+    name: windows-spy
+    id: 20
+  - enabled: true
+    url: https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
+    name: frogeye-trackers
+    id: 21
+  - enabled: true
+    url: https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
+    name: ads-and-tracking
+    id: 22
+  - enabled: true
+    url: https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/android-tracking.txt
+    name: android-tracking
+    id: 23
+  - enabled: true
+    url: https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt
+    name: smart-tv
+    id: 24
+  - enabled: true
+    url: https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/AmazonFireTV.txt
+    name: amazon-fire-tv
+    id: 25
+  # Malicious
+  - enabled: true
+    url: https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
+    name: Dandelion-AntiMalware
+    id: 26
   - enabled: true
     url: https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
-    name: Threat-Intel - Security
-    id: 1695281462
+    name: Threat-Intel
+    id: 27
+  - enabled: true
+    url: https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
+    name: disconnect-me-malware
+    id: 28
+  - enabled: true
+    url: https://phishing.army/download/phishing_army_blocklist_extended.txt
+    name: phisshing-army
+    id: 29
+  - enabled: true
+    url: https://v.firebog.net/hosts/RPiList-Malware.txt
+    name: Firebog-RPIList-Malware
+    id: 30
+  - enabled: true
+    url: https://v.firebog.net/hosts/RPiList-Phishing.txt
+    name: Firebog-RPIList-Phishing
+    id: 31
 whitelist_filters: []
 user_rules:
   - "@@||icloud.com^"
@@ -435,8 +400,8 @@ schema_version: 27
 
 
       resources {
-        cpu    = 1500
-        memory = 1536
+        cpu    = 1000
+        memory = 1024
       }
     }
   }
@@ -445,8 +410,8 @@ schema_version: 27
   update {
     max_parallel     = 1
     canary           = 1
-    min_healthy_time = "30s"
-    healthy_deadline = "1m"
+    min_healthy_time = "1m"
+    healthy_deadline = "2m"
     auto_revert      = true
     auto_promote     = true
   }
@@ -455,8 +420,8 @@ schema_version: 27
   migrate {
     max_parallel     = 1
     health_check     = "checks"
-    min_healthy_time = "30s"
-    healthy_deadline = "1m"
+    min_healthy_time = "1m"
+    healthy_deadline = "2m"
   }
 }
 
