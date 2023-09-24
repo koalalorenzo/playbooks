@@ -59,7 +59,10 @@ job "nix-serve" {
           . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
           set -ex
 
-          nix --extra-experimental-features "nix-command flakes" run nixpkgs\#nix-serve -- --port {{ env `NOMAD_PORT_http` }}
+          nix --extra-experimental-features "nix-command flakes" \
+            run nixpkgs\#nix-serve -- \
+             --port {{ env `NOMAD_PORT_http` }} \
+             --workers 2
         EOF
       }
 
