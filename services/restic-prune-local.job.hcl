@@ -3,7 +3,7 @@ job "restic-prune-local" {
   priority = 60
 
   periodic {
-    cron             = "@weekly"
+    crons            = ["@weekly"]
     time_zone        = "CET"
     prohibit_overlap = true
   }

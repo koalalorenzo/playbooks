@@ -2,7 +2,7 @@ job "shiori-update" {
   type = "batch"
 
   periodic {
-    cron             = "45 5 * * *"
+    crons            = ["45 5 * * *"]
     prohibit_overlap = true
     time_zone        = "CET"
   }

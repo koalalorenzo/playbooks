@@ -3,7 +3,7 @@ job "restic-cleanup-remote" {
   priority = 60
 
   periodic {
-    cron             = "@daily"
+    crons            = ["@daily"]
     time_zone        = "CET"
     prohibit_overlap = true
   }
