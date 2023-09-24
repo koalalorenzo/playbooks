@@ -54,6 +54,7 @@
 
     - name: Set up Postgres Volume
       command: nomad volume create /tmp/nomad/postgres.volume.hcl
+      ignore_errors: true
       run_once: true
 
     - name: Set up Postgres
