@@ -1,5 +1,5 @@
-id        = "adguard-work"
-name      = "adguard-work"
+id        = "adguard"
+name      = "adguard"
 type      = "csi"
 plugin_id = "nfs"
 

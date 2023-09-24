@@ -1,0 +1,21 @@
+---
+- name: Reset Nomad and redeploy (Raft)
+  hosts: nomadClients
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  tasks:
+    - name: Stop Nomad
+      service: name=nomad state=stopped
+
+    - file:
+        path: /opt/nomad/data/server/raft
+        state: absent
+
+    - name: Stop Nomad
+      service: name=nomad state=restarted
+
+- import_playbook: ../system/all.yaml
+- import_playbook: ../services/all.yaml

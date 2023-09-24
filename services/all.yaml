@@ -34,6 +34,7 @@
       shell: nomad volume create /tmp/nomad-services/{{ item | basename }}
       run_once: true
       with_fileglob: "*.volume.hcl"
+      ignore_errors: true
 
     - name: Ensures healthchecks and GC ran
       pause:

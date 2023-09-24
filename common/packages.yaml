@@ -18,16 +18,14 @@
           - acl
           - ca-certificates
           - curl
-          - dnsutils
           - gnupg
           - openssh-server
+          - mosh
           - openssl
           - python3
           - software-properties-common
           - ufw
           - unzip
-          - vim
-          - tmux
           - yubikey-manager
 
     - name: Upgrade System Packages

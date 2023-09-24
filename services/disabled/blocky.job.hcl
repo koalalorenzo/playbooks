@@ -1,4 +1,4 @@
-job "adguard" {
+job "blocky" {
   type = "service"
   priority = 90
 
@@ -10,7 +10,7 @@ job "adguard" {
   group "home" {
     restart {
       delay    = "5s"
-      interval = "30s"
+      interval = "20s"
       attempts = 3
       mode     = "delay"
     }

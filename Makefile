@@ -53,8 +53,14 @@ $(NOMAD_VOLUMES):
 .PHONY: $(NOMAD_VOLUMES)
 
 $(NOMAD_JOBS):
-	nomad $(NOMAD_JOB_CMD) $@
+	nomad $(NOMAD_JOB_CMD) ${NOMAD_ARGS} $@
 .PHONY: $(NOMAD_JOBS)
+
+nomad_system:
+	$(MAKE) $(wildcard system/*.vars.sops.hcl)
+	$(MAKE) $(wildcard system/*.job.hcl) -e NOMAD_ARGS="-detach"
+	sleep 30
+	$(MAKE) $(wildcard system/*.volume.hcl)
 
 nomad_variables: $(NOMAD_VARIABLES)
 nomad_volumes: $(NOMAD_VOLUMES)
