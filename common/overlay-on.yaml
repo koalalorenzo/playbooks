@@ -36,8 +36,16 @@
         path: "{{ item }}"
         state: absent
       loop:
-        - /opt/nomad/data
-        - /opt/consul
+        - /opt/nomad/
+        - /opt/consul/
+
+    - name: re-create nomad and consul files
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - /opt/nomad/
+        - /opt/consul/
 
     - name: Set OverlayFS on root config (No recursive, with swap)
       lineinfile:
