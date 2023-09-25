@@ -39,13 +39,19 @@
         - /opt/nomad/
         - /opt/consul/
 
-    - name: re-create nomad and consul files
+    - name: re-create nomad config dir
       file:
-        path: "{{ item }}"
+        path: /opt/nomad/
         state: directory
-      loop:
-        - /opt/nomad/
-        - /opt/consul/
+        mode: "0755"
+
+    - name: re-create consul config dir
+      file:
+        path: /opt/config/
+        state: directory
+        mode: "0755"
+        owner: consul
+        group: consul
 
     - name: Set OverlayFS on root config (No recursive, with swap)
       lineinfile:
