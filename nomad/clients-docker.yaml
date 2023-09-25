@@ -31,10 +31,7 @@
 
     - copy:
         dest: "/etc/docker/daemon.json"
-        content: |
-          {
-            "storage-driver": "vfs"
-          }
+        content: ""
       notify: Restart Docker
 
     - blockinfile:
@@ -44,8 +41,6 @@
           plugin "docker" {
             config {
               allow_privileged = true
-              enabled = true
-              dns_servers = ["1.1.1.1", "1.0.0.1"]
             }
           }
       notify: Restart Nomad
