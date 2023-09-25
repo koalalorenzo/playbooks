@@ -21,6 +21,24 @@
       when: ansible_distribution == 'Ubuntu'
       notify: Reboot
 
+    - name: Stop Services (but keep them enabled for cleanup before boot)
+      service:
+        name: "{{ item }}"
+        enabled: true
+        state: stopped
+      ignore_errors: true
+      loop:
+        - consul
+        - nomad
+
+    - name: Reset consul and nomad files
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /opt/nomad/data
+        - /opt/consul
+
     - name: Set OverlayFS on root config (No recursive, with swap)
       lineinfile:
         path: /etc/overlayroot.conf

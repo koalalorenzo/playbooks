@@ -21,12 +21,9 @@
       when: ansible_distribution == 'Ubuntu'
       notify: Reboot
 
-    - name: Force gathering facts from NAS servers
+    - name: Force gathering facts
       ansible.builtin.setup:
-      delegate_to: "{{ item }}"
       delegate_facts: true
-      loop: "{{ groups['nas'] }}"
-      when: ansible_distribution == 'Ubuntu'
 
     - name: Disable Chroot only when / is mounted on a device
       shell: overlayroot-chroot sed -i -r 's/overlayroot=.*/overlayroot="disabled"/' /etc/overlayroot.conf
