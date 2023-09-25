@@ -47,7 +47,7 @@
 
     - name: re-create consul config dir
       file:
-        path: /opt/config/
+        path: /opt/consul/
         state: directory
         mode: "0755"
         owner: consul
