@@ -146,6 +146,10 @@
                 - job_name: integrations/traefik
                   static_configs:
                     - targets: ["{{ ansible_hostname }}:8081"]
+                - job_name: consul_services
+                  consulagent_sd_configs:
+                    - refresh_interval: 30s
+                      tags: ["prometheus"]
             global:
               scrape_interval: 60s
             wal_directory: /tmp/grafana-agent-wal

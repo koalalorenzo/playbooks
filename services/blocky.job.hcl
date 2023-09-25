@@ -31,6 +31,7 @@ job "blocky" {
         "traefik.enable=true",
         "traefik.http.routers.blocky.rule=Host(`blocky.elates.it`)",
         "traefik.http.routers.blocky.tls.certresolver=letsencrypt",
+        "prometheus",
       ]
 
       check {
