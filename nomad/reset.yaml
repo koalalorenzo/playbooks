@@ -1,0 +1,53 @@
+---
+- name: Reset Nomad and redeploy (Raft)
+  hosts: nomadClients
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  tasks:
+    - name: Stop Nomad
+      service: name=nomad state=stopped
+
+    - name: Stop Services (but keep them enabled for cleanup before boot)
+      service:
+        name: "{{ item }}"
+        enabled: true
+        state: stopped
+      ignore_errors: true
+      loop:
+        - consul
+        - nomad
+
+    - name: Reset consul and nomad files
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /opt/nomad/
+        - /opt/consul/
+
+    - name: re-create nomad config dir
+      file:
+        path: /opt/nomad/
+        state: directory
+        mode: "0755"
+
+    - name: re-create consul config dir
+      file:
+        path: /opt/consul/
+        state: directory
+        mode: "0755"
+        owner: consul
+        group: consul
+
+    - name: Restart services
+      service:
+        name: "{{ item }}"
+        enabled: true
+        state: restarted
+      ignore_errors: true
+      loop:
+        - consul
+        - nomad
