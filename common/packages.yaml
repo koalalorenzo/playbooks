@@ -41,6 +41,18 @@
       ignore_errors: true
 
     - service:
+        name: "{{ item }}"
+        state: stopped
+        enabled: no
+      ignore_errors: true
+      loop:
+        - snap.lxd.user-daemon.unix.socket
+        - snap.lxd.daemon.unix.socket
+        - snap.lxd.daemon.unix.socket
+        - snapd
+        - snapd.socket
+
+    - service:
         name: snap.lxd.activate.service
         state: stopped
         enabled: no
