@@ -14,7 +14,7 @@
         path: /opt/nomad/data/server/raft
         state: absent
 
-    - name: Stop Nomad
+    - name: Start Nomad
       service: name=nomad state=restarted
 
 - import_playbook: ../system/all.yaml
