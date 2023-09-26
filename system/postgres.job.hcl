@@ -14,7 +14,7 @@ job "postgres" {
       attempts = 5
       interval = "30m"
       delay    = "20s"
-      mode     = "fail"
+      mode     = "delay"
     }
 
     volume "postgres" {

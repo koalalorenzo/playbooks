@@ -161,6 +161,11 @@ caching:
 prometheus:
   enable: true
   path: /metrics
+{{ range service "redis" }}
+redis:
+  required: false
+  address: {{ .Address }}:{{ .Port }}
+{{ end }}
 log:
   level: warn
   timestamp: true
