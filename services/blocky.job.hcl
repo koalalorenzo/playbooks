@@ -1,11 +1,6 @@
 job "blocky" {
-  type = "service"
+  type     = "service"
   priority = 90
-
-  constraint {
-    attribute = "${node.class}"
-    value     = "compute"
-  }
 
   group "resolver" {
     count = 2
@@ -44,7 +39,7 @@ job "blocky" {
         success_before_passing   = 1
         failures_before_critical = 3
       }
-      
+
     }
 
     service {
@@ -182,6 +177,17 @@ EOF
         cpu    = 1000
         memory = 512
       }
+    }
+
+    constraint {
+      operator = "distinct_hosts"
+      value    = "true"
+    }
+
+    affinity {
+      attribute = "${node.class}"
+      value     = "compute"
+      weight    = 90
     }
   }
 
