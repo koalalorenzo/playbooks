@@ -66,11 +66,11 @@ job "blocky" {
       driver = "docker"
 
       config {
-        image = "ghcr.io/0xerr0r/blocky"
-        force_pull = false
-        volumes = ["local/config.yml:/app/config.yml"]
-        ports = ["http", "dns"]
-        dns_servers = ["1.1.1.1","1.0.0.1"]
+        image       = "ghcr.io/0xerr0r/blocky"
+        force_pull  = false
+        volumes     = ["local/config.yml:/app/config.yml"]
+        ports       = ["http", "dns"]
+        dns_servers = ["1.1.1.1", "1.0.0.1"]
       }
 
       template {
