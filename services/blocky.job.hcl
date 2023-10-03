@@ -153,6 +153,12 @@ caching:
   prefetching: true
   prefetchThreshold: 5
   prefetchMaxItemsCount: 512
+queryLog:
+  type: postgresql
+  logRetentionDays: 90
+{{ range service "postgres" }}
+  target: postgres://{{ with nomadVar "nomad/jobs/blocky" }}{{ .POSTGRES_USERNAME }}:{{ .POSTGRES_PASSWORD }}{{ end }}@{{ .Address }}:{{ .Port }}/blocky?sslmode=disable
+{{ end }}
 prometheus:
   enable: true
   path: /metrics
