@@ -77,6 +77,7 @@ job "blocky" {
         destination = "local/config.yml"
         change_mode = "restart"
         data        = <<EOF
+minTlsServeVersion: 1.3
 upstreams:
   strategy: strict
   groups:
@@ -99,10 +100,10 @@ blocking:
       attempts: 5
   blockType: nxDomain
   blockTTL: 60s
-  # whiteLists:
-  #   apple:
-  #     - /icloud.com/
-  #     - /apple.com/
+  whiteLists:
+    tracking:
+      - /icloud.com/
+      - /apple.com/
   blackLists:
     suspicious:
       - https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
@@ -144,15 +145,14 @@ blocking:
       - suspicious
       - tracking
       - malware
-      # - apple
 caching:
-  minTime: 1m
-  maxTime: 8h
-  maxItemsCount: 1024
-  cacheTimeNegative: 5m
+  minTime: 5m
+  maxTime: 12h
+  maxItemsCount: 2048
+  cacheTimeNegative: 1m
   prefetching: true
   prefetchThreshold: 5
-  prefetchMaxItemsCount: 256
+  prefetchMaxItemsCount: 512
 prometheus:
   enable: true
   path: /metrics
