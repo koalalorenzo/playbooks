@@ -99,11 +99,12 @@ blocking:
       timeout: 1m
       attempts: 5
   blockType: nxDomain
-  blockTTL: 60s
+  blockTTL: 12h
   whiteLists:
     tracking:
-      - /icloud.com/
-      - /apple.com/
+      - |
+        /icloud.com/
+        /apple.com/
   blackLists:
     suspicious:
       - https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
