@@ -73,6 +73,12 @@
           DNSOverTLS=yes
       notify: Restsart resolved
 
+    - blockinfile:
+        path: /etc/hosts
+        marker: "# {mark} ANSIBLE MANAGED Docker DNS github"
+        block: |
+          {{ lookup('community.general.dig', 'ghcr.io', '@1.1.1.2') }} ghcr.io
+
     - name: Create symbolic link for resolv.conf
       file:
         src: /run/systemd/resolve/resolv.conf
