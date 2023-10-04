@@ -66,7 +66,7 @@ job "blocky" {
       driver = "docker"
 
       config {
-        image       = "ghcr.io/0xerr0r/blocky"
+        image       = "ghcr.io/0xerr0r/blocky:v0.22"
         force_pull  = false
         volumes     = ["local/config.yml:/app/config.yml"]
         ports       = ["http", "dns"]
