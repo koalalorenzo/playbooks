@@ -31,7 +31,10 @@
 
     - copy:
         dest: "/etc/docker/daemon.json"
-        content: ""
+        content: |
+          {
+            "dns": ["1.1.1.2", "1.0.0.2"]
+          }
       notify: Restart Docker
 
     - blockinfile:
