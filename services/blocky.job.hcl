@@ -240,7 +240,7 @@ EOF
   update {
     max_parallel     = 1
     canary           = 1
-    min_healthy_time = "1m"
+    min_healthy_time = "30s"
     healthy_deadline = "2m"
     auto_revert      = true
     auto_promote     = true
@@ -250,7 +250,7 @@ EOF
   migrate {
     max_parallel     = 1
     health_check     = "checks"
-    min_healthy_time = "1m"
+    min_healthy_time = "30s"
     healthy_deadline = "2m"
   }
 }
