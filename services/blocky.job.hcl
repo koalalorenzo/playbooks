@@ -105,6 +105,10 @@ blocking:
       - |
         /icloud.com/
         /apple.com/
+    ads:
+      - |
+        /icloud.com/
+        /apple.com/
   blackLists:
     suspicious:
       - https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
@@ -125,6 +129,14 @@ blocking:
       - https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts
       - https://v.firebog.net/hosts/Easyprivacy.txt
       - https://v.firebog.net/hosts/Prigent-Ads.txt
+      - |
+        /fwtracks.freshmarketer.com/
+        /realtime.luckyorange.com/
+        /advertising-api-eu.amazon.com/
+        /widgets.pinterest.com/
+        /static.media.net/
+        /adservetx.media.net/
+        /adc3-launch.adcolony.com/
     tracking:
       - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
       - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
@@ -133,6 +145,32 @@ blocking:
       - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/android-tracking.txt
       - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt
       - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/AmazonFireTV.txt
+      - |
+        /realme.com/
+        /mouseflow.com/
+        /app-measurement.com/
+        /smetrics.samsung.com/
+        /samsung-com.112.2o7.net/
+        /hicloud.com/
+        /metrics.data.hicloud.com/
+        /metrics2.data.hicloud.com/
+        /metrics3.data.hicloud.com/
+        /grs.hicloud.com/
+        /upload.luckyorange.net/
+        /logservice.hicloud.com/
+        /logservice1.hicloud.com/
+        /fwtracks.freshmarketer.com/
+        /logbak.hicloud.com/
+        /notify.bugsnag.com/
+        /app.getsentry.com/
+        /pixel.facebook.com/
+        /events.reddit.com/
+        /trk.pinterest.com/
+        /adfstat.yandex.ru/
+        /tracking.rus.miui.com/
+        /data.mistat.xiaomi.com/
+        /hotjar.com/
+        /insights.hotjar.com/
     malware:
       - https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
       - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
