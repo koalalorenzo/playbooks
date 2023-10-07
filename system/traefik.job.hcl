@@ -29,7 +29,7 @@ job "traefik" {
       port "dns" {
         static = 53
       }
-      
+
       port "http" {
         static = 80
       }

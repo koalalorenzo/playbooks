@@ -77,7 +77,7 @@ job "postgres" {
       attribute = "${node.class}"
       value     = "compute"
     }
-    
+
     network {
       port "pgweb" { to = 8081 }
     }
@@ -86,7 +86,7 @@ job "postgres" {
       delay    = "10s"
       interval = "30s"
       attempts = 3
-      mode     = "delay" 
+      mode     = "delay"
     }
 
     task "pgweb" {

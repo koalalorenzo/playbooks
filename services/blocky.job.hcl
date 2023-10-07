@@ -230,7 +230,7 @@ EOF
     }
 
     affinity {
-      attribute = "${node.class}"
+      attribute = node.class
       value     = "compute"
       weight    = 90
     }

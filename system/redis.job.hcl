@@ -34,7 +34,7 @@ job "redis" {
         volumes = [
           "local/redis.conf:/usr/local/etc/redis/redis.conf",
         ]
-        
+
       }
 
       template {
@@ -54,12 +54,12 @@ EOH
         destination = "/data"
         read_only   = false
       }
-      
+
       resources {
         cpu    = 1000
         memory = 512
       }
-      
+
       service {
         name = "redis"
         port = "redis"
