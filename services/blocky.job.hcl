@@ -188,9 +188,9 @@ caching:
   minTime: 5m
   maxTime: 12h
   maxItemsCount: 2048
-  cacheTimeNegative: 1m
+  cacheTimeNegative: 5m
   prefetching: true
-  prefetchThreshold: 5
+  prefetchThreshold: 10
   prefetchMaxItemsCount: 512
 {{ range service "postgres" }}
 queryLog:
