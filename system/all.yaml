@@ -25,7 +25,8 @@
       with_fileglob: "*.volume.hcl"
       run_once: true
 
-    - copy:
+    - name: Decrypt variable files
+      copy:
         content: "{{ lookup('community.sops.sops', item) }}"
         dest: "/tmp/nomad/{{ item | basename }}"
       with_fileglob: "*.vars.sops.hcl"
@@ -46,6 +47,10 @@
 
     - name: Set up Traefik
       command: nomad run /tmp/nomad/traefik.job.hcl
+      run_once: true
+
+    - name: Set up Blocky
+      command: nomad run /tmp/nomad/blocky.job.hcl
       run_once: true
 
     - name: Ensures healthchecks are running and successfull
