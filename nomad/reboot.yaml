@@ -1,0 +1,25 @@
+---
+- name: Safe restart nomad nodes
+  hosts: nomadClients
+  serial: 1
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: no
+
+  tasks:
+    - command: nomad node drain -enable -self -deadline 1m
+    - pause:
+        seconds: 10
+    - reboot:
+        reboot_timeout: 300
+        post_reboot_delay: 15
+        pre_reboot_delay: 15
+
+    - wait_for:
+        port: 4646
+        delay: 15
+
+    - command: nomad node eligibility -enable -self
+    - pause:
+        seconds: 15
