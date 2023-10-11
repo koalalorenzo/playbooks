@@ -8,7 +8,8 @@
   gather_facts: no
 
   tasks:
-    - command: nomad node drain -enable -self -deadline 1m
+    - name: Drain the node
+      command: nomad node drain -enable -self -deadline 1m
     - pause:
         seconds: 10
     - reboot:
@@ -20,6 +21,8 @@
         port: 4646
         delay: 15
 
-    - command: nomad node eligibility -enable -self
+    - name: Mark the node as available /eligible
+      command: nomad node eligibility -enable -self
+
     - pause:
         seconds: 15
