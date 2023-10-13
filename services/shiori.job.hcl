@@ -22,7 +22,7 @@ job "shiori" {
       driver = "docker"
 
       config {
-        image = "ghcr.io/go-shiori/shiori"
+        image = "ghcr.io/go-shiori/shiori:v1.5.5"
         ports = ["http"]
       }
 
