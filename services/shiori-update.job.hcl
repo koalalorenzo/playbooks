@@ -8,7 +8,7 @@ job "shiori-update" {
   }
 
   constraint {
-    attribute = "${node.class}"
+    attribute = node.class
     value     = "compute"
   }
 
