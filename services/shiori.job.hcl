@@ -41,6 +41,15 @@ job "shiori" {
         data        = <<EOH
           {{ range service "postgres" }}
             SHIORI_DATABASE_URL=postgres://{{ with nomadVar "nomad/jobs/shiori" }}{{ .POSTGRES_USERNAME }}:{{ .POSTGRES_PASSWORD }}{{ end }}@{{ .Address }}:{{ .Port }}/shiori?sslmode=disable
+            SHIORI_DBMS=postgresql
+            {{ with nomadVar "nomad/jobs/shiori" }}
+            SHIORI_PG_USER="{{ .POSTGRES_USERNAME }}"
+            SHIORI_PG_PASS="{{ .POSTGRES_PASSWORD }}"
+            {{ end }}
+            SHIORI_PG_NAME=shiori
+            SHIORI_PG_HOST={{ .Address }}
+            SHIORI_PG_PORT={{ .Port }}
+            SHIORI_PG_SSLMODE=disable
           {{ end }}
         EOH
       }
