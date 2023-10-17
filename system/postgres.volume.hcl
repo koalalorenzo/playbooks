@@ -9,12 +9,12 @@ capability {
 }
 
 parameters {
-  server           = "100.100.180.12"
+  server           = "storage0"
   share            = "/main/share/"
   mountPermissions = "0"
 }
 
 mount_options {
   fs_type     = "nfs"
-  mount_flags = ["timeo=60", "hard", "intr", "nolock"]
+  mount_flags = ["timeo=600", "hard", "intr", "nolock"]
 }
