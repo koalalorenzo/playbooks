@@ -64,6 +64,7 @@
         mode: "0700"
 
     - name: Upload certificates
+      no_log: true
       copy:
         mode: 0700
         owner: consul
