@@ -30,6 +30,9 @@ job "csi-nfs-controller" {
           "--endpoint=unix:///csi/csi.sock",
           "--drivername=nfs.csi.k8s.io"
         ]
+
+        network_mode = "host"
+        privileged   = true
       }
 
       csi_plugin {

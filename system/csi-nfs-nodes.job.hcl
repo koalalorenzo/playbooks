@@ -23,7 +23,8 @@ job "csi-nfs-node" {
           "--drivername=nfs.csi.k8s.io"
         ]
 
-        privileged = true
+        network_mode = "host"
+        privileged   = true
       }
 
       csi_plugin {
