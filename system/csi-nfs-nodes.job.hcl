@@ -1,12 +1,9 @@
-# From: https://gitlab.com/rocketduck/csi-plugin-nfs
-job "nfs-storage-node" {
-  datacenters = ["dc1"]
-  type        = "system"
-  priority    = 100
+job "csi-nfs-node" {
+  type     = "system"
+  priority = 100
 
   group "node" {
     restart {
-      # Restart every 30 seconds for 3 times, and then wait 1 min to try again
       delay    = "15s"
       interval = "60s"
       attempts = 4
@@ -17,19 +14,16 @@ job "nfs-storage-node" {
       driver = "docker"
 
       config {
-        image = "registry.gitlab.com/rocketduck/csi-plugin-nfs:0.7.0"
+        image = "registry.k8s.io/sig-storage/nfsplugin:v4.4.0"
 
         args = [
-          "--type=node",
-          "--node-id=${attr.unique.hostname}",
-          "--nfs-server=192.168.197.5:/main/nfs",
-          "--mount-options=defaults",
-          "--allow-nested-volumes",
-          "--log-level=DEBUG",
+          "--v=5",
+          "--nodeid=${attr.unique.hostname}",
+          "--endpoint=unix:///csi/csi.sock",
+          "--drivername=nfs.csi.k8s.io"
         ]
 
-        network_mode = "host"
-        privileged   = true
+        privileged = true
       }
 
       csi_plugin {
@@ -40,9 +34,8 @@ job "nfs-storage-node" {
 
       resources {
         cpu    = 100
-        memory = 128
+        memory = 32
       }
-
     }
   }
 }
