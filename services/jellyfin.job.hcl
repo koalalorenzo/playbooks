@@ -43,8 +43,10 @@ job "jellyfin" {
     }
 
     volume "multimedia" {
-      type   = "host"
-      source = "multimedia"
+      type            = "csi"
+      source          = "multimedia"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
     }
 
     service {
