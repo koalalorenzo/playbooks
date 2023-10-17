@@ -9,5 +9,12 @@ capability {
 }
 
 parameters {
-  mode = "777"
+  server           = "100.100.180.12"
+  share            = "/main/share/"
+  mountPermissions = "0"
+}
+
+mount_options {
+  fs_type     = "nfs"
+  mount_flags = ["timeo=60", "hard", "intr", "nolock"]
 }
