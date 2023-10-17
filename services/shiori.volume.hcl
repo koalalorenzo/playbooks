@@ -9,7 +9,7 @@ capability {
 }
 
 parameters {
-  server           = "storage0"
+  server           = "100.100.180.12"
   share            = "/main/share/"
   mountPermissions = "0"
 }
