@@ -157,4 +157,11 @@
             address = "127.0.0.1:8500"
             timeout = "30s"
           }
+
+          advertise {
+            # Defaults to the first private IP address. Using Tailscale instead
+            http = "{{ query('community.dns.lookup', '{{ ansible_hostname }}.{{ tailscale_domain }}', type='A' ) | first }}"
+            rpc = "{{ query('community.dns.lookup', '{{ ansible_hostname }}.{{ tailscale_domain }}', type='A' ) | first }}"
+            serf = "{{ query('community.dns.lookup', '{{ ansible_hostname }}.{{ tailscale_domain }}', type='A' ) | first }}"
+          }
       notify: Restart Nomad

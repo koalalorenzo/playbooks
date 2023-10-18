@@ -17,9 +17,7 @@ locals {
 }
 
 job "jellyfin" {
-  region      = "global"
-  datacenters = ["dc1"]
-  type        = "service"
+  type = "service"
 
   group "jellyfin" {
     network {
@@ -43,10 +41,11 @@ job "jellyfin" {
     }
 
     volume "multimedia" {
-      type   = "host"
-      source = "multimedia"
+      type            = "csi"
+      source          = "multimedia"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
     }
-
     service {
       name = "jellyfin"
       port = "http"

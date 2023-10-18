@@ -34,7 +34,7 @@
               "driver.denylist" = "java"
             }
 
-            servers = [{% for i in groups['nomadServers'] %}"{{ i }}",{% endfor %}]
+            servers = [{% for i in groups['nomadServers'] %}"{{ i }}.{{tailscale_domain}}",{% endfor %}]
 
             host_volume "ca-certificates" {
               path = "/etc/ssl/certs"
@@ -93,3 +93,15 @@
         rule: allow
         proto: udp
         port: "20000:32000"
+
+    - service:
+        name: consul
+        enabled: true
+        state: started
+      ignore_errors: true
+
+    - service:
+        name: nomad
+        enabled: true
+        state: started
+      ignore_errors: true

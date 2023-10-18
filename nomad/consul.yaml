@@ -64,6 +64,7 @@
         mode: "0700"
 
     - name: Upload certificates
+      no_log: true
       copy:
         mode: 0700
         owner: consul
@@ -100,7 +101,7 @@
           server = true
           bootstrap_expect = {{ groups["nomad"] | length }}
           bind_addr = "0.0.0.0"
-          advertise_addr = "{{ ansible_default_ipv4.address }}"
+          advertise_addr = "{{ query('community.dns.lookup', '{{ ansible_hostname }}.{{ tailscale_domain }}', type='A' ) | first }}"
 
           ui_config {
             enabled = true
@@ -110,7 +111,7 @@
             prometheus_retention_time = "90s"
           }
 
-          retry_join = [{% for i in groups['nomadServers'] %}"{{ i }}",{% endfor %}]
+          retry_join = [{% for i in groups['nomadServers'] %}"{{ i }}.{{ tailscale_domain }}",{% endfor %}]
 
           tls {
              defaults {

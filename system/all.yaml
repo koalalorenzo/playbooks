@@ -52,6 +52,7 @@
     - name: Set up Blocky
       command: nomad run /tmp/nomad/blocky.job.hcl
       run_once: true
+      ignore_errors: true
 
     - name: Ensures healthchecks are running and successfull
       pause:

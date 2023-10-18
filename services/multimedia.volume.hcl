@@ -1,5 +1,5 @@
-id        = "shiori"
-name      = "shiori"
+id        = "multimedia"
+name      = "multimedia"
 type      = "csi"
 plugin_id = "nfs"
 
@@ -10,7 +10,7 @@ capability {
 
 parameters {
   server           = "100.100.180.12"
-  share            = "/main/share/"
+  share            = "/main/"
   mountPermissions = "0"
 }
 
