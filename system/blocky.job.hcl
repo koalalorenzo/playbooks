@@ -190,12 +190,14 @@ blocking:
       - tracking
       - malware
 caching:
-  minTime: 5m
-  maxTime: 12h
-  maxItemsCount: 2048
-  cacheTimeNegative: 5m
+  minTime: 30m
+  maxTime: 48h
+  maxItemsCount: 16384
+  cacheTimeNegative: 15m
   prefetching: true
-  prefetchThreshold: 10
+  # Prefetch a domain if it has more than 30 requests in 1h. (2rq per minute)
+  prefetchExpires: 1h
+  prefetchThreshold: 30
   prefetchMaxItemsCount: 512
 {{ range service "postgres" }}
 queryLog:
