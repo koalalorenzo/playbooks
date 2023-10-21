@@ -93,11 +93,12 @@ blocking:
   loading:
     strategy: fast
     concurrency: 2
-    refreshPeriod: 12h
+    refreshPeriod: 8h
+    maxErrorsPerSource: 32
     downloads:
-      cooldown: 30s
+      cooldown: 5s
       timeout: 1m
-      attempts: 5
+      attempts: 10
   blockType: nxDomain
   blockTTL: 12h
   whiteLists:
@@ -105,10 +106,14 @@ blocking:
       - |
         /icloud.com/
         /apple.com/
+        /datadoghq.eu/
+        /static.datadoghq.com/
     ads:
       - |
         /icloud.com/
         /apple.com/
+        /datadoghq.eu/
+        /static.datadoghq.com/
   blackLists:
     suspicious:
       - https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
@@ -185,12 +190,14 @@ blocking:
       - tracking
       - malware
 caching:
-  minTime: 5m
-  maxTime: 12h
-  maxItemsCount: 2048
-  cacheTimeNegative: 5m
+  minTime: 30m
+  maxTime: 48h
+  maxItemsCount: 16384
+  cacheTimeNegative: 15m
   prefetching: true
-  prefetchThreshold: 10
+  # Prefetch a domain if it has more than 30 requests in 1h. (2rq per minute)
+  prefetchExpires: 1h
+  prefetchThreshold: 30
   prefetchMaxItemsCount: 512
 {{ range service "postgres" }}
 queryLog:
