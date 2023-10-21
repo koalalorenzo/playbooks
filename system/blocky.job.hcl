@@ -106,10 +106,14 @@ blocking:
       - |
         /icloud.com/
         /apple.com/
+        /datadoghq.eu/
+        /static.datadoghq.com/
     ads:
       - |
         /icloud.com/
         /apple.com/
+        /datadoghq.eu/
+        /static.datadoghq.com/
   blackLists:
     suspicious:
       - https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
