@@ -93,11 +93,12 @@ blocking:
   loading:
     strategy: fast
     concurrency: 2
-    refreshPeriod: 12h
+    refreshPeriod: 8h
+    maxErrorsPerSource: 32
     downloads:
-      cooldown: 30s
+      cooldown: 5s
       timeout: 1m
-      attempts: 5
+      attempts: 10
   blockType: nxDomain
   blockTTL: 12h
   whiteLists:
