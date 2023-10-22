@@ -40,9 +40,10 @@ apt_upgrade:
 ################################################################################
 NOMAD_ARGS ?=
 NOMAD_JOB_CMD ?= run
-NOMAD_JOBS := $(wildcard */*.job.hcl)
-NOMAD_VOLUMES := $(wildcard */*.volume.hcl)
-NOMAD_VARIABLES := $(wildcard */*.vars.sops.hcl)
+# All jobs (including disabled ones)
+NOMAD_JOBS := $(shell find . -type f -name '*.job.hcl')
+NOMAD_VOLUMES := $(shell find . -type f -name '*.volume.hcl')
+NOMAD_VARIABLES := $(shell find . -type f -name '*.vars.sops.hcl')
 
 $(NOMAD_VARIABLES):
 	sops -d $@ | nomad var put -in=hcl -force ${NOMAD_ARGS} -
