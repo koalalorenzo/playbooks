@@ -12,13 +12,6 @@ job "transmission" {
       port "torrent" {}
     }
 
-    volume "transmission" {
-      type            = "csi"
-      source          = "transmission"
-      attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
-    }
-
     volume "downloads" {
       type            = "csi"
       source          = "downloads"
@@ -47,8 +40,6 @@ job "transmission" {
         env         = true
         change_mode = "restart"
         data        = <<EOH
-          PGID=1000
-          PUID=1000
           PEERPORT={{ env "NOMAD_PORT_torrent" }}
         EOH
       }
@@ -63,11 +54,6 @@ job "transmission" {
           "traefik.http.routers.transmission.tls.certresolver=letsencrypt",
         ]
 
-      }
-
-      volume_mount {
-        volume      = "transmission"
-        destination = "/config"
       }
 
       volume_mount {
