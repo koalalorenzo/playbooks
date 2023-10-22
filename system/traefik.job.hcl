@@ -121,8 +121,6 @@ entryPoints:
         certResolver: "letsencrypt"
         domains:
            - main: elates.it
-           - main: home.elates.it
-             sans: "*.home.elates.it"
 
   dns-udp:
     address: ":53/udp"
@@ -143,7 +141,9 @@ certificatesResolvers:
         resolvers: 
           - "1.1.1.1:53"
           - "1.0.0.1:53"
-        delayBeforeCheck: 30
+          - "8.8.8.8:53"
+          - "8.8.4.4:53"
+        delayBeforeCheck: 45
 
 metrics:
   prometheus: {}
