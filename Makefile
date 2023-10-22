@@ -63,8 +63,7 @@ nomad_system:
 	sleep 30
 	$(MAKE) $(wildcard system/*.volume.hcl)
 
-nomad_variables: $(NOMAD_VARIABLES)
-nomad_volumes: $(NOMAD_VOLUMES)
-nomad_jobs: $(NOMAD_JOBS)
-
+nomad_variables: $(wildcard system/*.volume.hcl) $(wildcard services/*.volume.hcl)
+nomad_volumes: $(wildcard system/*.volume.hcl) $(wildcard services/*.volume.hcl)
+nomad_jobs: $(wildcard system/*.volume.hcl) $(wildcard services/*.volume.hcl)
 .DEFAULT_GOAL := all
