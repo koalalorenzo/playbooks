@@ -6,6 +6,11 @@ job "transmission" {
     value     = "compute"
   }
 
+  constraint {
+    attribute = meta.vpn.enabled
+    value     = "true"
+  }
+
   group "transmission" {
     network {
       port "http" { to = 9091 }
