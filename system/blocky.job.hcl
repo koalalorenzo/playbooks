@@ -94,7 +94,7 @@ blocking:
     strategy: fast
     concurrency: 2
     refreshPeriod: 8h
-    maxErrorsPerSource: 32
+    maxErrorsPerSource: -1
     downloads:
       cooldown: 5s
       timeout: 1m
