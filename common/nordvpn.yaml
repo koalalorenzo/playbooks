@@ -6,6 +6,10 @@
   become_method: sudo
 
   tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: nordvpn.sops.yaml
+
     - apt_key:
         url: https://repo.nordvpn.com/gpg/nordvpn_public.asc
         state: present
