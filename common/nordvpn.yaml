@@ -1,0 +1,32 @@
+---
+- name: Install NordVPN
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - apt_key:
+        url: https://repo.nordvpn.com/gpg/nordvpn_public.asc
+        state: present
+
+    - apt_repository:
+        repo: "deb https://repo.nordvpn.com/deb/nordvpn/debian stable main"
+        state: present
+
+    - package:
+        name: nordvpn
+        state: present
+        update_cache: yes
+      register: pkg_install
+
+    - sysctl:
+        name: net.ipv6.conf.all.forwarding
+        value: "1"
+        state: present
+
+    - sysctl:
+        name: net.ipv4.ip_forward
+        value: "1"
+        state: present
+        reload: yes
