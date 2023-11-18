@@ -30,3 +30,9 @@
         value: "1"
         state: present
         reload: yes
+
+    - name: Allows Tailscale Subnets (ipv4)
+      shell: nordvpn whitelist add subnet 100.64.0.0/10
+
+    - name: Allows Tailscale Subnets (ipv6)
+      shell: nordvpn whitelist add subnet fd7a:115c:a1e0::/48
