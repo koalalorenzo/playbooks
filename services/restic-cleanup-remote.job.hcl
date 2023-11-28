@@ -29,22 +29,24 @@ job "restic-cleanup-remote" {
         perms         = "0755"
 
         data = <<EOF
-          #!/bin/bash -ex
+          #!/bin/bash
+          {{ with nomadVar "nomad/jobs/restic" }}
+          export RESTIC_VERSION="{{ .RESTIC_VERSION }}"
+          export RESTIC_PASSWORD="{{ .RESTIC_PASSWORD }}"
+          export B2_ACCOUNT_ID="{{ .B2_ACCOUNT_ID }}"
+          export B2_ACCOUNT_KEY="{{ .B2_ACCOUNT_KEY }}"
+          export RESTIC_REPOSITORY="{{ .RESTIC_REPOSITORY }}"
+          {{ end }}
+
+          set -exu
           curl -L \
             --output restic.bz2 \
-            https://github.com/restic/restic/releases/download/v0.16.0/restic_0.16.0_{{ env "attr.kernel.name" }}_{{ env "attr.cpu.arch" }}.bz2
+            https://github.com/restic/restic/releases/download/v${RESTIC_VERSION}/restic_${RESTIC_VERSION}_{{ env "attr.kernel.name" }}_{{ env "attr.cpu.arch" }}.bz2
           bunzip2 ./restic.bz2
           chmod +x ./restic
 
           ./restic self-update
           sleep 3
-
-          {{ with nomadVar "nomad/jobs/restic" }}
-          export RESTIC_REPOSITORY="{{ .RESTIC_REPOSITORY }}"
-          export RESTIC_PASSWORD="{{ .RESTIC_PASSWORD }}"
-          export B2_ACCOUNT_ID="{{ .B2_ACCOUNT_ID }}"
-          export B2_ACCOUNT_KEY="{{ .B2_ACCOUNT_KEY }}"
-          {{ end }}
 
           # Use a single hostname
           export RESTIC_HOSTNAME="nas.elates.it"
