@@ -1,0 +1,82 @@
+---
+- name: Install NordVPN
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: nordvpn.sops.yaml
+
+    - apt_key:
+        url: https://repo.nordvpn.com/gpg/nordvpn_public.asc
+        state: present
+
+    - apt_repository:
+        repo: "deb https://repo.nordvpn.com/deb/nordvpn/debian stable main"
+        state: present
+
+    - package:
+        name: nordvpn
+        state: present
+        update_cache: yes
+      register: pkg_install
+
+    - sysctl:
+        name: net.ipv6.conf.all.forwarding
+        value: "1"
+        state: present
+
+    - sysctl:
+        name: net.ipv4.ip_forward
+        value: "1"
+        state: present
+        reload: yes
+
+    - name: Login
+      shell: nordvpn login --token "{{ nordvpn_token }}"
+      ignore_errors: true
+
+    - name: Disables Settings
+      shell: nordvpn set {{ item }} off
+      ignore_errors: true
+      loop:
+        - analytics
+        - firewall
+        - fwmark
+
+    - name: Set DNS servers (Tailscale, Storage and Compute1 via Tailscale)
+      shell: nordvpn set dns 100.100.100.100 192.168.197.5 100.72.132.135
+      ignore_errors: true
+
+    - name: Enables Settings
+      shell: nordvpn set {{ item }} on
+      ignore_errors: true
+      loop:
+        - lan-discovery
+        - ipv6
+        - mesh
+
+    - name: Set to use OpenVPN
+      shell: nordvpn set technology openvpn
+      ignore_errors: true
+
+    - name: Allows Ports
+      shell: nordvpn whitelist add port "{{ item }}"
+      loop:
+        - "22" # SSH
+        - "41641" # Tailscale
+        - "111" # NFS
+        - "2049" # NFS
+
+    - name: Allows Subnets
+      shell: nordvpn whitelist add subnet "{{ item }}"
+      ignore_errors: true
+      loop:
+        - 10.0.0.0/8 # Private Nets
+        - 100.64.0.0/10 # Tailscale
+        - fd7a:115c:a1e0::/48 # Tailscale
+        - 172.16.0.0/12 # Docker
+        - 192.168.0.0/16 # Local networks
