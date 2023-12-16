@@ -114,6 +114,12 @@ blocking:
         /apple.com/
         /datadoghq.eu/
         /static.datadoghq.com/
+    malware:
+      - |
+        /www.googleapis.com/
+        /accounts.google.com/
+        /play.google.com/
+        /calendar.google.com/
   blackLists:
     suspicious:
       - https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
