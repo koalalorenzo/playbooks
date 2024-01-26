@@ -92,7 +92,7 @@ job "postgres" {
       driver = "docker"
 
       config {
-        image = "sosedoff/pgweb"
+        image = "sosedoff/pgweb:0.14.2"
         ports = ["pgweb"]
       }
 
