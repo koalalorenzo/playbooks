@@ -20,6 +20,12 @@ job "jellyfin" {
   type = "service"
 
   group "jellyfin" {
+    affinity {
+      attribute = node.class
+      value     = "compute"
+      weight    = 70
+    }
+    
     network {
       port "http" {
         to     = 8096
