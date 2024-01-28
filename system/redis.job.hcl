@@ -28,13 +28,16 @@ job "redis" {
       user   = "1000"
 
       config {
-        image = "redis:alpine"
+        image = "redis:7.0-alpine"
         ports = ["redis"]
         args  = ["/usr/local/etc/redis/redis.conf"]
         volumes = [
           "local/redis.conf:/usr/local/etc/redis/redis.conf",
         ]
 
+        sysctl = {
+          #"vm.overcommit_memory" = "1"
+        }
       }
 
       template {
