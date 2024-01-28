@@ -5,7 +5,7 @@ job "postgres" {
 
   group "postgres" {
     constraint {
-      attribute = "${node.class}"
+      attribute = node.class
       value     = "storage"
     }
 
@@ -76,7 +76,7 @@ job "postgres" {
 
   group "pgweb" {
     constraint {
-      attribute = "${node.class}"
+      attribute = node.class
       value     = "compute"
     }
 

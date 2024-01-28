@@ -46,6 +46,7 @@ job "jellyfin" {
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
+
     service {
       name = "jellyfin"
       port = "http"

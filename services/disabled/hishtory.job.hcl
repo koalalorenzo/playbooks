@@ -2,7 +2,7 @@ job "hishtory" {
   type = "service"
 
   constraint {
-    attribute = "${node.class}"
+    attribute = node.class
     value     = "compute"
   }
 

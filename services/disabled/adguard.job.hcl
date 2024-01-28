@@ -3,7 +3,7 @@ job "adguard" {
   priority = 90
 
   constraint {
-    attribute = "${node.class}"
+    attribute = node.class
     value     = "compute"
   }
 

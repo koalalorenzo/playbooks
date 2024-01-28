@@ -2,7 +2,7 @@ job "nix-serve" {
   type = "service"
 
   constraint {
-    attribute = "${node.class}"
+    attribute = node.class
     value     = "storage"
   }
 

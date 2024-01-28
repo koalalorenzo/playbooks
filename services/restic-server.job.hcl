@@ -3,7 +3,7 @@ job "restic-server" {
   priority = 60
 
   constraint {
-    attribute = "${node.class}"
+    attribute = node.class
     value     = "storage"
   }
 

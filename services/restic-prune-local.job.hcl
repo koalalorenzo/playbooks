@@ -9,7 +9,7 @@ job "restic-prune-local" {
   }
 
   constraint {
-    attribute = "${node.class}"
+    attribute = node.class
     value     = "compute"
   }
 

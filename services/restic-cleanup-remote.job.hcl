@@ -9,7 +9,7 @@ job "restic-cleanup-remote" {
   }
 
   constraint {
-    attribute = "${node.class}"
+    attribute = node.class
     value     = "compute"
   }
 
