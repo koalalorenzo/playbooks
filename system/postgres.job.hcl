@@ -1,7 +1,7 @@
 job "postgres" {
-  region      = "global"
-  type        = "service"
-  priority    = 80
+  region   = "global"
+  type     = "service"
+  priority = 80
 
   group "postgres" {
     constraint {
@@ -28,10 +28,10 @@ job "postgres" {
     }
 
     task "postgres" {
-      driver = "docker"
-      user   = "1000"
-      kill_signal = "SIGTERM"
-      kill_timeout = "15s"
+      driver         = "docker"
+      user           = "1000"
+      kill_signal    = "SIGTERM"
+      kill_timeout   = "15s"
       shutdown_delay = "3s"
 
       config {

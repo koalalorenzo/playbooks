@@ -1,7 +1,7 @@
 job "redis" {
-  region      = "global"
-  type        = "service"
-  priority    = 80
+  region   = "global"
+  type     = "service"
+  priority = 80
 
   group "redis" {
     restart {

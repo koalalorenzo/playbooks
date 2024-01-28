@@ -25,7 +25,7 @@ job "jellyfin" {
       value     = "compute"
       weight    = 70
     }
-    
+
     network {
       port "http" {
         to     = 8096

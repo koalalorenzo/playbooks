@@ -1,5 +1,5 @@
 job "adguard" {
-  type = "service"
+  type     = "service"
   priority = 90
 
   constraint {
@@ -52,7 +52,7 @@ job "adguard" {
         success_before_passing   = 1
         failures_before_critical = 3
       }
-      
+
     }
 
     service {
@@ -79,11 +79,11 @@ job "adguard" {
       driver = "docker"
 
       config {
-        image = "adguard/adguardhome"
-        force_pull = false
-        volumes = ["local:/opt/adguardhome/conf"]
-        ports = ["http", "dns"]
-        dns_servers = ["1.1.1.1","1.0.0.1"]
+        image       = "adguard/adguardhome"
+        force_pull  = false
+        volumes     = ["local:/opt/adguardhome/conf"]
+        ports       = ["http", "dns"]
+        dns_servers = ["1.1.1.1", "1.0.0.1"]
       }
 
       template {

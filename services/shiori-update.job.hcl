@@ -24,7 +24,7 @@ job "shiori-update" {
       driver = "docker"
 
       config {
-        image = "ghcr.io/go-shiori/shiori:v1.6.0-rc.6"
+        image      = "ghcr.io/go-shiori/shiori:v1.6.0-rc.6"
         entrypoint = ["/bin/sh"]
         command    = "${NOMAD_TASK_DIR}/update.sh"
       }
