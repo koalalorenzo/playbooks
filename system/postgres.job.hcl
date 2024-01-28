@@ -32,7 +32,7 @@ job "postgres" {
       user   = "1000"
 
       config {
-        image = "postgres:15-alpine"
+        image = "postgres:16.1-alpine"
         ports = ["postgres"]
       }
 
