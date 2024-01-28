@@ -60,8 +60,8 @@ job "restic-prune-remote" {
       }
 
       resources {
-        cpu    = 1000
-        memory = 256
+        cpu    = 1500
+        memory = 1024
       }
     }
   }
