@@ -28,7 +28,7 @@ job "redis" {
       user   = "1000"
 
       config {
-        image = "redis:7.0-alpine"
+        image = "redis:7.2-alpine"
         ports = ["redis"]
         args  = ["/usr/local/etc/redis/redis.conf"]
         volumes = [
