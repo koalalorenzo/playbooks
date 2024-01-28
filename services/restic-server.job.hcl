@@ -3,7 +3,7 @@ job "restic-server" {
   priority = 60
 
   constraint {
-    attribute = "${node.class}"
+    attribute = node.class
     value     = "storage"
   }
 
@@ -55,7 +55,7 @@ job "restic-server" {
 
       resources {
         cpu    = 1000
-        memory = 512
+        memory = 1024
       }
     }
   }

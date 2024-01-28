@@ -1,10 +1,15 @@
 job "redis" {
-  region      = "global"
-  datacenters = ["dc1"]
-  type        = "service"
-  priority    = 80
+  region   = "global"
+  type     = "service"
+  priority = 80
 
   group "redis" {
+    affinity {
+      attribute = node.class
+      value     = "compute"
+      weight    = 80
+    }
+
     restart {
       attempts = 5
       interval = "5m"
@@ -25,16 +30,19 @@ job "redis" {
 
     task "redis" {
       driver = "docker"
-      user   = "1000"
+      user   = "999"
 
       config {
-        image = "redis:alpine"
+        image = "redis:7.2-alpine"
         ports = ["redis"]
         args  = ["/usr/local/etc/redis/redis.conf"]
         volumes = [
           "local/redis.conf:/usr/local/etc/redis/redis.conf",
         ]
 
+        sysctl = {
+          #"vm.overcommit_memory" = "1"
+        }
       }
 
       template {

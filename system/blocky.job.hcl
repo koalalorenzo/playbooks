@@ -66,7 +66,7 @@ job "blocky" {
       driver = "docker"
 
       config {
-        image       = "ghcr.io/0xerr0r/blocky:v0.22"
+        image       = "ghcr.io/0xerr0r/blocky:v0.23"
         force_pull  = false
         volumes     = ["local/config.yml:/app/config.yml"]
         ports       = ["http", "dns"]
@@ -197,12 +197,12 @@ blocking:
       - malware
 caching:
   minTime: 30m
-  maxTime: 48h
+  maxTime: 12h
   maxItemsCount: 16384
-  cacheTimeNegative: 15m
+  cacheTimeNegative: 30m
   prefetching: true
-  # Prefetch a domain if it has more than 30 requests in 1h. (2rq per minute)
-  prefetchExpires: 1h
+  # Prefetch a domain if it has more than 30 requests in 3h.
+  prefetchExpires: 3h
   prefetchThreshold: 30
   prefetchMaxItemsCount: 512
 {{ range service "postgres" }}

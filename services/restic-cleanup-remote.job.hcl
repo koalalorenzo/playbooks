@@ -9,7 +9,7 @@ job "restic-cleanup-remote" {
   }
 
   constraint {
-    attribute = "${node.class}"
+    attribute = node.class
     value     = "compute"
   }
 
@@ -65,7 +65,7 @@ job "restic-cleanup-remote" {
 
       resources {
         cpu    = 1000
-        memory = 512
+        memory = 1024
       }
     }
   }

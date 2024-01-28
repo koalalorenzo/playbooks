@@ -22,7 +22,7 @@ job "shiori" {
       driver = "docker"
 
       config {
-        image = "ghcr.io/go-shiori/shiori:v1.5.5"
+        image = "ghcr.io/go-shiori/shiori:v1.6.0-rc.6"
         ports = ["http"]
       }
 
@@ -39,17 +39,12 @@ job "shiori" {
         env         = true
         change_mode = "restart"
         data        = <<EOH
+          SHIORI_DIR=/shiori
           {{ range service "postgres" }}
             SHIORI_DATABASE_URL=postgres://{{ with nomadVar "nomad/jobs/shiori" }}{{ .POSTGRES_USERNAME }}:{{ .POSTGRES_PASSWORD }}{{ end }}@{{ .Address }}:{{ .Port }}/shiori?sslmode=disable
-            SHIORI_DBMS=postgresql
-            {{ with nomadVar "nomad/jobs/shiori" }}
-            SHIORI_PG_USER="{{ .POSTGRES_USERNAME }}"
-            SHIORI_PG_PASS="{{ .POSTGRES_PASSWORD }}"
-            {{ end }}
-            SHIORI_PG_NAME=shiori
-            SHIORI_PG_HOST={{ .Address }}
-            SHIORI_PG_PORT={{ .Port }}
-            SHIORI_PG_SSLMODE=disable
+          {{ end }}
+          {{ with nomadVar "nomad/jobs/shiori" }}
+          SHIORI_HTTP_SECRET_KEY="{{ .SHIORI_HTTP_SECRET_KEY }}"
           {{ end }}
         EOH
       }

@@ -84,7 +84,7 @@
               # drop extensive scrape statistics
               metric_relabel_configs:
               - action: drop
-                regex: node_scrape_collector_.+
+                regex: (node_scrape_collector_.*|node_nfsd_.*|node_systemd_socket_.*)
                 source_labels: [__name__]
               relabel_configs:
               - replacement: {{ ansible_hostname }}

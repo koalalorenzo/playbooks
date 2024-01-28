@@ -1,13 +1,13 @@
 job "postgres" {
-  region      = "global"
-  datacenters = ["dc1"]
-  type        = "service"
-  priority    = 80
+  region   = "global"
+  type     = "service"
+  priority = 80
 
   group "postgres" {
-    constraint {
-      attribute = "${node.class}"
-      value     = "storage"
+    affinity {
+      attribute = node.class
+      value     = "compute"
+      weight    = 80
     }
 
     restart {
@@ -29,11 +29,14 @@ job "postgres" {
     }
 
     task "postgres" {
-      driver = "docker"
-      user   = "1000"
+      driver         = "docker"
+      user           = "1000"
+      kill_signal    = "SIGTERM"
+      kill_timeout   = "15s"
+      shutdown_delay = "3s"
 
       config {
-        image = "postgres:15-alpine"
+        image = "postgres:16.1-alpine"
         ports = ["postgres"]
       }
 
@@ -74,7 +77,7 @@ job "postgres" {
 
   group "pgweb" {
     constraint {
-      attribute = "${node.class}"
+      attribute = node.class
       value     = "compute"
     }
 
@@ -93,7 +96,7 @@ job "postgres" {
       driver = "docker"
 
       config {
-        image = "sosedoff/pgweb"
+        image = "sosedoff/pgweb:0.14.2"
         ports = ["pgweb"]
       }
 

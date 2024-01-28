@@ -20,6 +20,12 @@ job "jellyfin" {
   type = "service"
 
   group "jellyfin" {
+    affinity {
+      attribute = node.class
+      value     = "compute"
+      weight    = 70
+    }
+
     network {
       port "http" {
         to     = 8096
@@ -46,6 +52,7 @@ job "jellyfin" {
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
+
     service {
       name = "jellyfin"
       port = "http"

@@ -27,6 +27,7 @@
           - ufw
           - unzip
           - yubikey-manager
+          - iotop
 
     - name: Upgrade System Packages
       apt:
