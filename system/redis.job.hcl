@@ -12,12 +12,12 @@ job "redis" {
       mode     = "delay"
     }
 
-    volume "data" {
-      type            = "csi"
-      attachment_mode = "file-system"
-      access_mode     = "single-node-writer"
-      source          = "redis"
-    }
+    # volume "data" {
+    #   type            = "csi"
+    #   attachment_mode = "file-system"
+    #   access_mode     = "single-node-writer"
+    #   source          = "redis"
+    # }
 
     network {
       port "redis" {}
@@ -25,7 +25,7 @@ job "redis" {
 
     task "redis" {
       driver = "docker"
-      user   = "1000"
+      # user   = "1000"
 
       config {
         image = "redis:7.2-alpine"
@@ -52,11 +52,11 @@ maxmemory 512m
 EOH
       }
 
-      volume_mount {
-        volume      = "data"
-        destination = "/data"
-        read_only   = false
-      }
+      # volume_mount {
+      #   volume      = "data"
+      #   destination = "/data"
+      #   read_only   = false
+      # }
 
       resources {
         cpu    = 1000
