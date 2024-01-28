@@ -30,6 +30,9 @@ job "postgres" {
     task "postgres" {
       driver = "docker"
       user   = "1000"
+      kill_signal = "SIGTERM"
+      kill_timeout = "15s"
+      shutdown_delay = "3s"
 
       config {
         image = "postgres:16.1-alpine"
