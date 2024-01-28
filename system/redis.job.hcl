@@ -4,6 +4,12 @@ job "redis" {
   priority = 80
 
   group "redis" {
+    affinity {
+      attribute = node.class
+      value     = "compute"
+      weight    = 80
+    }
+
     restart {
       attempts = 5
       interval = "5m"

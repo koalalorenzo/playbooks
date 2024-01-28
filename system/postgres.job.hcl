@@ -4,9 +4,10 @@ job "postgres" {
   priority = 80
 
   group "postgres" {
-    constraint {
+    affinity {
       attribute = node.class
-      value     = "storage"
+      value     = "compute"
+      weight    = 80
     }
 
     restart {
