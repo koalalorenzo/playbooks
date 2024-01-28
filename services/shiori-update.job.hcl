@@ -60,7 +60,7 @@ job "shiori-update" {
           # Loop through each URL and run shiori add command
           for URL in $URLS; do
               echo "Adding $URL to Shiori"
-              shiori add "$URL" -a
+              shiori add "$URL"
           done
 
           # Clean up the temporary RSS file
