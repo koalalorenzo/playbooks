@@ -47,7 +47,7 @@ job "redis" {
 protected-mode no
 port {{ env "NOMAD_PORT_redis" }}
 loglevel warning
-save 3600 1 300 100 60 10000
+# save 3600 1 300 100 60 10000
 maxmemory 512m
 EOH
       }
