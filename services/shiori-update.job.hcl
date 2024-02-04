@@ -2,7 +2,7 @@ job "shiori-update" {
   type = "batch"
 
   periodic {
-    crons            = ["45 5 * * *"]
+    crons            = ["45 */4 * * *"]
     prohibit_overlap = true
     time_zone        = "CET"
   }
@@ -48,8 +48,12 @@ job "shiori-update" {
         destination = "${NOMAD_TASK_DIR}/update.sh"
         change_mode = "restart"
         data        = <<EOH
+          #!/usr/bin/env bash
+
           # Define RSS feed URL
           RSS_FEED_URL="https://getpocket.com/users/koalalorenzo/feed/all"
+          # File to keep track of processed URLs
+          PROCESSED_URLS_FILE="/shiori/processed_urls.txt"
 
           # Fetch RSS feed using curl
           wget -q -O - "$RSS_FEED_URL" > rss_feed.xml
@@ -59,8 +63,16 @@ job "shiori-update" {
 
           # Loop through each URL and run shiori add command
           for URL in $URLS; do
-              echo "Adding $URL to Shiori"
-              shiori add "$URL"
+              # Check if URL is already processed
+              if grep -q "$URL" "$PROCESSED_URLS_FILE"; then
+                  echo "Skipping $URL, already processed."
+              else
+                  echo "Adding $URL to Shiori"
+                  # Add URL to Shiori
+                  shiori add "$URL"
+                  # Add URL to processed list
+                  echo "$URL" >> "$PROCESSED_URLS_FILE"
+              fi
           done
 
           # Clean up the temporary RSS file
