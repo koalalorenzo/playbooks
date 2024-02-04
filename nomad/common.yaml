@@ -136,7 +136,7 @@
           data_dir  = "/opt/nomad/data"
           bind_addr = "0.0.0.0"
 
-          log_rotate_duration = "48h"
+          log_rotate_duration = "24h"
           log_rotate_max_files = 7
 
           telemetry {

@@ -22,8 +22,7 @@
             enabled = true
             bootstrap_expect = {{ groups["nomadServers"] | length }}
 
-            node_gc_threshold = "3h"
-            job_gc_interval = "15m"
+            job_gc_interval = "12h"
             csi_volume_claim_gc_interval = "15m"
 
             job_gc_threshold = "72h"
