@@ -1,13 +1,13 @@
 {
-	"data": "ENC[AES256_GCM,data:iw6y5ZH9ZVpl+jHFN2l4UIpq6swcHlONXnM465dOLXD+z6+bwIlx/fbad7O0EGaJaOBvmNEJnr9eLwT47BWcJ4qzqEHDDd03DLjG9bNEdor3zX3gycexnKxiPWkmu35NOX24epox5VtFf6VhfiAk+EZyzD5FlHdtXcA5cH65qVND6+X1ca3SwhPe2qh7J+B99ucrP+MEWAZv+x6NIARNc4W8X46DI+9T7igomyk9Xn1M2H2ZtbeOclhynnZQBgK6mqRiuoCcmMx6lC0+6HUx4V2KRVCQfMF0dkIugMjIiYusBk2i2lyaSSswvpQv45wgqop8RhuMW+NZqW7yOC/HvuogvY4QDyYCBniVx0Io45t6A1woBlLntVeYFFUcdNlne76CoTpUMbIVsyF4iVvgNcnokMKrdpKbnrRYQWxFflZJ+7v/2DWPhNwdKREEnjLbFNx4BFaYaMP68vp5RhYZGf8U7Yx40A9EfBGua9xJGlcUZj/9vg==,iv:dfeqYFCTu2euNkuZQ9mVTa9qiuu14tCe0kdzG4Z35A8=,tag:t5qRdvgCM0rAha38w91Azw==,type:str]",
+	"data": "ENC[AES256_GCM,data:BZPhwBST0mqBdwsETDefRHVjTkelV7HzzXr+y66tdMjJ4UYqmdnOJ6jupkCkix2qER1OSrOX0Blm/kpPh6Mrt/tiEc3BhoUWY/+VS2LO/nLlJbKozC4ROyfmKu62kfAacFt+Wpj8cxJ6QWtAD6m3jZ+HkrF/tW+a5rzgdZCqqSAnmxlUOHxvxQG2PsdQHb76o4V7Y5gM8D5SksmUHXZZ6czeCY8qsHb6cvXI6qImxagXg6gpY/pUoHGB4Q51hLTjqjNjufHVo0EHZwz772mS6B8RptOmNcnK5IK13kdT+1cuiGHbE2UNRBN2lVBzz0qZMGmDfz/JF162/zyY4826bFG+Qf4DyQcs5QS8Bt1nqS94eWOjjPocjyoZCB+RbLBVlngQuVHBU+Vyb+BEgsjsK0w+bRxShJTTWa3UdsIboJpt4N5IyDbisznRje1PZzsPqCQncvDtZ24VydCxEcSBFH8AbxozXRGRK6YCZlBjt/UBqcxIa/iKBe/E4ZHIQrcxZYBUnjtaFbOjGOkVjUkoZBo=,iv:gMb3qxd0TMfS2GumnFIkngApFy/4EJusBcWzv1e0dKM=,tag:RFR909/OeDvKJbDsoQ599A==,type:str]",
 	"sops": {
 		"kms": null,
 		"gcp_kms": null,
 		"azure_kv": null,
 		"hc_vault": null,
 		"age": null,
-		"lastmodified": "2023-08-11T14:47:48Z",
-		"mac": "ENC[AES256_GCM,data:e1IR/+iTZwB99ivKXab8suolZkbcrTBL3sb7AOngvF5n/RslW71a7t2HmUUfOdoD9t/W3Et6KTaHwITF2pw8NyMTlhNeEYiP5HZ3iUxqd2eH2hPMy6w4f6oKGJDhlC7XZ43UXnrpRYoDLL4oFwH8SV21XtXfoBm19s/DP7j58OQ=,iv:N8G8SaPBxgJAwwITsokLqmovVytjTwetz+mFXkB7iLI=,tag:YRV50L5QsY9tBQwElLEGLA==,type:str]",
+		"lastmodified": "2024-01-29T09:56:51Z",
+		"mac": "ENC[AES256_GCM,data:MEGbxLMU7jD9rojbjSMzU3ERIfzGYRAup7yOQLl0/VAJ7FdELveU0zhf2nmZ0GVFUTJpflwAJBQ161hXHf3fCf7uQO9myIjvohAiEaKthE6cCLbrg6vqCSh8Nl1Cjpic3zsbmVLQJEQN1syGnD4GbMkUsFbPYoLbvwRPMuv99Mk=,iv:kCmi7aL9UImFMj4LZLF9gKeoh2rlWofzs/OnytVt2f8=,tag:SFhBldpuJAgnt/97qedaSQ==,type:str]",
 		"pgp": [
 			{
 				"created_at": "2023-08-11T14:19:00Z",
@@ -21,6 +21,6 @@
 			}
 		],
 		"unencrypted_suffix": "_unencrypted",
-		"version": "3.7.3"
+		"version": "3.8.1"
 	}
 }
