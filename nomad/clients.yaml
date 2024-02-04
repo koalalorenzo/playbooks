@@ -55,8 +55,8 @@
 
             reserved {
               {% if node_class == "storage"  %}
-              cpu    = 1000 # OpenZFS
-              memory = 2048 # OpenZFS
+              cpu    = 1250 # OpenZFS
+              memory = 3072 # OpenZFS
               {% else %}
               cpu    = 500
               memory = 512
