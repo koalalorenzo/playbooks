@@ -14,6 +14,7 @@ deps:
 	# Disabled datadog as we don't use it anymore
 	# ansible-galaxy install datadog.datadog
 	ansible-galaxy collection install community.sops
+	ansible-galaxy collection install community.dns
 .PHONY: deps
 
 reboot:
