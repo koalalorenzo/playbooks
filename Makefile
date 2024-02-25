@@ -31,7 +31,7 @@ all: deps
 
 apt_upgrade:
 	ansible all -i ./inventory.yml --become \
-		-m apt -a "update_cache=yes cache_valid_time=86400" ${ANSIBLE_ARGS}
+		-m apt -a "update_cache=yes cache_valid_time=600" ${ANSIBLE_ARGS}
 	ansible all -i ./inventory.yml --become \
 		-m apt -a "upgrade=full autoremove=true" ${ANSIBLE_ARGS}
 .PHONY: apt_upgrade
