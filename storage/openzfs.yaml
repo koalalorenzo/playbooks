@@ -121,7 +121,7 @@
         user: root
         hour: "2"
         minute: "30"
-        day: "2, 16"
+        day: "2,16"
         job: "/usr/sbin/zpool scrub main"
 
     - ufw:
