@@ -102,18 +102,20 @@ blocking:
   blockType: nxDomain
   blockTTL: 12h
   whiteLists:
-    tracking:
+    tracking: &generic_white_list
       - |
         /icloud.com/
         /apple.com/
-        /datadoghq.eu/
-        /static.datadoghq.com/
-    ads:
-      - |
-        /icloud.com/
-        /apple.com/
-        /datadoghq.eu/
-        /static.datadoghq.com/
+        #/datadoghq.eu/
+        #/static.datadoghq.com/
+        # GitHub Actions
+        /github.com/
+        /actions.githubusercontent.com/
+        /blob.core.windows.net/
+        /ghcr.io/
+        /github-cloud.githubusercontent.com/
+        /github-cloud.s3.amazonaws.com/
+    ads: *generic_white_list
     malware:
       - |
         /www.googleapis.com/
