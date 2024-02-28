@@ -10,11 +10,11 @@ job "csi-nfs-node" {
       mode     = "delay" # try again, never fail
     }
 
-    task "node" {
+    task "nfs-node" {
       driver = "docker"
 
       config {
-        image = "registry.k8s.io/sig-storage/nfsplugin:v4.4.0"
+        image = "registry.k8s.io/sig-storage/nfsplugin:v4.6.0"
 
         args = [
           "--v=5",

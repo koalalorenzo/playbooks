@@ -1,6 +1,6 @@
 # From: https://gitlab.com/rocketduck/csi-plugin-nfs
 job "csi-nfs-controller" {
-  type     = "service"
+  type     = "system"
   priority = 100
 
   constraint {
@@ -18,11 +18,11 @@ job "csi-nfs-controller" {
     }
 
 
-    task "controller" {
+    task "nfs-controller" {
       driver = "docker"
 
       config {
-        image = "registry.k8s.io/sig-storage/nfsplugin:v4.4.0"
+        image = "registry.k8s.io/sig-storage/nfsplugin:v4.6.0"
 
         args = [
           "--v=5",
