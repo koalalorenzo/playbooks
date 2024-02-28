@@ -26,7 +26,6 @@
     - package:
         name: grafana-agent
         state: latest
-      register: grafanapkg
       notify: Restart grafana-agent
 
     - name: Add Grafana config file
@@ -35,6 +34,19 @@
         mode: 0644
         content: |
           integrations:
+            cadvisor:
+              enabled: true
+              docker_only: true
+              instance: {{ ansible_hostname }}
+              relabel_configs:
+              - action: replace
+                replacement: integrations/docker
+                target_label: job
+              metric_relabel_configs:
+              - action: keep
+                regex: container_cpu_usage_seconds_total|container_fs_inodes_free|container_fs_inodes_total|container_fs_limit_bytes|container_fs_usage_bytes|container_last_seen|container_memory_usage_bytes|container_network_receive_bytes_total|container_network_tcp_usage_total|container_network_transmit_bytes_total|container_spec_memory_reservation_limit_bytes|machine_memory_bytes|machine_scrape_error
+                source_labels:
+                - __name__
             prometheus_remote_write:
             - basic_auth:
                 password: {{ grafana_token }}
@@ -126,6 +138,24 @@
                       instance: {{ ansible_hostname }}
                       __path__: /var/log/{syslog,messages,*.log}
                       job: integrations/node_exporter
+                - job_name: integrations/docker
+                  docker_sd_configs:
+                    - host: unix:///var/run/docker.sock
+                      refresh_interval: 5s
+                  relabel_configs:
+                  - action: replace
+                    replacement: integrations/docker
+                    target_label: job
+                  - action: replace
+                    replacement: '{{ ansible_hostname }}'
+                    target_label: instance
+                  - source_labels:
+                      - __meta_docker_container_name
+                    regex: '/(.*)'
+                    target_label: container
+                  - source_labels: 
+                      - __meta_docker_container_log_stream
+                    target_label: stream
           metrics:
             configs:
             - name: integrations
@@ -153,6 +183,20 @@
             global:
               scrape_interval: 60s
             wal_directory: /tmp/grafana-agent-wal
+      notify: Restart grafana-agent
+
+    - name: Determine available groups
+      getent:
+        database: group
+
+    - name: Add additional groups (docker etc), to grafana-agent if the groups exists
+      user:
+        name: "grafana-agent"
+        groups: "{{item}}"
+        append: yes
+      when: item in ansible_facts.getent_group
+      with_items:
+        - docker
       notify: Restart grafana-agent
 
     - name: Set ACL for Grafana Agent's user on various files
