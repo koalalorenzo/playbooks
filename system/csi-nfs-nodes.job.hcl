@@ -5,9 +5,9 @@ job "csi-nfs-node" {
   group "node" {
     restart {
       delay    = "15s"
-      interval = "60s"
-      attempts = 4
-      mode     = "delay" # try again, never fail
+      interval = "5m"
+      attempts = 20
+      mode     = "delay"
     }
 
     task "nfs-node" {

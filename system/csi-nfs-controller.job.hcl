@@ -1,6 +1,6 @@
 # From: https://gitlab.com/rocketduck/csi-plugin-nfs
 job "csi-nfs-controller" {
-  type     = "system"
+  type     = "service"
   priority = 100
 
   constraint {
@@ -10,11 +10,10 @@ job "csi-nfs-controller" {
 
   group "controller" {
     restart {
-      # Restart every 30 seconds for 3 times, and then wait 1 min to try again
       delay    = "5s"
-      interval = "15s"
-      attempts = 3
-      mode     = "delay" # try again, never fail
+      interval = "5m"
+      attempts = 55
+      mode     = "delay"
     }
 
 
