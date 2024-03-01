@@ -2,7 +2,6 @@ job "traefik" {
   type        = "system"
   priority    = 90
 
-
   group "traefik" {
     # If there the Nomad server is disconected for more than 1 min, and 
     # allocation does not have a heartbeat for 1 min, then kill it

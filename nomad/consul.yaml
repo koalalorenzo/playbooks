@@ -153,4 +153,4 @@
         name: "rejoin consul cluster after reboot"
         user: root
         special_time: reboot
-        job: "sleep 30; consul join {% for i in groups['nomadServers'] %}{{ i }} {% endfor %}"
+        job: "retry -t 10 -- consul join {% for i in groups['nomadServers'] %}{{ i }} {% endfor %}"
