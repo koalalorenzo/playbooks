@@ -16,18 +16,20 @@
         state: latest
         name:
           - acl
+          - at
           - ca-certificates
           - curl
           - gnupg
-          - openssh-server
+          - iotop
           - mosh
+          - openssh-server
           - openssl
           - python3
+          - retry
           - software-properties-common
           - ufw
           - unzip
           - yubikey-manager
-          - iotop
 
     - name: Upgrade System Packages
       apt:
@@ -38,25 +40,26 @@
       service:
         name: snapd
         state: stopped
-        enabled: no
+        enabled: false
       ignore_errors: true
 
     - service:
         name: "{{ item }}"
         state: stopped
-        enabled: no
+        enabled: false
       ignore_errors: true
       loop:
         - snap.lxd.user-daemon.unix.socket
         - snap.lxd.daemon.unix.socket
         - snap.lxd.daemon.unix.socket
+        - snap.lxd.activate.service
         - snapd
         - snapd.socket
 
     - service:
-        name: snap.lxd.activate.service
-        state: stopped
-        enabled: no
+        name: atd.service
+        state: started
+        enabled: true
       ignore_errors: true
 
     - name: Uninstall snapd package
