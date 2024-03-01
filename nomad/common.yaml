@@ -140,7 +140,7 @@
           log_rotate_max_files = 7
 
           telemetry {
-           collection_interval = "5s",
+           collection_interval = "60s", # Must match or less than prometheus scrape_interval
            publish_allocation_metrics = true,
            publish_node_metrics = true,
            prometheus_metrics = true

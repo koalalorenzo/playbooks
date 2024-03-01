@@ -216,7 +216,7 @@
                     - refresh_interval: 30s
                       tags: ["prometheus"]
             global:
-              scrape_interval: 30s
+              scrape_interval: 60s
             wal_directory: /tmp/grafana-agent-wal
       notify: Restart grafana-agent
 
