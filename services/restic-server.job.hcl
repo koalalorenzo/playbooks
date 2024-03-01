@@ -23,6 +23,13 @@ job "restic-server" {
       name = "restic-server"
       port = "http"
 
+      check {
+        name     = "alive"
+        type     = "tcp"
+        interval = "300s"
+        timeout  = "30s"
+      }
+
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.resticserver.rule=Host(`restic.elates.it`)",

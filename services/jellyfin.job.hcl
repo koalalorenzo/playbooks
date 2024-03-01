@@ -57,6 +57,13 @@ job "jellyfin" {
       name = "jellyfin"
       port = "http"
 
+      check {
+        name     = "alive"
+        type     = "tcp"
+        interval = "600s"
+        timeout  = "30s"
+      }
+
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.jellyfin.rule=Host(`media.elates.it`)",

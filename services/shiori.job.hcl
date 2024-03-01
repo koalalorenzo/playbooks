@@ -53,6 +53,13 @@ job "shiori" {
         name = "shiori"
         port = "http"
 
+        check {
+          name     = "alive"
+          type     = "tcp"
+          interval = "600s"
+          timeout  = "5s"
+        }
+
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.shiori.rule=Host(`shiori.elates.it`)",
