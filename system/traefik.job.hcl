@@ -1,6 +1,4 @@
 job "traefik" {
-  region      = "global"
-  datacenters = ["dc1"]
   type        = "system"
   priority    = 90
 
@@ -46,16 +44,16 @@ job "traefik" {
 
     service {
       name     = "traefik"
-      provider = "nomad"
-
+      # Using Consul for livecheck and alerts with grafana
+      # provider = "nomad" 
       port = "api"
 
       check {
         name     = "alive"
         type     = "tcp"
         port     = "http"
-        interval = "60s"
-        timeout  = "10s"
+        interval = "30s"
+        timeout  = "15s"
       }
 
       tags = [
