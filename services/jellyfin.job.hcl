@@ -60,7 +60,7 @@ job "jellyfin" {
       check {
         name     = "alive"
         type     = "tcp"
-        interval = "600s"
+        interval = "300s"
         timeout  = "30s"
       }
 
