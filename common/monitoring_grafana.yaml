@@ -35,7 +35,8 @@
         content: |
           integrations:
             cadvisor:
-              enabled: true
+              # Disabled as docker metrics are not important as logs for now
+              enabled: false
               docker_only: true
               instance: {{ ansible_hostname }}
               relabel_configs:
@@ -98,9 +99,13 @@
               # drop extensive scrape statistics
 
               metric_relabel_configs:
-              - action: drop
-                regex: (node_scrape_collector_.*|node_nfsd_.*|node_systemd_socket_.*)
-                source_labels: [__name__]
+              - action: keep
+                separator: "@"
+                regex: "node_systemd_unit_state@(consul.*|nomad.*|docker.*|atd.*|cloud.*|apt.*|cron.*|grafana-agent.*|nfs.*|ufw.*|unattended.*|tailscale.*|zfs.*|wpa.*|network.*|ssh.*|podman.*)"
+                source_labels: [__name__, name]
+              # - action: drop
+              #   regex: (node_scrape_collector_.*|node_nfsd_.*|node_systemd_socket_.*)
+              #   source_labels: [__name__]
               relabel_configs:
               - replacement: {{ ansible_hostname }}
                 target_label: instance
@@ -190,26 +195,26 @@
                   username: {{ grafana_prometheus_username }}
                 url: {{ grafana_prometheus_url }}
               scrape_configs:
-                # Add here any snippet that belongs to the `metrics.configs.scrape_configs` section.
-                # For a correct indentation, paste snippets copied from Grafana Cloud at the beginning of the line.
-                - job_name: integrations/nomad
-                  metrics_path: /v1/metrics
-                  params:
-                    format: ['prometheus']
-                  relabel_configs:
-                  - replacement: '{{ ansible_hostname }}'
-                    target_label: instance
-                  static_configs:
-                    - targets: ["{{ ansible_hostname }}:4646"]
-                  metric_relabel_configs:
-                  - action: keep
-                    regex: nomad_client_allocated_cpu|nomad_client_allocated_disk|nomad_client_allocated_memory|nomad_client_allocs_cpu_total_percent|nomad_client_allocs_cpu_total_ticks|nomad_client_allocs_memory_cache|nomad_client_allocs_memory_rss|nomad_client_host_cpu_idle|nomad_client_host_disk_available|nomad_client_host_disk_inodes_percent|nomad_client_host_disk_size|nomad_client_host_memory_available|nomad_client_host_memory_free|nomad_client_host_memory_total|nomad_client_host_memory_used|nomad_client_unallocated_cpu|nomad_client_unallocated_disk|nomad_client_unallocated_memory|nomad_client_uptime
-                    source_labels:
-                    - __name__
+                # Disabled as Nomad metrics are not used
+                # - job_name: integrations/nomad
+                #   metrics_path: /v1/metrics
+                #   params:
+                #     format: ['prometheus']
+                #   relabel_configs:
+                #   - replacement: '{{ ansible_hostname }}'
+                #     target_label: instance
+                #   static_configs:
+                #     - targets: ["{{ ansible_hostname }}:4646"]
+                #   metric_relabel_configs:
+                #   - action: keep
+                #     regex: nomad_client_allocated_cpu|nomad_client_allocated_disk|nomad_client_allocated_memory|nomad_client_allocs_cpu_total_percent|nomad_client_allocs_cpu_total_ticks|nomad_client_allocs_memory_cache|nomad_client_allocs_memory_rss|nomad_client_host_cpu_idle|nomad_client_host_disk_available|nomad_client_host_disk_inodes_percent|nomad_client_host_disk_size|nomad_client_host_memory_available|nomad_client_host_memory_free|nomad_client_host_memory_total|nomad_client_host_memory_used|nomad_client_unallocated_cpu|nomad_client_unallocated_disk|nomad_client_unallocated_memory|nomad_client_uptime
+                #     source_labels:
+                #     - __name__
 
-                - job_name: integrations/traefik
-                  static_configs:
-                    - targets: ["{{ ansible_hostname }}:8081"]
+                # Disabled as Traefik Metrics are not used
+                # - job_name: integrations/traefik
+                #   static_configs:
+                #     - targets: ["{{ ansible_hostname }}:8081"]
 
                 - job_name: consul_services
                   consulagent_sd_configs:
