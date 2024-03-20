@@ -91,3 +91,10 @@
         state: present
         mode: 0644
       notify: Restart ssh
+
+    - name: Ensures EDITOR var is passed
+      blockinfile:
+        path: /etc/sudoers
+        marker: "## {mark} ANSIBLE MANAGED BLOCK EDITOR var ##"
+        block: |
+          Defaults:%sudo env_keep += "EDITOR SYSTEMD_EDITOR"
