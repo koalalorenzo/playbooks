@@ -23,6 +23,7 @@
         is_admin: "{{ item.is_admin }}"
         pubkeys_urls: "{{ item.pubkeys_urls }}"
         email: "{{ item.email }}"
+        env_vars: "{{ item.env_vars }}"
       loop: "{{ system_users }}"
 
     - name: Download GPG/PGP Keys ( root )

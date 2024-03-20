@@ -18,6 +18,9 @@ all:
           - https://github.com/koalalorenzo.keys
         email: sage.scenery0e@icloud.com
         is_admin: true
+        env_vars:
+          EDITOR: vim
+          SYSTEMD_EDITOR: vim
 
     # This is used to encrypt emails if enabled
     gpg_key_fingerprints:

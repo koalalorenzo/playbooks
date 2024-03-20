@@ -68,3 +68,13 @@
     env: yes
     job: ifne /usr/bin/gpg --batch --armor --trust-model always --recipient {{ gpg_key_fingerprints | join (' --recipient ') }} --encrypt
   when: email
+
+- name: Insert Variables
+  blockinfile:
+    path: /home/{{ username }}/.profile
+    marker: "## {mark} ANSIBLE MANAGED BLOCK {{ variable.key }} ##"
+    block: |
+      export {{ variable.key }}="{{ variable.value }}"
+  loop: "{{ env_vars | dict2items }}"
+  loop_control:
+    loop_var: variable
