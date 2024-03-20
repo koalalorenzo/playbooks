@@ -19,6 +19,7 @@
       service:
         name: systemd-networkd-wait-online.service
         state: restarted
+        daemon_reload: yes
 
   tasks:
     - name: Load encrypted credentials
@@ -92,8 +93,15 @@
       ignore_errors: true # Tailscale might have overwritten this
       notify: Restsart resolved
 
+    - file:
+        path: "/etc/systemd/system/systemd-networkd-wait-online.service.d"
+        state: directory
+        mode: "0755"
+      notify: Restsart systemd-networkd-wait-online
+
     - copy:
         dest: /etc/systemd/system/systemd-networkd-wait-online.service.d/override.conf
+        mode: "0644"
         content: |
           [Service]
           ExecStart=
