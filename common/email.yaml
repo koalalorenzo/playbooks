@@ -103,10 +103,10 @@
         name: postfix
         enabled: yes
 
-    - name: Adds Email notification
-      cron:
-        name: MAILTO
-        user: root
-        env: yes
-        job: sage.scenery0e@icloud.com
-      notify: Restart postfix
+    # - name: Adds Email notification
+    #   cron:
+    #     name: MAILTO
+    #     user: root
+    #     env: yes
+    #     job: sage.scenery0e@icloud.com
+    #   notify: Restart postfix

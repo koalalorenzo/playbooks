@@ -53,21 +53,21 @@
     env: yes
     job: /bin/bash
 
-- name: Adds Email notification
-  cron:
-    user: "{{ username }}"
-    name: MAILTO
-    env: yes
-    job: "{{ email }}"
-  when: email
+# - name: Adds Email notification
+#   cron:
+#     user: "{{ username }}"
+#     name: MAILTO
+#     env: yes
+#     job: "{{ email }}"
+#   when: email
 
-- name: Adds GPG Key on cron to encrypt messages from cron (pipe to GPG_CMD)
-  cron:
-    user: "{{ username }}"
-    name: GPG_CMD
-    env: yes
-    job: ifne /usr/bin/gpg --batch --armor --trust-model always --recipient {{ gpg_key_fingerprints | join (' --recipient ') }} --encrypt
-  when: email
+# - name: Adds GPG Key on cron to encrypt messages from cron (pipe to GPG_CMD)
+#   cron:
+#     user: "{{ username }}"
+#     name: GPG_CMD
+#     env: yes
+#     job: ifne /usr/bin/gpg --batch --armor --trust-model always --recipient {{ gpg_key_fingerprints | join (' --recipient ') }} --encrypt
+#   when: email
 
 - name: Insert Variables
   blockinfile:

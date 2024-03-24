@@ -61,12 +61,12 @@
         env: yes
         job: ifne /usr/bin/gpg --batch --armor --trust-model always --recipient {{ gpg_key_fingerprints | join (' --recipient ') }} --encrypt
 
-    - name: Adds Email notification
-      cron:
-        user: "{{ ansible_user }}"
-        name: MAILTO
-        env: yes
-        job: sage.scenery0e@icloud.com
+    # - name: Adds Email notification
+    #   cron:
+    #     user: "{{ ansible_user }}"
+    #     name: MAILTO
+    #     env: yes
+    #     job: sage.scenery0e@icloud.com
 
     - name: Disable root login
       lineinfile:
