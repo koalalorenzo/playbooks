@@ -7,7 +7,6 @@
 
   tasks:
     - apt:
-        upgrade: yes
         update_cache: yes
       when: ansible_os_family == "Debian"
 
@@ -30,11 +29,6 @@
           - ufw
           - unzip
           - yubikey-manager
-
-    - name: Upgrade System Packages
-      apt:
-        upgrade: full
-      when: ansible_os_family == "Debian"
 
     - name: Stop and disable snapd service
       service:
