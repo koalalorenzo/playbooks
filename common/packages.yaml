@@ -50,13 +50,19 @@
         - snapd
         - snapd.socket
 
-    - service:
-        name: atd.service
-        state: started
-        enabled: true
-      ignore_errors: true
-
     - name: Uninstall snapd package
       package:
         name: snapd
         state: absent
+
+    - service:
+        name: atd.service
+        state: started
+        enabled: true
+
+    - name: Add cron job for pre-fetch upgrade packages
+      cron:
+        name: "fetch updates weekly"
+        user: root
+        special_time: "weekly"
+        job: echo "apt-get update -y -q ; apt-get upgrade -y -q -d" | batch
