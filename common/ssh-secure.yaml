@@ -19,11 +19,11 @@
           - ufw
           - openssh-server
 
-    - name: Set Max users to 2
+    - name: Set Max users to 5
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: "^MaxSessions"
-        line: "MaxSessions 2"
+        line: "MaxSessions 5"
         state: present
         mode: 0644
       notify: Restart ssh

@@ -78,3 +78,10 @@
   loop: "{{ env_vars | dict2items }}"
   loop_control:
     loop_var: variable
+
+- name: Allow user to reboot/shutdown without password
+  blockinfile:
+    path: /etc/sudoers
+    marker: "## {mark} ANSIBLE MANAGED BLOCK allow reboot and shutdown ##"
+    block: |
+      {{ username }} ALL = NOPASSWD: /sbin/reboot, /sbin/shutdown
