@@ -63,7 +63,7 @@ job "transmission" {
 
       volume_mount {
         volume      = "downloads"
-        destination = "/downloads"
+        destination = "/"
       }
 
       resources {
