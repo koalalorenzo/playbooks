@@ -151,6 +151,9 @@ blocking:
         /adservetx.media.net/
         /adc3-launch.adcolony.com/
     tracking:
+      - https://small.oisd.nl/domainswild
+      - https://big.oisd.nl/domainswild
+      - https://nsfw.oisd.nl/domainswild
       - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
       - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
       - https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
