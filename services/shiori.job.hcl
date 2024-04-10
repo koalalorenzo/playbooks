@@ -19,7 +19,7 @@ job "shiori" {
     }
 
     task "shiori" {
-      driver = "docker"
+      driver       = "docker"
       kill_timeout = "30s"
 
       config {

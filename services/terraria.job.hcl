@@ -43,7 +43,7 @@ job "terraria" {
     }
 
     task "tshock" {
-      driver = "exec"
+      driver       = "exec"
       kill_timeout = "60s"
 
       config {
