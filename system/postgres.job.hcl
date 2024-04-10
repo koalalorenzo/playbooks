@@ -6,8 +6,8 @@ job "postgres" {
   group "postgres" {
     affinity {
       attribute = node.class
-      value     = "compute"
-      weight    = 80
+      value     = "storage"
+      weight    = 90
     }
 
     restart {
