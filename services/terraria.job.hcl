@@ -6,9 +6,7 @@ job "terraria" {
 
     network {
       port "game" {}
-      port "http" {
-        static = 7878
-      }
+      port "http" {}
     }
 
     service {
@@ -63,24 +61,22 @@ job "terraria" {
             --output tshock.zip \
             https://github.com/Pryaxis/TShock/releases/download/v5.2.0/TShock-5.2-for-Terraria-1.4.4.9-{{ env "attr.kernel.name" }}-{{ env "attr.cpu.arch" }}-Release.zip
 
-          curl -L https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
-          
-          mkdir -p /server/dotnet
-          bash ./dotnet-install.sh \
-            --install-dir /server/dotnet --runtime dotnet --channel 6.0
-
           unzip -o -u tshock.zip -d /server
           cd /server
           tar -xf ./*.tar
           rm ./*.tar
 
-          export DOTNET_ROOT=/server/dotnet
-          export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
+          # Replace porti
+          sed -i 's/"ServerPort": [0-9]\+/"ServerPort": {{ env "NOMAD_PORT_game" }}/' /server/tshock/config.json
+          sed -i 's/"RestApiPort": [0-9]\+/"RestApiPort": {{ env "NOMAD_PORT_http" }}/' /server/tshock/config.json
+
           export DOTNET_BUNDLE_EXTRACT_BASE_DIR=/tmp/dotnetbundle/
           mkdir -p $DOTNET_BUNDLE_EXTRACT_BASE_DIR
           
-          ./TShock.Server \
-            -ip 0.0.0.0 -p {{ env "NOMAD_PORT_game" }} -maxplayers 3 \
+          ./TShock.Installer \
+            -ip 0.0.0.0 -p {{ env "NOMAD_PORT_game" }}  -maxplayers 4 \
+            -config /server/tshock/config.json \
+            -configpath /server/tshock/ \
             -world /server/tshock/share/Worlds/banana.wld
         EOF
       }
