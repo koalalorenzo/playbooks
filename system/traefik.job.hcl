@@ -38,6 +38,11 @@ job "traefik" {
       port "api" {
         static = 8081
       }
+
+      port "terraria" {
+        static = 7777
+      }
+
     }
 
     service {
@@ -69,12 +74,13 @@ job "traefik" {
 
     task "traefik" {
       driver = "docker"
+      kill_timeout = "30s"
 
       config {
         image        = "traefik:v2.11.0"
         network_mode = "host"
 
-        ports = ["http", "https", "api"]
+        ports = ["http", "https", "api", "dns", "terraria"]
 
         volumes = [
           "local/traefik.yaml:/etc/traefik/traefik.yaml",
@@ -123,6 +129,12 @@ entryPoints:
   
   traefik:
     address: ":8081"
+
+  terraria-tcp:
+    address: ":7777"
+    
+  terraria-udp:
+    address: ":7777/udp"
 
 certificatesResolvers:
   letsencrypt:
