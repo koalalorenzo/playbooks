@@ -20,6 +20,7 @@ job "shiori" {
 
     task "shiori" {
       driver = "docker"
+      kill_timeout = "30s"
 
       config {
         image = "ghcr.io/go-shiori/shiori:v1.6.0-rc.7"

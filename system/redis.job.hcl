@@ -31,6 +31,7 @@ job "redis" {
     task "redis" {
       driver = "docker"
       user   = "999"
+      kill_timeout = "60s"
 
       config {
         image = "redis:7.2-alpine"

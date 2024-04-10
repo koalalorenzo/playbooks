@@ -32,7 +32,7 @@ job "postgres" {
       driver         = "docker"
       user           = "1000"
       kill_signal    = "SIGTERM"
-      kill_timeout   = "15s"
+      kill_timeout   = "30s"
       shutdown_delay = "3s"
 
       config {

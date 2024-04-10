@@ -12,6 +12,7 @@ job "csi-nfs-node" {
 
     task "nfs-node" {
       driver = "docker"
+      kill_timeout = "60s"
 
       config {
         image = "registry.k8s.io/sig-storage/nfsplugin:v4.6.0"

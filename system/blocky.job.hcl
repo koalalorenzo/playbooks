@@ -64,6 +64,8 @@ job "blocky" {
 
     task "dns" {
       driver = "docker"
+      kill_timeout = "30s"
+
 
       config {
         image       = "ghcr.io/0xerr0r/blocky:v0.23"
