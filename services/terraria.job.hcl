@@ -59,27 +59,35 @@ job "terraria" {
 
         data = <<EOF
           #!/bin/bash
-          set -exu
           curl -L \
             --output tshock.zip \
             https://github.com/Pryaxis/TShock/releases/download/v5.2.0/TShock-5.2-for-Terraria-1.4.4.9-{{ env "attr.kernel.name" }}-{{ env "attr.cpu.arch" }}-Release.zip
-          mkdir -p /server
+
+          curl -L https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh
+          
+          mkdir -p /server/dotnet
+          bash ./dotnet-install.sh \
+            --install-dir /server/dotnet --runtime dotnet --channel 6.0
+
           unzip -o -u tshock.zip -d /server
           cd /server
           tar -xf ./*.tar
-          
+          rm ./*.tar
+
+          export DOTNET_ROOT=/server/dotnet
+          export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
           export DOTNET_BUNDLE_EXTRACT_BASE_DIR=/tmp/dotnetbundle/
           mkdir -p $DOTNET_BUNDLE_EXTRACT_BASE_DIR
-
-          ./TShock.Installer \
-            -ip 0.0.0.0 -p {{ env "NOMAD_PORT_game" }} -maxplayers 4 \
-            -world /tshock/share/Worlds/banana.wld
+          
+          ./TShock.Server \
+            -ip 0.0.0.0 -p {{ env "NOMAD_PORT_game" }} -maxplayers 3 \
+            -world /server/tshock/share/Worlds/banana.wld
         EOF
       }
 
       volume_mount {
         volume      = "data"
-        destination = "/tshock"
+        destination = "/server/tshock"
       }
 
       resources {
