@@ -29,8 +29,8 @@ job "redis" {
     }
 
     task "redis" {
-      driver = "docker"
-      user   = "999"
+      driver       = "docker"
+      user         = "999"
       kill_timeout = "60s"
 
       config {

@@ -1,6 +1,6 @@
 job "traefik" {
-  type        = "system"
-  priority    = 90
+  type     = "system"
+  priority = 90
 
   group "traefik" {
     # If there the Nomad server is disconected for more than 1 min, and 
@@ -46,7 +46,7 @@ job "traefik" {
     }
 
     service {
-      name     = "traefik"
+      name = "traefik"
       # Using Consul for livecheck and alerts with grafana
       # provider = "nomad" 
       port = "api"
@@ -73,7 +73,7 @@ job "traefik" {
     }
 
     task "traefik" {
-      driver = "docker"
+      driver       = "docker"
       kill_timeout = "30s"
 
       config {

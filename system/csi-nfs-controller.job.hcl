@@ -18,7 +18,7 @@ job "csi-nfs-controller" {
 
 
     task "nfs-controller" {
-      driver = "docker"
+      driver       = "docker"
       kill_timeout = "60s"
 
       config {

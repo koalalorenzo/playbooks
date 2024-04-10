@@ -63,7 +63,7 @@ job "blocky" {
     }
 
     task "dns" {
-      driver = "docker"
+      driver       = "docker"
       kill_timeout = "30s"
 
 
