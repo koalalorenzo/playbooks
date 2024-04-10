@@ -67,6 +67,19 @@
       loop: "{{ (ansible_all_ipv4_addresses | ansible.utils.ipaddr('192.168.0.0/16')) + (ansible_all_ipv4_addresses | ansible.utils.ipaddr('100.64.0.0/10')) }}"
       when: item | ansible.utils.ipv4
 
+    - name: Create IPv4 addresses for tailscale (*.ts.main_domain)
+      cloudflare_dns:
+        api_token: "{{ cloudflare_api_token }}"
+        account_email: "{{ cloudflare_email }}"
+        zone: "{{ main_domain }}"
+        value: "{{ item }}"
+        type: A
+        record: "ts.{{ main_domain }}"
+        ttl: 300
+        state: present
+      loop: "{{ (ansible_all_ipv4_addresses | ansible.utils.ipaddr('100.64.0.0/10')) }}"
+      when: item | ansible.utils.ipv4
+
     # Disabled because I have no IPv6 in local network support and it causes i
     # on round robing
     # - name: Create AAAA Tailscale records
