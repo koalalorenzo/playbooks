@@ -10,7 +10,8 @@ job "restic-backups" {
 
   group "restic" {
     task "restic" {
-      driver = "exec"
+      driver       = "exec"
+      kill_timeout = "120s"
 
       config {
         command = "/bin/bash"

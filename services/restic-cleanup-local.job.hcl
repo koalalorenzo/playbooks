@@ -15,7 +15,9 @@ job "restic-cleanup-local" {
 
   group "restic" {
     task "restic" {
-      driver = "exec"
+      driver       = "exec"
+      kill_timeout = "60s"
+
 
       config {
         command = "/bin/bash"

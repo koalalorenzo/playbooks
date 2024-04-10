@@ -39,8 +39,10 @@ job "restic-server" {
     }
 
     task "restic-server" {
-      driver = "docker"
-      user   = "1000"
+      driver       = "docker"
+      user         = "1000"
+      kill_timeout = "60s"
+
 
       config {
         image = "restic/rest-server"

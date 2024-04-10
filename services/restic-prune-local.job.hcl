@@ -15,7 +15,8 @@ job "restic-prune-local" {
 
   group "restic" {
     task "restic" {
-      driver = "exec"
+      driver       = "exec"
+      kill_timeout = "300s"
 
       config {
         command = "/bin/bash"
