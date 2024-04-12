@@ -14,10 +14,21 @@ job "iperf3" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.udp.routers.iperf.entrypoints=iperf3-udp",
+        "traefik.udp.routers.iperf.entrypoints=iperf-udp",
         "traefik.tcp.routers.iperf.rule=HostSNI(`*`)",
-        "traefik.tcp.routers.iperf.entrypoints=iperf3-tcp",
+        "traefik.tcp.routers.iperf.entrypoints=iperf-tcp",
       ]
+
+      check {
+        name     = "iperf3"
+        type     = "tcp"
+        interval = "60s"
+        timeout  = "5s"
+
+        success_before_passing   = 1
+        failures_before_critical = 3
+      }
+
     }
 
     task "iperf3" {
