@@ -83,6 +83,8 @@
         - { proto: any, port: 8081 } # Traefik
         - { proto: any, port: 1900 } # Jellyfin DLNA / upnp
         - { proto: any, port: 7359 } # Jellyfin autodiscovery
+        - { proto: any, port: 7777 } # Terraria
+        - { proto: any, port: 5201 } # Iperf 3
 
     - ufw:
         rule: allow
