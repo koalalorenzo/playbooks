@@ -50,8 +50,13 @@ job "terraria" {
       }
 
       artifact {
+        # This is a tar.zip file (?) and to ensure cache, we are downloading it as a file and not have nomad decompress
+        # it for us.
         source      = "https://github.com/Pryaxis/TShock/releases/download/v5.2.0/TShock-5.2-for-Terraria-1.4.4.9-${attr.kernel.name}-${attr.cpu.arch}-Release.zip"
-        destination = "local/tshock"
+
+        options {
+          archive = false
+        }
       }
 
       template {
@@ -62,16 +67,12 @@ job "terraria" {
 
         data = <<EOF
           #!/bin/bash
-          curl -L \
-            --output tshock.zip \
-            https://github.com/Pryaxis/TShock/releases/download/v5.2.0/TShock-5.2-for-Terraria-1.4.4.9-{{ env "attr.kernel.name" }}-{{ env "attr.cpu.arch" }}-Release.zip
-
-          unzip -o -u tshock.zip -d /server
           cd /server
+          unzip -o -u /local/TShock-5.2-for-Terraria-1.4.4.9-{{ env "attr.kernel.name" }}-{{ env "attr.cpu.arch" }}-Release.zip -d /server
           tar -xf ./*.tar
           rm ./*.tar
 
-          # Replace porti
+          # Replace ports
           sed -i 's/"ServerPort": [0-9]\+/"ServerPort": {{ env "NOMAD_PORT_game" }}/' /server/tshock/config.json
           sed -i 's/"RestApiPort": [0-9]\+/"RestApiPort": {{ env "NOMAD_PORT_http" }}/' /server/tshock/config.json
 
