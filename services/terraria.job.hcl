@@ -49,6 +49,11 @@ job "terraria" {
         args    = ["local/start.sh"]
       }
 
+      artifact {
+        source      = "https://github.com/Pryaxis/TShock/releases/download/v5.2.0/TShock-5.2-for-Terraria-1.4.4.9-${attr.kernel.name}-${attr.cpu.arch}-Release.zip"
+        destination = "local/tshock"
+      }
+
       template {
         destination   = "local/start.sh"
         change_mode   = "signal"
