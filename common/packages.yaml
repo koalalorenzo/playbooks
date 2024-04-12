@@ -29,6 +29,7 @@
           - ufw
           - unzip
           - yubikey-manager
+          - iperf3
 
     - name: Stop and disable snapd service
       service:

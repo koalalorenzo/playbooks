@@ -136,6 +136,12 @@ entryPoints:
   terraria-udp:
     address: ":7777/udp"
 
+  iperf-tcp:
+    address: ":5201"
+
+  iperf-udp:
+    address: ":5201/udp"
+
 certificatesResolvers:
   letsencrypt:
     acme:
@@ -225,8 +231,8 @@ EOF
 
 
       resources {
-        cpu    = 200
-        memory = 128
+        cpu    = 500
+        memory = 256
       }
     }
   }
