@@ -48,7 +48,7 @@ job "blocky" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.udp.routers.adguard-dns.entrypoints=dns-udp",
+        "traefik.udp.routers.blocky-dns.entrypoints=dns-udp",
       ]
 
       check {
