@@ -41,8 +41,8 @@ job "iperf3" {
       }
 
       resources {
-        cpu    = 256
-        memory = 64
+        cpu    = 64
+        memory = 16
       }
     }
 
