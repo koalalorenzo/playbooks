@@ -189,7 +189,7 @@ providers:
   # Load catalog from Consul
   consulCatalog:
     prefix: "traefik"
-    exposedByDefault: true
+    exposedByDefault: false
     defaultRule: "Host(`{{"{{"}} .Name {{"}}"}}.elates.it`) || Host(`{{"{{"}} .Name {{"}}"}}.ts.elates.it`)"
 
     endpoint:
