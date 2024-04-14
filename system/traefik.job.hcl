@@ -77,7 +77,7 @@ job "traefik" {
       kill_timeout = "30s"
 
       config {
-        image        = "traefik:v2.11.0"
+        image        = "traefik:v2.11.2"
         network_mode = "host"
 
         ports = ["http", "https", "api", "dns", "terraria"]
