@@ -15,21 +15,21 @@ job "terraria" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.udp.routers.terraria-tcp.entrypoints=terraria-udp",
-        "traefik.tcp.routers.terraria-tcp.rule=HostSNI(`*`)",
-        "traefik.tcp.routers.terraria-tcp.entrypoints=terraria-tcp",
+        "traefik.udp.routers.terraria.entrypoints=terraria-udp",
+        "traefik.tcp.routers.terraria.rule=HostSNI(`*`)",
+        "traefik.tcp.routers.terraria.entrypoints=terraria-tcp",
       ]
     }
 
     service {
-      name = "terraria-http"
+      name = "terraria-api"
       port = "http"
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.terraria-http.entrypoints=web,websecure",
-        "traefik.http.routers.terraria-http.rule=Host(`terraria.elates.it`)",
-        "traefik.http.routers.terraria-http.tls.certresolver=letsencrypt",
+        "traefik.http.routers.terraria-api.entrypoints=web,websecure",
+        "traefik.http.routers.terraria-api.rule=Host(`terraria.elates.it`)",
+        "traefik.http.routers.terraria-api.tls.certresolver=letsencrypt",
       ]
     }
 
