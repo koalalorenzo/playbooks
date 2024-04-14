@@ -3,12 +3,14 @@ job "web-static" {
 
   group "server" {
     network {
-      port "http" {}
+      port "http" {
+        to = 80
+      }
     }
 
     service {
       name = "web-static"
-      port = "api"
+      port = "http"
 
       check {
         name     = "alive"
@@ -20,14 +22,20 @@ job "web-static" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.http.rule=Host(`*.elates.it`, `*.ts.elates.it`)",
+        "traefik.http.routers.static.rule=Host(`static.elates.it`) || Host(`satic.ts.elates.it`)",
       ]
     }
 
+    volume "web-static" {
+      type            = "csi"
+      source          = "web-static"
+      attachment_mode = "file-system"
+      access_mode     = "multi-node-multi-writer"
+    }
 
     task "nginx" {
       driver       = "docker"
-      kill_timeout = "15s"
+      kill_timeout = "10s"
 
       config {
         image        = "nginx:alpine"
@@ -35,7 +43,7 @@ job "web-static" {
         ports = ["http"]
 
         volumes = [
-          "local/default:/etc/nginx/sites/default",
+          "local/default:/etc/nginx/conf.d/default.conf",
         ]
       }
 
@@ -46,15 +54,42 @@ job "web-static" {
 
       template {
         data = <<EOF
+        server {
+          listen       80;
+          listen  [::]:80;
+          server_name  localhost;
+    
+          location / {
+            root   /var/www;
+            index  index.html index.htm;
+            autoindex on;
+
+            # No cache plz
+            add_header Cache-Control 'private no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+            # Allow Godot Games
+            add_header Cross-Origin-Opener-Policy 'same-origin';
+            add_header Cross-Origin-Embedder-Policy 'require-corp';
+          }
+
+          error_page   500 502 503 504  /50x.html;
+          location = /50x.html {
+              root   /usr/share/nginx/html;
+          }
+        }
         EOF
 
         destination = "local/default"
       }
 
-
       resources {
-        cpu    = 500
+        cpu    = 128
         memory = 64
+      }
+
+      affinity {
+        attribute = node.class
+        value     = "compute"
+        weight    = 90
       }
     }
   }
