@@ -1,6 +1,6 @@
 ---
-- name: Sets DNS records for hostname
-  hosts: nomadClients
+- name: Sets DNS records for Network Entrypoints
+  hosts: nomadNetEntrypoint
   become: yes
   become_user: root
   become_method: sudo

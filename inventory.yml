@@ -40,6 +40,12 @@ all:
         - compute1.home.elates.it
 
   children:
+    # Nodes that will process Network Requests/exposed via dns
+    nomadNetEntrypoint:
+      hosts:
+        compute0:
+        compute1:
+
     nomadServers:
       hosts:
         storage0:
