@@ -61,7 +61,7 @@ job "traefik" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.http.rule=Host(`traefik.elates.it`)",
+        "traefik.http.routers.http.rule=Host(`traefik.elates.it`) || Host(`traefik.ts.elates.it`)",
         "traefik.http.routers.traefik.tls.certresolver=letsencrypt",
       ]
     }
@@ -115,6 +115,7 @@ entryPoints:
         entrypoint:
           to: websecure
           scheme: https
+          permanent: false
 
   websecure:
     address: ":443"
@@ -123,6 +124,7 @@ entryPoints:
         certResolver: "letsencrypt"
         domains:
            - main: elates.it
+           - main: ts.elates.it
 
   dns-udp:
     address: ":53/udp"
@@ -176,7 +178,7 @@ providers:
   nomad:
     endpoint:
       address: http://127.0.0.1:4646
-    defaultRule: "Host(`{{"{{"}} .Name {{"}}"}}.elates.it`)"
+    defaultRule: "Host(`{{"{{"}} .Name {{"}}"}}.elates.it`) || Host(`{{"{{"}} .Name {{"}}"}}.ts.elates.it`)"
 
   # Load config from Consul. Disable because unstalbe
   # consul:
@@ -187,8 +189,8 @@ providers:
   # Load catalog from Consul
   consulCatalog:
     prefix: "traefik"
-    exposedByDefault: false
-    defaultRule: "Host(`{{"{{"}} .Name {{"}}"}}.elates.it`)"
+    exposedByDefault: true
+    defaultRule: "Host(`{{"{{"}} .Name {{"}}"}}.elates.it`) || Host(`{{"{{"}} .Name {{"}}"}}.ts.elates.it`)"
 
     endpoint:
       address: "127.0.0.1:8500"
@@ -203,13 +205,13 @@ EOF
 http:
   routers:
     nomad:
-      rule: "Host(`nomad.elates.it`)"
+      rule: "Host(`nomad.elates.it`) || Host(`nomad.ts.elates.it`)"
       service: "nomad-service"
       tls:
         certresolver: letsencrypt
 
     consul:
-      rule: "Host(`consul.elates.it`)"
+      rule: "Host(`consul.elates.it`) || Host(`consul.ts.elates.it`)"
       service: "consul-service"
       tls:
         certresolver: letsencrypt
