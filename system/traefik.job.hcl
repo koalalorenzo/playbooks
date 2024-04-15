@@ -124,7 +124,9 @@ entryPoints:
         certResolver: "letsencrypt"
         domains:
            - main: elates.it
-           - main: ts.elates.it
+             sans:
+               - "*.ts.elates.it"
+               - "*.elates.it"
 
   dns-udp:
     address: ":53/udp"
