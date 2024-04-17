@@ -81,13 +81,18 @@ job "blocky" {
         data        = <<EOF
 minTlsServeVersion: 1.3
 upstreams:
-  strategy: strict
+  strategy: parallel_best
   groups:
     default:
       - https://security.cloudflare-dns.com/dns-query
       - https://extended.dns.mullvad.net/dns-query
+      - https://dns.quad9.net/dns-query
+      - https://dns.nextdns.io/8bdcc5
 bootstrapDns:
-  - https://1.1.1.2/dns-query
+  - https://9.9.9.9/dns-query
+  - https://1.1.1.1/dns-query
+  - 194.242.2.9
+  - 2a07:e340::9
 ports:
   dns: {{ env `NOMAD_PORT_dns` }}
   http: {{ env `NOMAD_PORT_http` }}
