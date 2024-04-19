@@ -1,47 +1,36 @@
 wifi_networks:
     Look Ma No Wires:
-        password: ENC[AES256_GCM,data:FlIB0Axz2RacxA==,iv:QL3ueA78MGc4+bzv/az9qEBuR56faK4P79QjLYuEZh4=,tag:ozDz2+sPwW8ERla6s7hO7g==,type:str]
+        password: ENC[AES256_GCM,data:6NRJf4nMPxhqmA==,iv:QL3ueA78MGc4+bzv/az9qEBuR56faK4P79QjLYuEZh4=,tag:A4qvx3ClDYp9dcur9aDO/w==,type:str]
     Look Ma, No Wires!:
-        password: ENC[AES256_GCM,data:qk3qRwRFK76i1g==,iv:xzbH4qiJ2f7o2MfGsKagW6YC4DVO15I7o3sKErAbLGM=,tag:p6YgPFTZnp8oKeXX68c4mQ==,type:str]
+        password: ENC[AES256_GCM,data:KHz98p6K/O+Grw==,iv:xzbH4qiJ2f7o2MfGsKagW6YC4DVO15I7o3sKErAbLGM=,tag:a/Podbz9gxeeORDMOjtoUw==,type:str]
 sops:
     kms: []
     gcp_kms: []
     azure_kv: []
     hc_vault: []
     age: []
-    lastmodified: "2023-08-23T18:35:58Z"
-    mac: ENC[AES256_GCM,data:SXhd4SKg0tl6xvGuQHkCjyAwLhbSFTAVGQEaj/VlJjA022gKQx6I7g9HAIfx4E/qE74RTH8Zfia6IzJe3V0zKaX3bPG0zRYkx+TD62R0zEKWp+gSe3vITvRPJ1/QYEsxQauw0gtGJU4W5EN4rShudBeF9sNuev0JXUII5pt6dU0=,iv:RoPhod+xjFdJzBbL44hIwBYek0/VcK1IZ4ucvavKBX4=,tag:MoJN393CLxzdxQ23FUwJnA==,type:str]
+    lastmodified: "2024-04-19T13:17:20Z"
+    mac: ENC[AES256_GCM,data:x/mYBksnjf/gfFtFDnu2Cv0OGRAFXZuMcuRcI2Z09yvpdym5pGbUXDMnq+ENslsoY9VADDSdVAIsOf54cT6ykVbcLd2IxPvOKNT9VfgpKBcFqraFfXuB3gbZWIyg4yw5scZ4Lg0ndCyW58iLOHGDIUiURf2KFxTnzJrbMnYi0ys=,iv:NxoDsC9py/vcyrx/TAnrZ7ACo7yfbYKPLBldRb9LNWk=,tag:s89PhZBemZqxP/wZ7gH8QQ==,type:str]
     pgp:
-        - created_at: "2023-07-24T20:56:02Z"
+        - created_at: "2024-04-19T13:16:28Z"
           enc: |-
             -----BEGIN PGP MESSAGE-----
 
-            wcFMAwEkGKbmunUuAQ/+MUv5/V1PITy7bMvkB+RwLtaCQJ3VCdQ+uWYSNBZLxKtS
-            rANbshUzkWpdCmpQ9K6UDcCQzNprtXOuM+3dlqB6KXMVHopliE/r6Lm7sPwnrfGs
-            anpgDXXIjY1YhPtK5CuL9gXacDkRliqL3TykpfUR90IJRUd2KKF6xOFk2M1gVIBT
-            Jtk53CHBLMlKIKJVtxE44fTpoyOsw9pBG2Ge/ECCergJlI+513I/QpVY3xZX3319
-            IY7pGrYbAApJ+4OVDQL3jP040av/6bIdwZWlStYFIHK3vFIl9yEgG5Vk9c5qNie2
-            3i1wRUvD5+z8ypWi0rZHpJUN+tlxoQjZMKnkGzVt35hwJnvaBbKuvS6dDbLA3gwx
-            GTvZwWMUszC7IuZx9Une8WpJKsaFEch3TW+twS6TmnPwFXiz4W/JBU48cCtAhISd
-            VZRXMEypPIws10qtkQrFCfMSDg34qyYDD9o0bsCHd3cbQtnLrAeJkUbYjxcSiB2B
-            v0gVViIcu0gmDSk0i8uFxx2DPpF9No/nDS7myIxRfgPleskpa4GcUa6ciqQa/5yN
-            RUQSJ+2j0tNTCCvXGfpxbfrVIzDXBjIQc3IuodvTf0nPYZkkIOg1N8oMFh7/kxrw
-            GJgTDoYbxXbKUnFrPLcUooCAp1fTUsHDFYAQYHrJ/eJy6flsF/c8athCseurPMnS
-            UQFSUxCnV44jvnK1YYAfTZ9uh90Yz/q6oIrfMTB+y8ts4IuDTKZ3aikF7PBcw57v
-            X/LD2AHcdRQ1tsx1xx/1oMjhKMGCdeb8wH+1c2Pd1p+v9w==
-            =YG6G
+            hQIMAwEkGKbmunUuAQ/6A1tc23duO/uwENKhusD2mwFnc6w/6xHupVuy0fJM+XvA
+            PH8DDA5MzH3bdD52m6LGz8mMbT7pj02UndD/6WLC66E2/oNJTQagq1LRTy5O+onN
+            mBfTBmb2SfA7J0/RYZoizObhkiMFXttwoqnnrdjhHFLFV191Sb3O0KfkSVLBUBUP
+            mYdZUcf2DqjbK9kQ6EM26trCb4Vd/9mxdfR0gHw+vfwykCyQUT2u6RLYV+MPL6iQ
+            C18sqohC9IcmFkWKQ38bDAnW9YL4c93JjkVsbMXYl1h/UYUo2pMM6gSTkoqPc0AW
+            tmcE0UaUmneEeuUM2gW/PtDIEQMeMRgV09Z4BUv3/S6rdMbbTRXlJtSFAHIwbNQm
+            qLm5GWZcoCf3VFeUYRXuZeEl8iAWuQpSDzmwQHivMov7cBnsg6hhczSp4rrE2+BT
+            1rkYVw7V2uRPmO/sabWHXhhGEEBcNNkBQQvL65KMQSKJ2GKBK2QQGK5uZ6LyZgkH
+            Q7ViPElVS1/z9v49z0UCGkBn9Qx+OLs/2nLnOs5FLpuZWIim7iNeOhyIjrd9YFpH
+            WjYq0rkWqWUB/vT/1xfywsVoj7byuYVjOSll3FEeU4F8+NBitIQ7tw4ERTpB/rzP
+            /AyAdJmDmcqm6j0xTWtD4V8T5mgXImHG7FxYr5GObTYeOa5SKGyL4SKZPDqGV2zS
+            XgE55mz+d/EAlEtV7Ywi0WKGti5cNvR0+Fjx+yGXaPH+/W+395es5lG7IjM0eA3J
+            5vTPiYrOv/1gtrqYrbxcMXlBQz0Lj60dWAzyRw3dzdgPCclwkfGc10GiyBhs8DQ=
+            =YurI
             -----END PGP MESSAGE-----
           fp: 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
-        - created_at: "2023-07-24T20:56:02Z"
-          enc: |
-            -----BEGIN PGP MESSAGE-----
-
-            hF4DXe1noTiG/OoSAQdADdhnndM5EUCgcz8Q9h82LqlbgkjBF2xNo59r1NDI3Csw
-            ruHyYIVmyIWWBYWhEhVJEgOpNapA7OEQCxnL2q4hU6mIWDLhJ+/bIKgng+2pFq/z
-            0lwBA9PsYBV+QUFLHmiKopx3FOrYacvaGzuhya9nS2M89XE+c5MLx66hvtP0w0Vl
-            1ewDLfH3Klva2LdLvrvWw7TvKpFZIUq6PlulGZpx1oIsCQQNnCSkjGr77yCNhA==
-            =RbrH
-            -----END PGP MESSAGE-----
-          fp: 55065306FCC6617D4D928B70020F4A4E40F95228
     unencrypted_suffix: _unencrypted
     version: 3.7.3

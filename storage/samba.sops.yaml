@@ -1,44 +1,33 @@
-samba_username: ENC[AES256_GCM,data:ErC1WpTlS/9GmCs6,iv:m2ioNKOLeDo8EBRthHi6CQtSVa9ueC8bmilKC2UymUo=,tag:ct8kPcqRGRKXO0m1v9lxpA==,type:str]
-samba_password: ENC[AES256_GCM,data:QangF4gBbzm07EXw,iv:ur7o6TPEIbELx1+F6insMUDp7by+8Laz9zni6rqjO6U=,tag:R/CvDASposCDLeT7kQ+/Vw==,type:str]
+samba_username: ENC[AES256_GCM,data:zw7J132K+8T/9TYJ,iv:m2ioNKOLeDo8EBRthHi6CQtSVa9ueC8bmilKC2UymUo=,tag:Zh1idzCwa6bVZ/YNOUSBCA==,type:str]
+samba_password: ENC[AES256_GCM,data:wDmPGOez8nileMga,iv:ur7o6TPEIbELx1+F6insMUDp7by+8Laz9zni6rqjO6U=,tag:9zgxR2iG0v9/NKG84yVa6w==,type:str]
 sops:
     kms: []
     gcp_kms: []
     azure_kv: []
     hc_vault: []
     age: []
-    lastmodified: "2023-08-11T14:47:38Z"
-    mac: ENC[AES256_GCM,data:ToL/GHobKIDWVNi989VYy3D4X/50CwkEGx5IiSeTqfdhB87vUrmeNqmLfJCzkzZzoaRUmAgOdOcbwqkUqgclh6XquoCiwFVZzHg4ytyhykuIwgnfwvYNNxlTxV2gM9Md61Z5CEFVy/8kOnDFMmS/fjSBt1AJNQczCKe9y/lElZw=,iv:k55oTCpHolrib+/wNNcywZSNlXa/hChkoY3Y6RkK/nc=,tag:iApswqHc38P3uLjDPicloQ==,type:str]
+    lastmodified: "2024-04-19T13:17:15Z"
+    mac: ENC[AES256_GCM,data:3ySDm4q4MB72D88W96pk+H90bs2hUdfaDIrsG031tI1ktu9ev5/mqWWLvz7KL7dtjYDtIDznafwSUHr5rVCkVm68tjeJVse7slVJ0Q/RBxV88/84bblgeXa//HLEXWGiSc4zpsGSE3irfEvGq24+uldXonS7opWKpnCHixtjcPQ=,iv:ai3+RX62dwOTdYD6A3Wk91ywnGaJS7xRW6PN8IhAGEQ=,tag:ZeACIzh3Fcejr08clMCLug==,type:str]
     pgp:
-        - created_at: "2022-10-11T08:54:44Z"
+        - created_at: "2024-04-19T13:16:23Z"
           enc: |-
             -----BEGIN PGP MESSAGE-----
 
-            wcFMAwEkGKbmunUuAQ//TwEfGCOgAr2Rs6qq3aNGrmtGxYXU3mjA/R5OkByvN//n
-            EjgkcBXwNFV6vqIOO/m7+z5kFUvPyUew41N3mKeJgXSX8uh0VYRU2zKs4cVR/nr8
-            z4DWuLdAL9S0MjtCeTLkeNr2a5t/oERB8I0CsRn9uagta9NQlLTiDWhjt9aw3aOo
-            w3sH4HQH/uhPfo3igQgSN7QBj3M3ZfSRsYP+RnWtyHwLcKqKlgsrznqVFA+03MSq
-            gGK1xa8d5D6KNl0O2mamcxFJ+0xWUCMWPNNLqZxCq7VFizqiCc0U/QX9IV6s5/aW
-            xZIuSOWXm/5O3mx0pY1kYheGtINLEHtNR2SjRyhYm1w7nEI07zvEEcEVDJ+HNwUH
-            JP72igl1Wfd32nyl3V6Tnr/nLwPTh6HntuuohMrMRKqLXfyjMVZERDPQJc0oT+aX
-            ZfiV325632ZKuzDeeSfoR0h9h9oljBZsC/y51aMvfheQDlkw3OJ0HHqjm5Pykn0T
-            E7yddt6DhVOtwsyZwMLyRxGWREYdn3FnZXJbWrCNwbydGQe7Rx7CDHrQKAxiXLHB
-            eIxY4PQBkoSm2LMUqyaujZZTRsJ/Un0Rq3MG6h3+U+9FmncsY4hZfueL7Md/Ox9o
-            4R5sBejmNQO5dlZABoLp954i6YJiLeVveieBHga46k4WAN1OHNSwl4FCJNsigiHS
-            UQGGNxGkuTtNo0rY8k0rT8Wudl47W7swCjyMjgDIYv4CJlXVN+WvSRDtL4f2amWc
-            iQFO00s3thVYvxjGqZmPzeL2WIgektBuXpi2xmi8DGQrLA==
-            =++U/
+            hQIMAwEkGKbmunUuAQ/+JBcXoeG/em+5Yd8tMFdfNMqpN0u4QeGd9oQa2Rpe9cXZ
+            B6pShbJLRwvfwXJDRX5MGEKfFCg5fdpmw/EtQrFaQi1KbCcDhn21FFH02FY+XL54
+            4wBSrLvQ0hxG4v4AjUAaxNOeNQYeXS6UkesP+nnFXERWjalqb9z8c02UfSjMqNyO
+            t4dMqENQBPodoABkSs8MfZQuB7vovlQs3qDPISys43a4q8rZtuCaJKhTc5PnAe7n
+            jN7sLfS9EWZNxEN23qouddBDwLpTv0xtEM7hR3LgQn7QrA58pa/TqGwpflqFlKdH
+            ItEloOU/XnRTbuug9uSmIPJqXbbnFyMlnJsJKEnaERNfw36HOu/tZwA5kNnqplBV
+            DXO/zBD48DPC/h9FdunWIanno6rObmQ40Pr7A+6L9UW8FrAnCJMm6Va1JXRxct2O
+            HCvk8PabpNK1RTHBr72FBWIhhdxHleUNskZCKaXv9mqkrP8trQtLuTzdgR5goeOO
+            jUIjuvoppNsdGmsxNj67tNRyUfHshRGYP/Gt8FSun3gCNsueVy/Kyld/0VGxEiSQ
+            2jqGLLah/LLXG8f9ooGdTyvRAoQvbrgfREfcv+LUCVYZgto0vO08/kdAHivw1y92
+            MDBVKGQf4qyZRWi73NsUYpvD8UCw9JaBO8mtmniSwPHyu/rpUHznWN4lgdhkPJzS
+            XgHwLyPDrDUfRUHGvblO9jJyVt61WsErisFFX4CBt9pBsemT4fP9gXal0IiAe6fK
+            xvSd6VAncC+Zi8+SRkCY7gk8A/SfpcZFXODm/ctOHuRgHVRrNuSueog6qubCFJk=
+            =Dem3
             -----END PGP MESSAGE-----
           fp: 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
-        - created_at: "2022-10-11T08:54:44Z"
-          enc: |
-            -----BEGIN PGP MESSAGE-----
-
-            hF4DXe1noTiG/OoSAQdA0z9mYQh+/3PZj0DsWrWrQf6Q2FdMpSeUUjho641a8wsw
-            hjidUSeTKe66/woXWN4sME9mHlrtPeibEiRZQzf84weD/RjRmQa6qgM8ahLZfyvD
-            0l4BMcVp9an9PWM/np+qTq8U8SdMHpHIYN3fXz79wjXisnPA3DISHYUyYuufZVzs
-            LjeVEwqiD2kGKRNkK8byEjEloGCdgTZ2Rtfg09KRLcN6yNQocXnEADE86hiG8W3b
-            =jis9
-            -----END PGP MESSAGE-----
-          fp: 55065306FCC6617D4D928B70020F4A4E40F95228
     unencrypted_suffix: _unencrypted
     version: 3.7.3
