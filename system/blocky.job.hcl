@@ -233,7 +233,7 @@ redis:
 log:
   level: warn
   timestamp: true
-  privacy: true
+  privacy: false
 connectIPVersion: v4
 filtering:
   queryTypes:
@@ -243,8 +243,8 @@ EOF
 
 
       resources {
-        cpu    = 1000
-        memory = 512
+        cpu    = 512
+        memory = 256
       }
     }
 
