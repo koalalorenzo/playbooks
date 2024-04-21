@@ -120,6 +120,7 @@ blocking:
         /actions.githubusercontent.com/
         /blob.core.windows.net/
         /ghcr.io/
+        /stats.grafana.org/
         /github-cloud.githubusercontent.com/
         /github-cloud.s3.amazonaws.com/
     ads: *generic_white_list
@@ -127,7 +128,6 @@ blocking:
       - |
         /www.googleapis.com/
         /accounts.google.com/
-        /play.google.com/
         /calendar.google.com/
   blackLists:
     suspicious:
