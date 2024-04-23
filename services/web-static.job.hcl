@@ -1,5 +1,5 @@
 job "web-static" {
-  type     = "service"
+  type = "service"
 
   group "server" {
     network {
@@ -38,7 +38,7 @@ job "web-static" {
       kill_timeout = "10s"
 
       config {
-        image        = "nginx:alpine"
+        image = "nginx:alpine"
 
         ports = ["http"]
 

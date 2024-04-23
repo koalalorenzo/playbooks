@@ -52,7 +52,7 @@ job "terraria" {
       artifact {
         # This is a tar.zip file (?) and to ensure cache, we are downloading it as a file and not have nomad decompress
         # it for us.
-        source      = "https://github.com/Pryaxis/TShock/releases/download/v5.2.0/TShock-5.2-for-Terraria-1.4.4.9-${attr.kernel.name}-${attr.cpu.arch}-Release.zip"
+        source = "https://github.com/Pryaxis/TShock/releases/download/v5.2.0/TShock-5.2-for-Terraria-1.4.4.9-${attr.kernel.name}-${attr.cpu.arch}-Release.zip"
 
         options {
           archive = false
