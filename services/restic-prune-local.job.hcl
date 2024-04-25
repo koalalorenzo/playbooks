@@ -36,6 +36,7 @@ job "restic-prune-local" {
           export RESTIC_PASSWORD="{{ .RESTIC_PASSWORD }}"
           export B2_ACCOUNT_ID="{{ .B2_ACCOUNT_ID }}"
           export B2_ACCOUNT_KEY="{{ .B2_ACCOUNT_KEY }}"
+          export RESTIC_COMMON_FLAGS="{{ .RESTIC_COMMON_FLAGS }}"
           {{ end }}
 
           set -exu
@@ -58,7 +59,7 @@ job "restic-prune-local" {
           # ./restic repair index
           # ./restic repair snapshots --forget
         
-          ./restic prune
+          ./restic prune $RESTIC_COMMON_FLAGS
         EOF
       }
 

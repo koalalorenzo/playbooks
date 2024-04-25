@@ -42,6 +42,7 @@ job "restic-backups" {
           export B2_ACCOUNT_ID="{{ .B2_ACCOUNT_ID }}"
           export B2_ACCOUNT_KEY="{{ .B2_ACCOUNT_KEY }}"
           export RESTIC_REPOSITORY="{{ .RESTIC_REPOSITORY }}"
+          export RESTIC_COMMON_FLAGS="{{ .RESTIC_COMMON_FLAGS }}"
           {{ end }}
 
           set -exu
@@ -58,10 +59,10 @@ job "restic-backups" {
           export RESTIC_HOSTNAME="nas.elates.it"
           
           echo "Startint backing up the backups"
-          ./restic backup /main/backups --host $RESTIC_HOSTNAME
+          ./restic backup /main/backups --host $RESTIC_HOSTNAME $RESTIC_COMMON_FLAGS
           sleep 5
           echo "Starting backing up personal files"
-          ./restic backup /main/personal --host $RESTIC_HOSTNAME
+          ./restic backup /main/personal --host $RESTIC_HOSTNAME $RESTIC_COMMON_FLAGS
         EOF
       }
 

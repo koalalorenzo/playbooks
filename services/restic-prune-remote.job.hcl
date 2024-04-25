@@ -37,6 +37,7 @@ job "restic-prune-remote" {
           export B2_ACCOUNT_ID="{{ .B2_ACCOUNT_ID }}"
           export B2_ACCOUNT_KEY="{{ .B2_ACCOUNT_KEY }}"
           export RESTIC_REPOSITORY="{{ .RESTIC_REPOSITORY }}"
+          export RESTIC_COMMON_FLAGS="{{ .RESTIC_COMMON_FLAGS }}"
           {{ end }}
         
           set -exu
@@ -56,7 +57,7 @@ job "restic-prune-remote" {
           # ./restic repair index
           # ./restic repair snapshots --forget
         
-          ./restic prune
+          ./restic prune $RESTIC_COMMON_FLAGS
         EOF
       }
 
