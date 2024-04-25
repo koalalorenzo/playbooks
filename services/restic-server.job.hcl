@@ -53,7 +53,7 @@ job "restic-server" {
         env         = true
         change_mode = "restart"
         data        = <<EOF
-          OPTIONS="--prometheus --no-auth --listen=:{{ env "NOMAD_PORT_http" }}"
+          OPTIONS="--prometheus --debug --no-auth --listen=:{{ env "NOMAD_PORT_http" }}"
         EOF
       }
 
