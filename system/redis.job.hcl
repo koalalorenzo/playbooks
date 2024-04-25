@@ -4,10 +4,9 @@ job "redis" {
   priority = 80
 
   group "redis" {
-    affinity {
+    constraint {
       attribute = node.class
       value     = "storage"
-      weight    = 75
     }
 
     restart {
