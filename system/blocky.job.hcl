@@ -85,7 +85,7 @@ upstreams:
   groups:
     default:
       - https://security.cloudflare-dns.com/dns-query
-      - https://extended.dns.mullvad.net/dns-query
+      - https://base.dns.mullvad.net/dns-query
       - https://dns.quad9.net/dns-query
       - https://dns.nextdns.io/8bdcc5
 bootstrapDns:

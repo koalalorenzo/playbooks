@@ -1,5 +1,4 @@
 job "redis" {
-  region   = "global"
   type     = "service"
   priority = 80
 

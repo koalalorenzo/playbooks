@@ -1,5 +1,4 @@
 job "postgres" {
-  region   = "global"
   type     = "service"
   priority = 80
 
