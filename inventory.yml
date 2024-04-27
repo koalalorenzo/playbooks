@@ -93,10 +93,14 @@ all:
 
     # Deploys Consul on every Nomad Servers
     consul:
+      vars:
+        bootstrap_quorum: 3
       children:
         nomadServers:
 
     nomad:
+      vars:
+        bootstrap_quorum: 3
       children:
         nomadServers:
         nomadClients:
