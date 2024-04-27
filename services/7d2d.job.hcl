@@ -8,7 +8,7 @@ job "7dtd" {
     }
 
     constraint {
-      attribute = cpu.arch
+      attribute = attr.cpu.arch
       value     = "amd64" #arm64 for arm64
     }
 
@@ -17,7 +17,6 @@ job "7dtd" {
       port "game_server_o" { static = 26901 } # Default game ports tcp + udp
       port "game_server_t" { static = 26902 } # udp 
       port "webadmin" { to = 8080 } # OPTIONAL - WEBADMIN
-      port "telnet" { static = 8081 } # OPTIONAL - TELNET
       port "webserver" { to = 8082 } # OPTIONAL - WEBSERVER https://7dtd.illy.bz/wiki/Server%20fixes
     }
 
@@ -30,6 +29,7 @@ job "7dtd" {
 
     task "gameserver" {
       driver = "docker"
+      kill_timeout = "120s"
 
       config {
         image = "vinanrra/7dtd-server"
@@ -38,9 +38,18 @@ job "7dtd" {
           "game_server_o",
           "game_server_t",
           "webadmin",
-          "telnet",
           "webserver",
         ]
+      }
+
+      volume_mount {
+        volume      = "serverfiles"
+        destination = "/home/sdtdserver/serverfiles"
+      }
+
+      volume_mount {
+        volume      = "gamefiles"
+        destination = "/home/sdtdserver/.local/share/7DaysToDie"
       }
 
       template {
@@ -82,13 +91,13 @@ job "7dtd" {
       }
 
       resources {
-        cpu    = 2000
-        memory = 4096
+        cpu    = 3000
+        memory = 10240
       }
 
       service {
-        name = "7dtd"
-        port = "7dtd"
+        name = "webadmin"
+        port = "webadmin"
 
         tags = [
           "traefik.enable=true",
@@ -97,6 +106,21 @@ job "7dtd" {
         ]
       }
     }
+
+    volume "serverfiles" {
+      type            = "csi"
+      source          = "7d2d-serverfiles"
+      attachment_mode = "file-system"
+      access_mode     = "single-node-writer"
+    }
+
+    volume "gamefiles" {
+      type            = "csi"
+      source          = "7d2d-gamefiles"
+      attachment_mode = "file-system"
+      access_mode     = "single-node-writer"
+    }
+
   }
 }
 
