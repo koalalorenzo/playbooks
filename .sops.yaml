@@ -1,4 +1,10 @@
 creation_rules:
-  - pgp: >-
-      73880ECAF69EC2ED44CE5889502BFB12D0B5295F
-    age: "age1hv77jtx2x5dczummreqqksw0nr54nqz6mdpwljdveme2lz8csp7qjhnr50"
+  - path_regex: "*.sops.*"
+    pgp:
+      - 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
+    age:
+      - age1hv77jtx2x5dczummreqqksw0nr54nqz6mdpwljdveme2lz8csp7qjhnr50
+      - age15qauah7skmftfg5u4z4l526uas5gqaze6k6d09fm7jnga0zzuqtsfy3m5n
+      - age12gjnss76aeqqly8jwh05c3na44r6nu5ws04v07xedj9fwf38letsewvd6r
+      - age1dyqrgtfmayzq4a9hsd743jzlkmty0ac4q8wwjggwadumzy3hj3us86m32q
+      - age1f9uy7mcfdm7skndsa9p5zu9xqfs8hahxtzg75e4vktrkvqc9qu5q89fdzf

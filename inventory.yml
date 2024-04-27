@@ -38,6 +38,9 @@ all:
     compute1:
       extra_ssl_domains:
         - compute1.home.elates.it
+    compute2:
+      extra_ssl_domains:
+        - compute2.home.elates.it
 
   children:
     # Nodes that will process Network Requests/exposed via dns
@@ -51,6 +54,7 @@ all:
         storage0:
         compute0:
         compute1:
+        compute2:
       vars:
 
     nomadClients:
@@ -85,6 +89,7 @@ all:
 
         compute0:
         compute1:
+        compute2:
 
     # Deploys Consul on every Nomad Servers
     consul:
