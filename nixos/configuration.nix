@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, networking, ... }:
 {
   nixpkgs.config.allowUnfree = true;
 
@@ -6,19 +6,25 @@
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./nomad.nix
-    
+
+    # Sops encryption
     "${builtins.fetchTarball {
       url = "https://github.com/Mic92/sops-nix/archive/f1b0adc27265274e3b0c9b872a8f476a098679bd.tar.gz";
     }}/modules/sops"
+
+    # Apple T2 support
+    # "${builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }}/apple/t2"
   ];
 
-
-  networking.hostName = "compute2"; # Define your hostname.
+  networking.hostName = "compute2";
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Adds applet2 loader
+  # hardware.apple-t2.enableAppleSetOsLoader = true;
+  
   # networking.hostName = "compute2";
   networking.networkmanager.enable = true;
 
@@ -36,8 +42,18 @@
     };
   };
 
-  networking.firewall.enable = false;
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  # Disable lid close sleep
+  services.logind.lidSwitch = "ignore";
+  services.logind.lidSwitchDocked = "ignore";
+  services.upower.ignoreLid = true;
+
+  # On MacOS
+  services.mbpfan.enable = true;
+  
+  networking.firewall.enable = true;
+  services.fail2ban.enable = true;
+  networking.firewall.allowedTCPPorts = with networking; [ 22 ];
+  networking.firewall.allowedUDPPortRanges = with networking; [{ from = 60000; to = 61000; }];
 
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
@@ -51,29 +67,37 @@
     PermitRootLogin = "yes";
   };
 
+  # Adds tailscale connectivity
   services.tailscale.enable = true;
   services.tailscale.extraUpFlags = "--ssh --accept-dns";
 
+  # Enables Grafan Agent (configured via Ansible)
+  services.grafana-agent.enable = true;
+
+  # At and Cron for scheduling
   services.atd.enable = true;
   services.cron.enable = true;
-  
+
+  # Various packages needed 
   environment.systemPackages = [
     pkgs.acl
     pkgs.age
-    pkgs.gnupg
     pkgs.curl
+    pkgs.git
+    pkgs.gnupg
     pkgs.grafana-agent
     pkgs.helix
     pkgs.htop
     pkgs.iotop
-    pkgs.python3 # Ansible requires it
     pkgs.iperf
     pkgs.mosh
+    pkgs.python3 # Ansible requires it
     pkgs.retry
-    pkgs.vim
-    pkgs.tmux
-    pkgs.zfs
     pkgs.service-wrapper
+    pkgs.tmux
+    pkgs.vim
+    pkgs.nano # No ESC keyboard on my old mac
+    pkgs.zfs
   ];
 
   users.users.koalalorenzo = {
@@ -81,6 +105,8 @@
     initialPassword = "password";
     extraGroups = [ "wheel" "networkmanager" "consul" "nomad" "docker" ];
   };
+
+  environment.variables.EDITOR = "hx";
   
   # First version being used for the setup. Do not change it in the future, 
   # unless it is a brand new setup from scratch. It is used for compatibility
