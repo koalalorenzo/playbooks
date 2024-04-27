@@ -105,6 +105,10 @@
       ];
     }
     ];
+
+    # Allows nfs cache
+    services.cachefilesd.enable = true;
+    
     virtualisation.containerd.enable = true;
     # virtualisation.podman.enable = true;
     virtualisation.cri-o.enable = true;
