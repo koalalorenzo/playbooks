@@ -85,7 +85,7 @@ job "7dtd" {
           BEPINEX=NO # Optional - BepInEx
           BEPINEX_UPDATE=NO # Optional - Update BepInEx before server start
           
-          BACKUP=YES # Optional - Backup server at 5 AM
+          BACKUP=NO # Optional - Backup server at 5 AM
           MONITOR=NO # Optional - Keeps server up if crash
         EOH
       }
