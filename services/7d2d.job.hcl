@@ -91,7 +91,7 @@ job "7d2d" {
       }
 
       resources {
-        cpu    = 3000
+        cpu    = 8000 # 8 Ghz (3Ghz per core)
         memory = 14848 # 14.5 GB of RAM
       }
 
