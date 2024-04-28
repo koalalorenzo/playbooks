@@ -51,8 +51,10 @@ job "grafana" {
           "--server.http.listen-addr=0.0.0.0:${NOMAD_PORT_http}",
           "--server.http.enable-pprof=false",
           "--cluster.enabled=true",
-          "--cluster.join-addresses=192.168.197.3:${NOMAD_PORT_http},192.168.197.4:${NOMAD_PORT_http},192.168.197.5:${NOMAD_PORT_http},",
+          "--cluster.join-addresses=192.168.197.3:${NOMAD_PORT_http},192.168.197.4:${NOMAD_PORT_http},192.168.197.5:${NOMAD_PORT_http}",
+          "--cluster.rejoin-interval=3600s", # Avoid split brain issues
           "--cluster.advertise-address=${NOMAD_ADDR_http}",
+          "--cluster.name=elates.it",
           "--storage.path=/var/lib/alloy/data",
           "/etc/alloy/config.alloy"
         ]
@@ -61,6 +63,8 @@ job "grafana" {
 
         volumes = [
           "local/config.alloy:/etc/alloy/config.alloy",
+          "/var/run/docker.sock:/var/run/docker.sock",
+          "/var/logs:/var/logs:ro",
         ]
       }
 
@@ -74,13 +78,25 @@ job "grafana" {
           }
 
           discovery.consul "consul" {
-            server = "localhost:8500"
+            server = "https://consul.elates.it"
           }
 
           discovery.docker "containers" {
             host = "unix:///var/run/docker.sock"
           }
-        EOF
+
+          prometheus.remote_write "primary" {
+              endpoint {
+                  {{- with nomadVar "nomad/jobs/grafana" -}}
+                  url = "{{ .GCLOUD_HOSTED_METRICS_URL }}"
+                  basic_auth {
+                      username = "{{ .GCLOUD_HOSTED_METRICS_ID }}"
+                      password = "{{ .GCLOUD_RW_API_KEY }}"
+                  }
+                  {{- end --}}
+              }
+          }
+      EOF
       }
 
       resources {
