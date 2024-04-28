@@ -8,5 +8,4 @@
 - import_playbook: common/swap.yaml
 
 - import_playbook: common/email.yaml
-- import_playbook: common/monitoring_grafana.yaml
 - import_playbook: common/network.yaml
