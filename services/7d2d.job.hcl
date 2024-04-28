@@ -96,7 +96,7 @@ job "7d2d" {
       }
 
       service {
-        name = "webadmin"
+        name = "7d2d"
         port = "webadmin"
 
         tags = [

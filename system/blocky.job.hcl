@@ -123,6 +123,7 @@ blocking:
         /stats.grafana.org/
         /github-cloud.githubusercontent.com/
         /github-cloud.s3.amazonaws.com/
+        /api.epicgames.dev/
     ads: *generic_white_list
     malware:
       - |
