@@ -76,6 +76,9 @@
 
             gc_interval = "5m"
 
+            # Uses Tailscale as network interface
+            network_interface = "tailscale0"
+
             {% if node_class %}
             node_class = "{{ node_class }}"
             {% endif %}

@@ -51,7 +51,7 @@ job "grafana" {
           "--server.http.listen-addr=0.0.0.0:${NOMAD_PORT_http}",
           "--server.http.enable-pprof=false",
           "--cluster.enabled=true",
-          "--cluster.join-addresses=192.168.197.3:${NOMAD_PORT_http},192.168.197.4:${NOMAD_PORT_http},192.168.197.5:${NOMAD_PORT_http}",
+          "--cluster.join-addresses=compute0:${NOMAD_PORT_http},compute1:${NOMAD_PORT_http},storage0:${NOMAD_PORT_http}",
           "--cluster.rejoin-interval=3600s", # Avoid split brain issues
           "--cluster.advertise-address=${NOMAD_ADDR_http}",
           "--cluster.name=elates.it",
