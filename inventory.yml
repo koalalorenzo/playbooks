@@ -90,6 +90,10 @@ all:
         compute0:
         compute1:
         compute2:
+          host_volumes:
+            - name: "nix-store"
+              path: "/nix/store"
+              read_only: true
 
     # Deploys Consul on every Nomad Servers
     consul:

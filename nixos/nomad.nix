@@ -2,6 +2,7 @@
     # Install packages
     environment = with pkgs; {
       systemPackages = [
+        pkgs.nomad_1_6
         pkgs.consul
         pkgs.bzip2
         pkgs.gnupg
@@ -9,7 +10,6 @@
         pkgs.curl
         pkgs.gnupg
         pkgs.nfs-utils
-        pkgs.nomad
         pkgs.retry
         # pkgs.podman
         pkgs.docker
