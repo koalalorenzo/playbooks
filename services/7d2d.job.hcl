@@ -1,5 +1,5 @@
 job "7d2d" {
-  type     = "service"
+  type = "service"
 
   group "7d2d" {
     constraint {
@@ -16,8 +16,8 @@ job "7d2d" {
       port "game_server_z" { static = 26900 } # Default game ports tcp + udp
       port "game_server_o" { static = 26901 } # Default game ports tcp + udp
       port "game_server_t" { static = 26902 } # udp 
-      port "webadmin" { to = 8080 } # OPTIONAL - WEBADMIN
-      port "webserver" { to = 8082 } # OPTIONAL - WEBSERVER https://7dtd.illy.bz/wiki/Server%20fixes
+      port "webadmin" { to = 8080 }           # OPTIONAL - WEBADMIN
+      port "webserver" { to = 8082 }          # OPTIONAL - WEBSERVER https://7dtd.illy.bz/wiki/Server%20fixes
     }
 
     restart {
@@ -28,7 +28,7 @@ job "7d2d" {
     }
 
     task "gameserver" {
-      driver = "docker"
+      driver       = "docker"
       kill_timeout = "120s"
 
       config {
@@ -91,7 +91,7 @@ job "7d2d" {
       }
 
       resources {
-        cpu    = 8000 # 8 Ghz (3Ghz per core)
+        cpu    = 8000  # 8 Ghz (3Ghz per core)
         memory = 14848 # 14.5 GB of RAM
       }
 

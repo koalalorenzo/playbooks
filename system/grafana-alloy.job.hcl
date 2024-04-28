@@ -45,8 +45,8 @@ job "grafana" {
       kill_timeout = "30s"
 
       config {
-        image        = "grafana/alloy:latest"
-        args         = [
+        image = "grafana/alloy:latest"
+        args = [
           "run",
           "--server.http.listen-addr=0.0.0.0:${NOMAD_PORT_http}",
           "--server.http.enable-pprof=false",
@@ -71,7 +71,7 @@ job "grafana" {
 
       template {
         destination = "local/config.alloy"
-        data = <<EOF
+        data        = <<EOF
           logging {
             level  = "info"
             format = "logfmt"

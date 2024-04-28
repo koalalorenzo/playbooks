@@ -1,5 +1,5 @@
 job "pgweb" {
-  type     = "service"
+  type = "service"
 
   group "pgweb" {
     constraint {
