@@ -5,15 +5,13 @@
   imports =
   [ # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./macbookpro.nix
     ./nomad.nix
 
     # Sops encryption
     "${builtins.fetchTarball {
       url = "https://github.com/Mic92/sops-nix/archive/f1b0adc27265274e3b0c9b872a8f476a098679bd.tar.gz";
     }}/modules/sops"
-
-    # Apple T2 support
-    # "${builtins.fetchGit { url = "https://github.com/NixOS/nixos-hardware.git"; }}/apple/t2"
   ];
 
   networking.hostName = "compute2";
@@ -22,10 +20,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Adds applet2 loader
-  # hardware.apple-t2.enableAppleSetOsLoader = true;
-  
-  # networking.hostName = "compute2";
   networking.networkmanager.enable = true;
 
   # Sets DNS to Cloudflare
@@ -42,14 +36,6 @@
     };
   };
 
-  # Disable lid close sleep
-  services.logind.lidSwitch = "ignore";
-  services.logind.lidSwitchDocked = "ignore";
-  services.upower.ignoreLid = true;
-
-  # On MacOS
-  services.mbpfan.enable = true;
-  
   networking.firewall.enable = true;
   services.fail2ban.enable = true;
   networking.firewall.allowedTCPPorts = with networking; [ 22 ];
@@ -93,7 +79,6 @@
     pkgs.service-wrapper
     pkgs.tmux
     pkgs.vim
-    pkgs.nano # No ESC keyboard on my old mac
     pkgs.zfs
   ];
 
