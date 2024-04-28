@@ -317,6 +317,42 @@ job "grafana" {
               targets    = discovery.consul.consul_discovery.targets
               forward_to = [prometheus.remote_write.metrics_service.receiver]
           }
+
+          // Consul Integration
+          prometheus.exporter.consul "integrations_consul_exporter" {
+             server = "https://consul.elates.it"
+          }
+
+          discovery.relabel "integrations_consul_exporter" {
+          	targets = prometheus.exporter.consul.integrations_consul_exporter.targets
+
+          	rule {
+          		target_label = "instance"
+          		replacement  = "{{ env "attr.unique.hostname" }}"
+          	}
+
+          	rule {
+          		target_label = "job"
+          		replacement  = "integrations/consul"
+          	}
+          }
+
+          prometheus.scrape "integrations_consul_exporter" {
+          	targets    = discovery.relabel.integrations_consul_exporter.output
+          	forward_to = [prometheus.relabel.integrations_consul_exporter.receiver]
+          	job_name   = "integrations/consul_exporter"
+          }
+
+          prometheus.relabel "integrations_consul_exporter" {
+          	forward_to = [prometheus.remote_write.metrics_service.receiver]
+
+          	rule {
+          		source_labels = ["__name__"]
+          		regex         = "up|consul_raft_leader|consul_raft_leader_lastcontact_count|consul_raft_peers|consul_up"
+          		action        = "keep"
+          	}
+          }
+
         EOF
       }
 
