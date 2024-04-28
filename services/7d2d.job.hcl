@@ -1,7 +1,7 @@
-job "7dtd" {
+job "7d2d" {
   type     = "service"
 
-  group "7dtd" {
+  group "7d2d" {
     constraint {
       attribute = node.class
       value     = "compute"
@@ -92,7 +92,7 @@ job "7dtd" {
 
       resources {
         cpu    = 3000
-        memory = 10240
+        memory = 14848 # 14.5 GB of RAM
       }
 
       service {
@@ -101,8 +101,8 @@ job "7dtd" {
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.7dtd.rule=Host(`7dtd.elates.it`)",
-          "traefik.http.routers.7dtd.tls.certresolver=letsencrypt",
+          "traefik.http.routers.7d2d.rule=Host(`7d2d.elates.it`)",
+          "traefik.http.routers.7d2d.tls.certresolver=letsencrypt",
         ]
       }
     }
