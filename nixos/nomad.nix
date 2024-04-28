@@ -76,6 +76,7 @@
       7359 # Jellyfin autodiscovery
       7777 # Terraria
       5201 # Iperf 3
+      3478 # Steam Client
     ];
 
     allowedUDPPorts = [
@@ -90,16 +91,16 @@
       7777 # Terraria
       5201 # Iperf 3
       3478 # Steam Client
-      4379 # Steam Client
-      4380 # Steam Client
     ];
 
     allowedUDPPortRanges = [
+      { from = 4378;  to = 4380;  } # Steam P2P
       { from = 27000; to = 27100; } # Steam
       { from = 26900; to = 26950; } # 7d2d
     ];
 
     allowedTCPPortRanges = [
+      { from = 4378;  to = 4380;  } # Steam P2P
       { from = 27000; to = 27100; } # Steam
       { from = 26900; to = 26950; } # 7d2d
     ];

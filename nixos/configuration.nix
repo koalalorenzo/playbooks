@@ -36,7 +36,8 @@
     };
   };
 
-  networking.firewall.enable = true;
+  networking.firewall.enable = false;
+  networking.firewall.logRefusedConnections = true;
   services.fail2ban.enable = true;
   networking.firewall.allowedTCPPorts = with networking; [ 22 ];
   networking.firewall.allowedUDPPortRanges = with networking; [{ from = 60000; to = 61000; }];
@@ -68,7 +69,6 @@
     pkgs.curl
     pkgs.git
     pkgs.gnupg
-    pkgs.grafana-agent
     pkgs.helix
     pkgs.htop
     pkgs.iotop
