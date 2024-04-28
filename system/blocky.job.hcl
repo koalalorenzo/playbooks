@@ -124,6 +124,8 @@ blocking:
         /github-cloud.githubusercontent.com/
         /github-cloud.s3.amazonaws.com/
         /api.epicgames.dev/
+        /epicgames.dev/
+        /epicgames.com/
     ads: *generic_white_list
     malware:
       - |

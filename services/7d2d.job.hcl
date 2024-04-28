@@ -4,12 +4,12 @@ job "7d2d" {
   group "7d2d" {
     constraint {
       attribute = node.class
-      value     = "compute"
+      value     = "edge"
     }
 
     constraint {
       attribute = attr.cpu.arch
-      value     = "amd64" #arm64 for arm64
+      value     = "amd64" # 7d2d supports only amd64
     }
 
     network {
@@ -33,6 +33,7 @@ job "7d2d" {
 
       config {
         image = "vinanrra/7dtd-server"
+
         ports = [
           "game_server_z",
           "game_server_o",
