@@ -23,7 +23,7 @@ job "shiori" {
       kill_timeout = "30s"
 
       config {
-        image = "ghcr.io/go-shiori/shiori:v1.6.0-rc.7"
+        image = "ghcr.io/go-shiori/shiori:v1.6.3"
         ports = ["http"]
       }
 
