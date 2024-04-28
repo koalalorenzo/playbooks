@@ -84,12 +84,12 @@ job "grafana" {
 
             rule {
               target_label = "instance"
-              replacement  = constants.hostname
+              replacement  = "{{ env "attr.unique.hostname" }}"
             }
 
             rule {
               target_label = "alloy_hostname"
-              replacement  = constants.hostname
+              replacement  = "{{ env "attr.unique.hostname" }}"
             }
 
             rule {
@@ -157,7 +157,7 @@ job "grafana" {
 
             rule {
               target_label = "instance"
-              replacement  = constants.hostname
+              replacement  = "{{ env "attr.unique.hostname" }}"
             }
 
             rule {
@@ -209,7 +209,7 @@ job "grafana" {
             path_targets = [{
               __address__ = "localhost",
               __path__    = "/var/log/{syslog,messages,*.log}",
-              instance    = constants.hostname,
+              instance    = "{{ env "attr.unique.hostname" }}",
               job         = "integrations/node_exporter",
             }]
           }
