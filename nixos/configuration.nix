@@ -71,9 +71,6 @@
   services.tailscale.enable = true;
   services.tailscale.extraUpFlags = "--ssh --accept-dns";
 
-  # Enables Grafan Agent (configured via Ansible)
-  services.grafana-agent.enable = true;
-
   # At and Cron for scheduling
   services.atd.enable = true;
   services.cron.enable = true;

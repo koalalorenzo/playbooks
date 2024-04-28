@@ -66,11 +66,11 @@
           }
       notify: Restart Nomad
 
-    - blockinfile:
-        path: /etc/nomad.d/client.hcl
-        create: yes
+    - name: Adds Client configuration
+      copy:
+        dest: /etc/nomad.d/client.hcl
         mode: 0700
-        block: |
+        content: |
           client {
             enabled = true
 
@@ -123,16 +123,20 @@
                 image_delay = "72h"
                 container   = true
               }
+
+              volumes {
+                # Allows mounting local paths
+                enabled = true
+              }
             }
           }
       notify: Restart Nomad
 
     - name: Adds Nomad Server configuration
-      blockinfile:
-        path: /etc/nomad.d/server.hcl
-        create: yes
+      copy:
+        dest: /etc/nomad.d/server.hcl
         mode: 0700
-        block: |
+        content: |
           server {
             enabled = true
             bootstrap_expect = {{ bootstrap_quorum }}
