@@ -159,8 +159,8 @@ job "7d2d" {
 
   group "traefik-7d2d" {
     constraint {
-      attribute = node.class
-      value     = "edge"
+      attribute = meta.sdtd.port-forward
+      operator  = "is_set"
     }
 
     network {
