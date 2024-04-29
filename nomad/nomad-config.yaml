@@ -84,6 +84,12 @@
             node_class = "{{ node_class }}"
             
             {% endif %}
+
+            {% if node_pool %}
+            
+            node_pool = "{{ node_pool }}"
+
+             {% endif %}
             
             options = {
               "driver.denylist" = "java"

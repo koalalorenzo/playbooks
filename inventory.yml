@@ -28,6 +28,9 @@ all:
       - 55065306FCC6617D4D928B70020F4A4E40F95228
       - 13C6836A224BB603724399C671C9E6BA29324FEE
 
+    node_pool: ""
+    node_class: ""
+
   hosts:
     storage0:
     compute0:
@@ -89,6 +92,8 @@ all:
       hosts:
         compute0:
         compute1:
+      vars:
+        node_pool: edge
 
     # Nomad Servers on control-plane
     nomadServers:
