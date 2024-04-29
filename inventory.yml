@@ -30,35 +30,15 @@ all:
 
   hosts:
     storage0:
-      extra_ssl_domains:
-        - storage0.home.elates.it
     compute0:
-      extra_ssl_domains:
-        - compute0.home.elates.it
     compute1:
-      extra_ssl_domains:
-        - compute1.home.elates.it
     compute2:
-      extra_ssl_domains:
-        - compute2.home.elates.it
 
   children:
-    # Nodes that will process Network Requests/exposed via dns
-    nomadNetEntrypoint:
-      hosts:
-        compute0:
-        compute1:
-
-    nomadServers:
-      hosts:
-        storage0:
-        compute0:
-        compute1:
-        compute2:
+    nomad:
       vars:
+        bootstrap_quorum: 3
 
-    nomadClients:
-      vars:
         node_class: "compute"
         host_volumes:
           - name: "traefik"
@@ -101,13 +81,22 @@ all:
         bootstrap_quorum: 3
       children:
         nomadServers:
+        nomadEdge:
+        nomad:
 
-    nomad:
-      vars:
-        bootstrap_quorum: 3
-      children:
-        nomadServers:
-        nomadClients:
+    # Nodes that will process Network Requests/exposed via dns
+    nomadEdge:
+      hosts:
+        compute0:
+        compute1:
+
+    # Nomad Servers on control-plane
+    nomadServers:
+      hosts:
+        storage0:
+        compute0:
+        compute1:
+        compute2:
 
     # Machines that provide storage layer (OpenZFS)
     storage:

@@ -80,7 +80,9 @@
             network_interface = "tailscale0"
 
             {% if node_class %}
+            
             node_class = "{{ node_class }}"
+            
             {% endif %}
             
             options = {
@@ -95,15 +97,26 @@
             }
 
             {% for host in host_volumes %}
+            
             host_volume "{{ host.name }}" {
               path = "{{ host.path }}"
               read_only = {% if host.read_only %}true{% else %}false{% endif %}
             }
+            
             {% endfor %}
 
             reserved {
+              {% if node_class == "storage"  %}
+              
+              cpu    = 1250 # OpenZFS
+              memory = 3072 # OpenZFS
+              
+              {% else %}
+              
               cpu    = 500
-              memory = 512
+              memory = 256
+              
+              {% endif %}
             }
 
             artifact {
@@ -135,6 +148,18 @@
           }
       notify: Restart Nomad
 
+- name: Set config for nomad servers
+  hosts: nomadServers
+  become: yes
+  become_user: root
+  become_method: sudo
+  gather_facts: yes
+
+  handlers:
+    - name: Restart Nomad
+      service: name=nomad state=restarted
+
+  tasks:
     - name: Adds Nomad Server configuration
       copy:
         dest: /etc/nomad.d/server.hcl
@@ -144,6 +169,8 @@
             enabled = true
             bootstrap_expect = {{ bootstrap_quorum }}
 
+            # Remove Nodes after this time
+            node_gc_threshold = "6h"
 
             # How often should we run the GC?
             job_gc_interval = "1h"
