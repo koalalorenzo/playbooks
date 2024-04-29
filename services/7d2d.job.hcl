@@ -4,7 +4,7 @@ job "7d2d" {
   group "7d2d" {
     constraint {
       attribute = node.class
-      value     = "edge"
+      value     = "compute"
     }
 
     constraint {
@@ -13,12 +13,46 @@ job "7d2d" {
     }
 
     network {
-      port "game_server_z" { static = 26900 } # Default game ports tcp + udp
-      port "game_server_o" { static = 26901 } # Default game ports tcp + udp
-      port "game_server_t" { static = 26902 } # udp 
+      port "gsz" { static = 26900 } # Default game ports tcp + udp (game server zero)
+      port "gso" { static = 26901 } # Default game ports tcp + udp (game server one)
+      port "gst" { static = 26902 } # udp  (game server two)
       port "webadmin" { to = 8080 }           # OPTIONAL - WEBADMIN
       port "webserver" { to = 8082 }          # OPTIONAL - WEBSERVER https://7dtd.illy.bz/wiki/Server%20fixes
     }
+
+    service {
+      name = "sdtd-gsz"
+      port = "gsz"
+
+      tags = [
+        "traefik-7d2d.enabled=true",
+        "traefik.udp.routers.terraria.entrypoints=gsz-udp",
+        "traefik.tcp.routers.terraria.entrypoints=gsz-tcp",
+      ]
+    }
+
+    service {
+      name = "sdtd-gso"
+      port = "gso"
+
+      tags = [
+        "traefik-7d2d.enabled=true",
+        "traefik.udp.routers.terraria.entrypoints=gso-udp",
+        "traefik.tcp.routers.terraria.entrypoints=gso-tcp",
+      ]
+    }
+
+    service {
+      name = "sdtd-gst"
+      port = "gst"
+
+      tags = [
+        "traefik-7d2d.enabled=true",
+        "traefik.udp.routers.terraria.entrypoints=gst-udp",
+        "traefik.tcp.routers.terraria.entrypoints=gst-tcp",
+      ]
+    }
+
 
     restart {
       delay    = "10s"
@@ -35,9 +69,9 @@ job "7d2d" {
         image = "vinanrra/7dtd-server"
 
         ports = [
-          "game_server_z",
-          "game_server_o",
-          "game_server_t",
+          "gsz",
+          "gso",
+          "gst",
           "webadmin",
           "webserver",
         ]
