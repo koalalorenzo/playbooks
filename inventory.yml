@@ -28,8 +28,9 @@ all:
       - 55065306FCC6617D4D928B70020F4A4E40F95228
       - 13C6836A224BB603724399C671C9E6BA29324FEE
 
-    node_pool: ""
-    node_class: ""
+    nomad_node_pool: ""
+    nomad_node_class: ""
+    nomad_node_meta: {}
 
   hosts:
     storage0:
@@ -41,15 +42,16 @@ all:
     nomad:
       vars:
         bootstrap_quorum: 3
-
-        node_class: "compute"
+        nomad_node_class: "compute"
         host_volumes:
           - name: "traefik"
             path: "/etc/traefik"
             read_only: false
       hosts:
         storage0:
-          node_class: "storage"
+          nomad_node_class: "storage"
+          nomad_node_meta:
+            traefik: true
           host_volumes:
             - name: "traefik"
               path: "/etc/traefik"
@@ -93,7 +95,8 @@ all:
         compute0:
         compute1:
       vars:
-        node_pool: edge
+        nomad_node_meta:
+          traefik: true
 
     # Nomad Servers on control-plane
     nomadServers:

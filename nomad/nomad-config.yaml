@@ -7,8 +7,8 @@
   gather_facts: yes
 
   handlers:
-    - name: Restart Nomad
-      service: name=nomad state=restarted
+    - name: Reload Nomad
+      service: name=nomad state=reloaded
 
   tasks:
     - file:
@@ -64,7 +64,7 @@
             rpc = "{{ ansible_all_ipv4_addresses | ansible.utils.ipaddr('100.64.0.0/10') | first }}"
             serf = "{{ ansible_all_ipv4_addresses | ansible.utils.ipaddr('100.64.0.0/10') | first }}"
           }
-      notify: Restart Nomad
+      notify: Reload Nomad
 
     - name: Adds Client configuration
       copy:
@@ -79,17 +79,19 @@
             # Uses Tailscale as network interface
             network_interface = "tailscale0"
 
-            {% if node_class %}
-            
-            node_class = "{{ node_class }}"
-            
+            {% if nomad_node_class %}
+            node_class = "{{ nomad_node_class }}"
             {% endif %}
 
-            {% if node_pool %}
-            
-            node_pool = "{{ node_pool }}"
+            {% if nomad_node_pool %}
+            node_pool = "{{ nomad_node_pool }}"
+            {% endif %}
 
-             {% endif %}
+            meta {
+            {% for key, value in nomad_node_meta.items() %}
+              {{ key }} = "{{ value }}"
+            {% endfor %}
+            }
             
             options = {
               "driver.denylist" = "java"
@@ -112,7 +114,7 @@
             {% endfor %}
 
             reserved {
-              {% if node_class == "storage"  %}
+              {% if nomad_node_class == "storage"  %}
               
               cpu    = 1250 # OpenZFS
               memory = 3072 # OpenZFS
@@ -152,7 +154,7 @@
               }
             }
           }
-      notify: Restart Nomad
+      notify: Reload Nomad
 
 - name: Set config for nomad servers
   hosts: nomadServers
@@ -190,3 +192,4 @@
               scheduler_algorithm = "spread"
             }
           }
+      notify: Restart Nomad
