@@ -155,7 +155,78 @@ job "7d2d" {
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
+  }
 
+  group "traefik-7d2d" {
+    constraint {
+      attribute = node.class
+      value     = "edge"
+    }
+
+    network {
+      port "gsz" { static = 26900 } # Default game ports tcp + udp
+      port "gso" { static = 26901 } # Default game ports tcp + udp
+      port "gst" { static = 26902 } # udp 
+      port "webadmin" { to = 8080 }           # OPTIONAL - WEBADMIN
+      port "webserver" { to = 8082 }          # OPTIONAL - WEBSERVER https://7dtd.illy.bz/wiki/Server%20fixes
+    }
+
+    task "traefik" {
+      driver       = "docker"
+      kill_timeout = "45s"
+
+      config {
+        image        = "traefik:v2.11.2"
+        network_mode = "host"
+
+        ports = [
+          "gsz",
+          "gso",
+          "gst",
+          "webadmin",
+          "webserver",
+        ]
+
+        volumes = [
+          "local/traefik.yaml:/etc/traefik/traefik.yaml",
+        ]
+      }
+
+      template {
+        data = <<EOF
+          entryPoints:
+            gsz-udp:
+              address: ":26900/udp"
+            gso-udp:
+              address: ":26901/udp"
+            gst-udp:
+              address: ":26902/udp"
+
+            gsz-tcp:
+              address: ":26900"
+            gso-tcp:
+              address: ":26901"
+            gst-tcp:
+              address: ":26902"
+
+
+          providers:
+            consulCatalog:
+              prefix: "traefik-7d2d"
+
+              endpoint:
+                address: "127.0.0.1:8500"
+                scheme: "http"
+          EOF
+
+        destination = "local/traefik.yaml"
+      }
+
+      resources {
+        cpu    = 250
+        memory = 32
+      }
+    }
   }
 }
 
