@@ -67,6 +67,7 @@ job "7d2d" {
 
       config {
         image = "vinanrra/7dtd-server"
+        network_mode = "host"
 
         ports = [
           "gsz",
@@ -127,7 +128,7 @@ job "7d2d" {
 
       resources {
         cpu    = 8000  # 8 Ghz (3Ghz per core)
-        memory = 14848 # 14.5 GB of RAM
+        memory = 12288 # 14.5 GB of RAM
       }
 
       service {
@@ -157,76 +158,76 @@ job "7d2d" {
     }
   }
 
-  group "traefik-7d2d" {
-    constraint {
-      attribute = meta.sdtd.port-forward
-      operator  = "is_set"
-    }
+  # group "traefik-7d2d" {
+  #   constraint {
+  #     attribute = meta.sdtd.port-forward
+  #     operator  = "is_set"
+  #   }
 
-    network {
-      port "gsz" { static = 26900 } # Default game ports tcp + udp
-      port "gso" { static = 26901 } # Default game ports tcp + udp
-      port "gst" { static = 26902 } # udp 
-      port "webadmin" { to = 8080 }           # OPTIONAL - WEBADMIN
-      port "webserver" { to = 8082 }          # OPTIONAL - WEBSERVER https://7dtd.illy.bz/wiki/Server%20fixes
-    }
+  #   network {
+  #     port "gsz" { static = 26900 } # Default game ports tcp + udp
+  #     port "gso" { static = 26901 } # Default game ports tcp + udp
+  #     port "gst" { static = 26902 } # udp 
+  #     port "webadmin" { to = 8080 }           # OPTIONAL - WEBADMIN
+  #     port "webserver" { to = 8082 }          # OPTIONAL - WEBSERVER https://7dtd.illy.bz/wiki/Server%20fixes
+  #   }
 
-    task "traefik" {
-      driver       = "docker"
-      kill_timeout = "45s"
+  #   task "traefik" {
+  #     driver       = "docker"
+  #     kill_timeout = "45s"
 
-      config {
-        image        = "traefik:v2.11.2"
-        network_mode = "host"
+  #     config {
+  #       image        = "traefik:v2.11.2"
+  #       network_mode = "host"
 
-        ports = [
-          "gsz",
-          "gso",
-          "gst",
-          "webadmin",
-          "webserver",
-        ]
+  #       ports = [
+  #         "gsz",
+  #         "gso",
+  #         "gst",
+  #         "webadmin",
+  #         "webserver",
+  #       ]
 
-        volumes = [
-          "local/traefik.yaml:/etc/traefik/traefik.yaml",
-        ]
-      }
+  #       volumes = [
+  #         "local/traefik.yaml:/etc/traefik/traefik.yaml",
+  #       ]
+  #     }
 
-      template {
-        data = <<EOF
-          entryPoints:
-            gsz-udp:
-              address: ":26900/udp"
-            gso-udp:
-              address: ":26901/udp"
-            gst-udp:
-              address: ":26902/udp"
+  #     template {
+  #       data = <<EOF
+  #         entryPoints:
+  #           gsz-udp:
+  #             address: ":26900/udp"
+  #           gso-udp:
+  #             address: ":26901/udp"
+  #           gst-udp:
+  #             address: ":26902/udp"
 
-            gsz-tcp:
-              address: ":26900"
-            gso-tcp:
-              address: ":26901"
-            gst-tcp:
-              address: ":26902"
+  #           gsz-tcp:
+  #             address: ":26900"
+  #           gso-tcp:
+  #             address: ":26901"
+  #           gst-tcp:
+  #             address: ":26902"
 
 
-          providers:
-            consulCatalog:
-              prefix: "traefik-7d2d"
+  #         providers:
+  #           consulCatalog:
+  #             prefix: "traefik-7d2d"
 
-              endpoint:
-                address: "127.0.0.1:8500"
-                scheme: "http"
-          EOF
+  #             endpoint:
+  #               address: "127.0.0.1:8500"
+  #               scheme: "http"
+  #         EOF
 
-        destination = "local/traefik.yaml"
-      }
+  #       destination = "local/traefik.yaml"
+  #     }
 
-      resources {
-        cpu    = 250
-        memory = 32
-      }
-    }
-  }
+  #     resources {
+  #       cpu    = 250
+  #       memory = 32
+  #     }
+  #   }
+  # }
 }
 

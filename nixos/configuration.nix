@@ -36,7 +36,7 @@
     };
   };
 
-  networking.firewall.enable = false;
+  networking.firewall.enable = true;
   networking.firewall.logRefusedConnections = true;
   services.fail2ban.enable = true;
   networking.firewall.allowedTCPPorts = with networking; [ 22 ];
