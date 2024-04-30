@@ -130,6 +130,12 @@
             artifact {
               disable_filesystem_isolation = true
             }
+
+            options = {
+              {% for key, value in nomad_client_options.items() %}
+              "{{ key }}" = "{{ value }}"
+              {% endfor %}
+            }
           }
 
           plugin "raw_exec" {
