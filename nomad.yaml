@@ -1,9 +1,0 @@
----
-- import_playbook: nomad/common.yaml
-- import_playbook: nomad/consul.yaml
-- import_playbook: nomad/servers.yaml
-- import_playbook: nomad/clients.yaml
-- import_playbook: nomad/clients-docker.yaml
-- import_playbook: nomad/dns.yaml
-# - import_playbook: system/all.yaml
-# - import_playbook: services/all.yaml

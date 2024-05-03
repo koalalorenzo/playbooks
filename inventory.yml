@@ -12,16 +12,6 @@ all:
     tailscale_accept_dns: "true"
 
     ansible_user: koalalorenzo
-    system_users:
-      - username: koalalorenzo
-        pubkeys_urls:
-          - https://github.com/koalalorenzo.keys
-        email: sage.scenery0e@icloud.com
-        is_admin: true
-        env_vars:
-          EDITOR: vim
-          SYSTEMD_EDITOR: vim
-
     # This is used to encrypt emails if enabled
     gpg_key_fingerprints:
       - 73880ECAF69EC2ED44CE5889502BFB12D0B5295F

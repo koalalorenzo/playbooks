@@ -17,10 +17,6 @@ deps:
 	ansible-galaxy collection install community.dns
 .PHONY: deps
 
-reboot:
-	ansible-playbook -i ./inventory.yml common/reboot.yaml ${ANSIBLE_ARGS}
-.PHONY: reboot
-
 $(ALL_PLAYBOOKS) $(PLAYBOOKS): deps
 	ansible-playbook -i ./inventory.yml $@ ${ANSIBLE_ARGS}
 .PHONY: $(ALL_PLAYBOOKS) $(PLAYBOOKS)
