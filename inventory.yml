@@ -31,7 +31,8 @@ all:
     nomad_node_pool: ""
     nomad_node_class: ""
     nomad_node_meta: {}
-    nomad_client_options: {}
+    nomad_client_options:
+      "driver.denylist": "java"
 
   hosts:
     storage0:
@@ -81,7 +82,7 @@ all:
               path: "/nix/store"
               read_only: true
           nomad_client_options:
-            "driver.denylist": "exec"
+            "driver.denylist": "exec,java"
 
     # Deploys Consul on every Nomad Servers
     consul:

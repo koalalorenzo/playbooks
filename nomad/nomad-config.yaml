@@ -94,7 +94,9 @@
             }
             
             options = {
-              "driver.denylist" = "java"
+              {% for key, value in nomad_client_options.items() %}
+              "{{ key }}" = "{{ value }}"
+              {% endfor %}
             }
 
             servers = [{% for i in groups['nomadServers'] %}"{{ i }}.{{tailscale_domain}}",{% endfor %}]
@@ -129,12 +131,6 @@
 
             artifact {
               disable_filesystem_isolation = true
-            }
-
-            options = {
-              {% for key, value in nomad_client_options.items() %}
-              "{{ key }}" = "{{ value }}"
-              {% endfor %}
             }
           }
 
