@@ -1,5 +1,5 @@
 ---
-- name: Install SAMBA
+- name: Setup samba for Storage
   hosts: storage
   become: yes
   become_user: root
@@ -14,13 +14,6 @@
     - name: Load encrypted credentials
       community.sops.load_vars:
         file: samba.sops.yaml
-
-    - name: "Install packages"
-      package:
-        state: latest
-        name:
-          - samba
-          - samba-common-bin
 
     - name: Adds Samba volumes
       blockinfile:
@@ -61,21 +54,21 @@
         group: root
         mode: 0644
 
-    - name: Restart & Enable Samba (smbd) service
+    - name: Enable Samba (smbd) service
       service:
         name: smbd
         enabled: yes
 
-    - name: Allow Samba on Tailscale
-      ufw:
-        rule: allow
-        port: 445
-        direction: in
-        interface: tailscale0
+    # - name: Allow Samba on Tailscale
+    #   ufw:
+    #     rule: allow
+    #     port: 445
+    #     direction: in
+    #     interface: tailscale0
 
-    - name: Allow Samba on local network
-      ufw:
-        rule: allow
-        proto: tcp
-        from_ip: 192.168.0.0/16
-        port: 445
+    # - name: Allow Samba on local network
+    #   ufw:
+    #     rule: allow
+    #     proto: tcp
+    #     from_ip: 192.168.0.0/16
+    #     port: 445

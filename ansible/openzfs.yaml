@@ -1,0 +1,68 @@
+---
+# See https://openzfs.github.io/openzfs-docs/Getting%20Started/Debian/index.html
+- name: Setup OpenZFS devices
+  hosts: storage
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: Load encrypted credentials
+      community.sops.load_vars:
+        file: openzfs.sops.yaml
+
+    - name: Makes sure that encryption keys are stored safe in path
+      file:
+        state: directory
+        path: "/etc/zfskeys/"
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Adds encryption keys
+      copy:
+        dest: "{{ item.path }}"
+        content: "{{ item.pwd }}"
+        owner: root
+        group: root
+        mode: "0600"
+      loop:
+        - { path: "/etc/zfskeys/personal", pwd: "{{ zfs_personal_pwd }}" }
+        - { path: "/etc/zfskeys/backups", pwd: "{{ zfs_backups_pwd }}" }
+
+    - shell: zfs load-key -a
+    - shell: zfs mount -a
+
+    - name: Load Keys at Reboot
+      cron:
+        name: "Load keys and mount at reboot"
+        user: root
+        special_time: reboot
+        job: "sleep 5; retry -t 3 -- /usr/sbin/zfs load-key -a"
+
+    - name: Mount at Reboot
+      cron:
+        name: "Load keys and mount at reboot"
+        user: root
+        special_time: reboot
+        job: "sleep ; retry -t 5 -- /usr/sbin/zfs mount -a"
+
+    - name: Add cronjob to Scrub disks
+      cron:
+        name: "Scrub disk once a every 2 weeks"
+        user: root
+        hour: "2"
+        minute: "30"
+        day: "2,16"
+        job: "/usr/sbin/zpool scrub main"
+
+    # - ufw:
+    #     proto: "any"
+    #     port: "nfs"
+    #     src: "{{ item }}"
+    #     rule: allow
+    #   loop:
+    #     - 10.0.0.0/8
+    #     - 100.64.0.0/10
+    #     - 172.16.0.0/12
+    #     - 192.168.0.0/16
