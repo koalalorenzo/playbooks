@@ -29,13 +29,6 @@ all: deps
 	ansible-playbook -i ./inventory.yml $(PLAYBOOKS) common/reboot-uptime.yaml ${ANSIBLE_ARGS}
 .PHONY: all
 
-apt_upgrade:
-	ansible all -i ./inventory.yml --become \
-		-m apt -a "update_cache=yes cache_valid_time=600" ${ANSIBLE_ARGS}
-	ansible all -i ./inventory.yml --become \
-		-m apt -a "upgrade=full autoremove=true" ${ANSIBLE_ARGS}
-.PHONY: apt_upgrade
-
 ################################################################################
 # Nomad
 ################################################################################
