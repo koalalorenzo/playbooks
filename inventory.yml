@@ -35,10 +35,11 @@ all:
       "driver.denylist": "java"
 
   hosts:
+    edge0:
     storage0:
     compute0:
     compute1:
-    compute2:
+    # compute2:
 
   children:
     nomad:
@@ -76,8 +77,21 @@ all:
 
         compute0:
         compute1:
-        compute2:
+        # compute2:
+        #   host_volumes:
+        #     - name: "traefik"
+        #       path: "/etc/traefik"
+        #       read_only: false
+        #     - name: "nix-store"
+        #       path: "/nix/store"
+        #       read_only: true
+        #   nomad_client_options:
+        #     "driver.denylist": "exec,java"
+        edge0:
           host_volumes:
+            - name: "traefik"
+              path: "/etc/traefik"
+              read_only: false
             - name: "nix-store"
               path: "/nix/store"
               read_only: true
@@ -96,6 +110,7 @@ all:
     # Nodes that will process Network Requests/exposed via dns
     nomadEdge:
       hosts:
+        edge0:
         compute0:
         compute1:
       vars:
@@ -108,7 +123,6 @@ all:
         storage0:
         compute0:
         compute1:
-        compute2:
 
     # Machines that provide storage layer (OpenZFS)
     storage:

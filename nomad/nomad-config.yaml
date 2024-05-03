@@ -21,7 +21,7 @@
         state: directory
       loop: "{{ host_volumes }}"
 
-    - name: Adds Nomad Server configuration
+    - name: Adds Nomad base configuration
       copy:
         dest: /etc/nomad.d/nomad.hcl
         mode: 0700
