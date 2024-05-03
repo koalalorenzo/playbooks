@@ -9,6 +9,8 @@
   handlers:
     - name: Reload Nomad
       service: name=nomad state=reloaded
+    - name: Restart Nomad
+      service: name=nomad state=restarted
 
   tasks:
     - file:
@@ -156,7 +158,7 @@
               }
             }
           }
-      notify: Reload Nomad
+      notify: Restart Nomad
 
 - name: Set config for nomad servers
   hosts: nomadServers
