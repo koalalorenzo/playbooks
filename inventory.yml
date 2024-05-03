@@ -85,8 +85,11 @@ all:
             - name: "nix-store"
               path: "/nix/store"
               read_only: true
+          nomad_node_class: "edge"
           nomad_client_options:
             "driver.denylist": "exec,java"
+          nomad_node_meta:
+            traefik: true
 
     # Deploys Consul on every Nomad Servers
     consul:
