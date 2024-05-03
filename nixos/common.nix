@@ -16,6 +16,7 @@
   services.resolved.enable = false;
 
   networking.firewall.enable = true;
+  networking.firewall.allowPing = true;
   networking.firewall.logRefusedConnections = true;
   services.fail2ban.enable = true;
 
@@ -26,7 +27,8 @@
   services.openssh.enable = true;
   services.openssh.settings = {
     PasswordAuthentication = true;
-    PermitRootLogin = "yes";
+    PermitRootLogin = "no";
+    PasswordAuthentication = false;
   };
 
   # Adds tailscale connectivity
