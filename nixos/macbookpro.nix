@@ -10,6 +10,10 @@
   # Adds applet2 loader
   # hardware.apple-t2.enableAppleSetOsLoader = true;
 
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
   # Disable lid close sleep
   services.logind.lidSwitch = "ignore";
   services.logind.lidSwitchDocked = "ignore";
