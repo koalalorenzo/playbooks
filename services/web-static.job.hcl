@@ -22,7 +22,7 @@ job "web-static" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.static.rule=Host(`static.elates.it`) || Host(`satic.ts.elates.it`)",
+        "traefik.http.routers.static.rule=Host(`static.elates.it`) || Host(`static.ts.elates.it`)",
       ]
     }
 
