@@ -169,6 +169,7 @@ blocking:
       - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/android-tracking.txt
       - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt
       - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/AmazonFireTV.txt
+      - https://gist.githubusercontent.com/eterps/9ddb13a118a21a7d9c12c6165e0bbff5/raw/0ba4b04802a4b478d7777fb7abe76c8eac0c5bfc/Samsung%2520Smart-TV%2520Blocklist%2520Adlist%2520(for%2520PiHole)
       - |
         /realme.com/
         /mouseflow.com/
@@ -195,6 +196,8 @@ blocking:
         /data.mistat.xiaomi.com/
         /hotjar.com/
         /insights.hotjar.com/
+        /intercom.io/
+        /samsungqbe.com/
     malware:
       - https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
       - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
@@ -212,7 +215,7 @@ caching:
   minTime: 30m
   maxTime: 12h
   maxItemsCount: 16384
-  cacheTimeNegative: 30m
+  cacheTimeNegative: 5m
   prefetching: true
   # Prefetch a domain if it has more than 30 requests in 3h.
   prefetchExpires: 3h
