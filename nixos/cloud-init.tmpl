@@ -1,0 +1,29 @@
+## cloud-config
+# nixos-infect cloud init
+
+{% set names = imports.split(',') -%}
+{% set contents = imports_content.split(',') -%}
+write_files:
+  - path: /etc/nixos/host.nix
+    permissions: "0644"
+    content: |
+      {pkgs, ...}:
+      {
+        imports = [
+          {%- for item in names %}
+          /etc/nixos/{{ item }}
+          {%- endfor %}
+        ];
+      
+        environment.systemPackages = with pkgs; [ vim helix ];
+      }
+{% for item in contents %}
+  - path: /etc/nixos/{{ names[loop.index0] }}
+    permissions: "0644"
+    encoding: base64
+    content: |
+      {{ item }}
+{% endfor %}
+
+runcmd:
+  - curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | PROVIDER={{ cloud_provider }} NIXOS_IMPORT=./host.nix NIX_CHANNEL={{ nix_channel }} bash 2>&1 | tee /tmp/infect.log
