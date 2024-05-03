@@ -1,5 +1,25 @@
 { config, lib, pkgs, networking, ... }:
 {
+  # Enables flaeks:
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Sets up garbage collector
+  nix.gc = {
+    automatic = true;
+    dates = "monthly";
+    options = "--delete-older-than 30d";
+  };
+
+  # Free 2GB when 1024 GB are free
+  nix.extraOptions = ''
+    min-free = ${toString (1024 * 1024 * 1024)}
+    max-free = ${toString (2048 * 1024 * 1024)}
+  '';
+
+  # Optimize automatically
+  nix.optimise.automatic = true;
+  nix.optimise.dates = [ "weekly" ];
+
   nixpkgs.config.allowUnfree = true;
 
   # Set your time zone.
@@ -26,9 +46,8 @@
 
   services.openssh.enable = true;
   services.openssh.settings = {
-    PasswordAuthentication = true;
-    PermitRootLogin = "no";
     PasswordAuthentication = false;
+    PermitRootLogin = "no";
   };
 
   # Adds tailscale connectivity
