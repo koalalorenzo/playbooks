@@ -14,7 +14,7 @@
       devShell = pkgs.mkShell {
         buildInputs = with pkgs; [
           pkgs.coreutils
-          pkgs.coreutils
+          pkgs.moreutils
           pkgs.jinja2-cli
           pkgs.python311Packages.jinja2
           pkgs.python311Packages.jinja2-ansible-filters
