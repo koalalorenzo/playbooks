@@ -8,6 +8,12 @@ job "diun" {
     prohibit_overlap = true
   }
 
+  affinity {
+    attribute = node.class
+    value     = "batch"
+    weight    = 90
+  }
+
   group "diun" {
     task "diun" {
       driver = "docker"

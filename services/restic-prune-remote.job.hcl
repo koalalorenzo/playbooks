@@ -8,9 +8,10 @@ job "restic-prune-remote" {
     prohibit_overlap = true
   }
 
-  constraint {
+  affinity {
     attribute = node.class
-    value     = "compute"
+    value     = "batch"
+    weight    = 90
   }
 
   group "restic" {

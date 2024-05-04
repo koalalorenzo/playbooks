@@ -7,9 +7,10 @@ job "shiori-update" {
     time_zone        = "CET"
   }
 
-  constraint {
+  affinity {
     attribute = node.class
-    value     = "compute"
+    value     = "batch"
+    weight    = 90
   }
 
   group "shiori" {
