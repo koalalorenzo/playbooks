@@ -61,10 +61,6 @@ all:
             - name: "personal"
               path: "/main/personal"
               read_only: true
-            - name: "nfs"
-              path: "/main/nfs"
-              read_only: false
-
         compute0:
         compute1:
         # compute2:

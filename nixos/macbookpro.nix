@@ -1,6 +1,6 @@
 { config, lib, pkgs, services, ... }:
 {
-  ### Specific settings for my MacBook Pro 2016
+  ### Specific settings for my MacBook Pro 2016, with NixOS
 
   # imports = lib.mkMerge [
   #   # Apple T2 support
