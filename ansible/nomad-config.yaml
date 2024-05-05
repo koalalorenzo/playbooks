@@ -123,6 +123,11 @@
               cpu    = 1250 # OpenZFS
               memory = 3072 # OpenZFS
               
+              {% elif nomad_node_class == "batch" %}
+              
+              cpu    = 50
+              memory = 32
+              
               {% else %}
               
               cpu    = 500
