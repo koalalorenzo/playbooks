@@ -87,8 +87,8 @@ job "shiori-update" {
       }
 
       resources {
-        cpu    = 1000
-        memory = 1024
+        cpu    = 250
+        memory = 32
       }
     }
   }
