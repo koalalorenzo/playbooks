@@ -26,6 +26,7 @@ all:
 
   hosts:
     edge0:
+    batch0:
     storage0:
     compute0:
     compute1:
@@ -84,8 +85,14 @@ all:
           nomad_node_class: "edge"
           nomad_client_options:
             "driver.denylist": "exec,java"
-          nomad_node_meta:
-            traefik: true
+        batch0:
+          host_volumes:
+            - name: "nix-store"
+              path: "/nix/store"
+              read_only: true
+          nomad_node_class: "batch"
+          nomad_client_options:
+            "driver.denylist": "exec,java"
 
     # Deploys Consul on every Nomad Servers
     consul:
