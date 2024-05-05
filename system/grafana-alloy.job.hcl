@@ -51,7 +51,7 @@ job "grafana" {
           "--server.http.listen-addr=0.0.0.0:${NOMAD_PORT_http}",
           "--server.http.enable-pprof=false",
           "--cluster.enabled=true",
-          "--cluster.join-addresses=compute0:${NOMAD_PORT_http},compute1:${NOMAD_PORT_http},storage0:${NOMAD_PORT_http}",
+          "--cluster.join-addresses=home.elates.it:${NOMAD_PORT_http}",
           "--cluster.rejoin-interval=3600s", # Avoid split brain issues
           "--cluster.advertise-address=${NOMAD_ADDR_http}",
           "--cluster.name=elates.it",
@@ -64,7 +64,11 @@ job "grafana" {
         volumes = [
           "local/config.alloy:/etc/alloy/config.alloy",
           "/var/run/docker.sock:/var/run/docker.sock",
-          "/var/logs:/var/logs:ro",
+          "/var/logs:/var/logs:ro,rslave",
+          "/sys:/host/sys:ro,rslave",
+          "/proc:/host/proc:ro,rslave",
+          "/run:/host/run:ro,rslave",
+          "/:/host/root:ro,rslave",
         ]
       }
 
@@ -159,11 +163,16 @@ job "grafana" {
           }
 
           prometheus.exporter.unix "integrations_node_exporter" {
-            disable_collectors = ["ipvs", "btrfs", "infiniband", "xfs", "zfs"]
+            disable_collectors = ["ipvs", "btrfs", "infiniband", "xfs"]
+
+            procfs_path = "/host/proc"
+            sysfs_path = "/host/sys"
+            rootfs_path = "/host/root"
+            udev_data_path = "/host/root/run/udev/data"
 
             filesystem {
               fs_types_exclude     = "^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|tmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$"
-              mount_points_exclude = "^/(dev|proc|run/credentials/.+|sys|var/lib/docker/.+)($|/)"
+              mount_points_exclude = "^/(dev|proc|opt/nomad/data/.+|run/credentials/.+|sys|var/lib/docker/.+)($|/)"
               mount_timeout        = "5s"
             }
 
