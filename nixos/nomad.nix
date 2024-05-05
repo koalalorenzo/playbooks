@@ -1,125 +1,82 @@
-{ config, lib, pkgs, boot, ... }: {
+{ config, lib, pkgs, boot, sops, ... }: {
   # Install packages
-  environment = with pkgs; {
-    systemPackages = [
-      pkgs.nomad_1_6
-      pkgs.consul
-      pkgs.bzip2
-      pkgs.gnupg
-      pkgs.wget
-      pkgs.curl
-      pkgs.gnupg
-      pkgs.nfs-utils
-      pkgs.retry
-      # pkgs.podman
-      pkgs.docker
-      pkgs.docker-compose
-    ];
-  };
+  environment.systemPackages = with pkgs; [
+    nomad_1_6
+    consul
+    nfs-utils
+  ];
 
-  boot.kernel.sysctl = with boot; { 
-    "net.bridge.bridge-nf-call-arptables" = "1"; 
-    "net.bridge.bridge-nf-call-ip6tables" = "1"; 
-    "net.bridge.bridge-nf-call-iptables" = "1"; 
-  };
-
-  services.consul.enable = true;
-
-  networking.firewall = lib.mkMerge [
-  { # Nomad And Consul
+  networking.firewall = {
     allowedTCPPortRanges = [
       { from = 20000; to = 32000; } # Nomad: Port Allocation
-      { from = 21000; to = 21255; } # Consul Sidecar Proxy
     ];
 
     allowedTCPPorts = [
       4646 # Nomad: API / UI
       4647 # Nomad: RCP API
       4648 # Nomad: WAN Gossip
-      8300 # Consul: Server RPC
-      8301 # Consul: LAN Serf
-      8302 # Consul: WAN Serf
-      8500 # Consul: HTTP
-      8500 # Consul: HTTP
-      8501 # Consul: HTTPS
-      8502 # Consul: gRPC
-      8503 # Consul: gRPC TLS
-      8600 # Consul: DNS
-      8600 # Consul: DNS
     ];
 
     allowedUDPPorts = [
       4647 # Noamd: RCP API
       4648 # Noamd: WAN Gossip
-      8301 # Consul: LAN Serf
-      8302 # Consul: WAN Serf
-      8502 # Consul: gRPC
-      8503 # Consul: gRPC TLS
-      8600 # Consul: DNS
     ];
 
     allowedUDPPortRanges = [
       { from = 20000; to = 32000; } # Nomad: Port Allocation
-      { from = 21000; to = 21255; } # Consul Sidecar Proxy
     ];
-  }
+  };
 
-  { # Apllication/Services 
-    allowedTCPPorts = [
-      # Application/services prots:
-      53 # DNS / PiHole, AdGuard or Unbound
-      80 # Traefik: HTTP
-      443 # Traefik: HTTPS
-      853 # DNS over TLS / QUIC
-      8081 # Traefik
-      1900 # Jellyfin DLNA / upnp
-      7359 # Jellyfin autodiscovery
-      7777 # Terraria
-      5201 # Iperf 3
-      3478 # Steam Client
-    ];
-
-    allowedUDPPorts = [
-      # Application/services prots:
-      53 # DNS / PiHole, AdGuard or Unbound
-      80 # Traefik HTTP
-      443 # Traefik HTTPS
-      853 # DNS over TLS / QUIC
-      8081 # Traefik
-      1900 # Jellyfin DLNA / upnp
-      7359 # Jellyfin autodiscovery
-      7777 # Terraria
-      5201 # Iperf 3
-      3478 # Steam Client
-    ];
-
-    allowedUDPPortRanges = [
-      { from = 4378;  to = 4380;  } # Steam P2P
-      { from = 27000; to = 27100; } # Steam
-      { from = 26900; to = 26950; } # 7d2d
-    ];
-
-    allowedTCPPortRanges = [
-      { from = 4378;  to = 4380;  } # Steam P2P
-      { from = 27000; to = 27100; } # Steam
-      { from = 26900; to = 26950; } # 7d2d
-    ];
-  }
-  ];
-
-  # Allows nfs cache
-  services.cachefilesd.enable = true;
-  
-  virtualisation.containerd.enable = true;
-  # virtualisation.podman.enable = true;
-  virtualisation.cri-o.enable = true;
-  virtualisation.containers.enable = true;
-  
   services.nomad = {
     enable = true;
     package = pkgs.nomad_1_6;
-    enableDocker = true;
     dropPrivileges = false;
     extraSettingsPaths = [ "/etc/nomad.d" ];
   };
+
+  environment.etc = {
+    "nomad.d/nomad.hcl" = {
+      text = ''
+        datacenter = "dc1"
+        data_dir  = "/opt/nomad/data"
+        bind_addr = "0.0.0.0"
+
+        log_rotate_duration = "24h"
+        log_rotate_max_files = 7
+
+        telemetry {
+         collection_interval = "60s", # Must match or less than prometheus scrape_interval
+         publish_allocation_metrics = true,
+         publish_node_metrics = true,
+         prometheus_metrics = true
+        }
+
+        ui {
+          enabled = true
+          consul {
+            ui_url = "http://consul.elates.it/ui"
+          }
+        }
+
+        consul {
+          address = "127.0.0.1:8500"
+
+          # The service name to register the server and client with Consul.
+          server_service_name = "nomad"
+          client_service_name = "nomad-client"
+          auto_advertise = true
+          server_auto_join = true
+          client_auto_join = true
+        }
+
+        advertise {
+          # Defaults to the first private IP address. Using Tailscale instead
+          http = "{{ GetPrivateInterfaces | include \"network\" \"100.64.0.0/10\" | attr \"address\" }}"
+          rpc = "{{ GetPrivateInterfaces | include \"network\" \"100.64.0.0/10\" | attr \"address\" }}"
+          serf = "{{ GetPrivateInterfaces | include \"network\" \"100.64.0.0/10\" | attr \"address\" }}"
+        }
+      '';
+    };
+  };
 }
+
