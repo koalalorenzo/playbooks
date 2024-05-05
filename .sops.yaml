@@ -1,6 +1,5 @@
 keys:
   - &safe_gpg 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
-  - &safe_age age1hv77jtx2x5dczummreqqksw0nr54nqz6mdpwljdveme2lz8csp7qjhnr50
   - &node_storage0 age15qauah7skmftfg5u4z4l526uas5gqaze6k6d09fm7jnga0zzuqtsfy3m5n
   - &node_compute0 age12gjnss76aeqqly8jwh05c3na44r6nu5ws04v07xedj9fwf38letsewvd6r
   - &node_compute1 age1dyqrgtfmayzq4a9hsd743jzlkmty0ac4q8wwjggwadumzy3hj3us86m32q
@@ -13,7 +12,6 @@ creation_rules:
       - pgp:
           - *safe_gpg
         age:
-          - *safe_age
           - *node_storage0
           - *node_compute0
           - *node_compute1
