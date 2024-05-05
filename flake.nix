@@ -25,6 +25,8 @@
           pkgs.python311Packages.ansible
           pkgs.jq
           pkgs.git
+          pkgs.mosh
+          pkgs.openssh
           pkgs.radicle-cli
         ];
       };
