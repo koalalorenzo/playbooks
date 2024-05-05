@@ -8,7 +8,7 @@
 
     # Sops encryption
     "${builtins.fetchTarball {
-      url = "https://github.com/Mic92/sops-nix/archive/298b235f664f925b433614dc33380f0662adfc3f.tar.gz";
+      url = "https://github.com/Mic92/sops-nix/archive/10dc39496d5b027912038bde8d68c836576ad0bc.tar.gz";
     }}/modules/sops"
   ];
 
