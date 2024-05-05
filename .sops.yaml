@@ -7,6 +7,7 @@ keys:
   - &node_edge0 age123602hjzp7w95ndcfhz23dj7mza8fdm5kav2ttsyg5uk7qq39c8sxs5tyy
   - &node_batch0-qemu age1xrwvrmq8r4w47ka64ptx8qkc0zaek9056gmen9tkrwvdk08p5pfq7c78h3
   - &node_batch0-apple age165zwkwyyzg4vhg3a2qt6ucje50y7jupakwuaxm66n26ch2vk9yqq2xcz6u
+  - &node_batch0-vmware age192yp45xlauwp5j8hfkfqh63zv2kn9vt3x9jggtw92adgsacedq2qsv3w37
 creation_rules:
   - path_regex: .*\.sops\..*
     key_groups:
@@ -20,3 +21,4 @@ creation_rules:
           - *node_edge0
           - *node_batch0-qemu
           - *node_batch0-apple
+          - *node_batch0-vmware
