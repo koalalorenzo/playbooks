@@ -45,7 +45,7 @@
     maxretry = 3;
     ignoreIP = ["100.64.0.0/10"];
     bantime = "5m";
-    bantime-increment { 
+    bantime-increment = { 
       enable = true;
       maxtime = "24h";
     };
