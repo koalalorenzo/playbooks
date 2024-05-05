@@ -14,6 +14,9 @@
 
   # networking.hostName = "compute2";
 
+  # Is it a VM?
+  #services.spice-vdagentd.enable = true;
+
   # First version being used for the setup. Do not change it in the future, 
   # unless it is a brand new setup from scratch. It is used for compatibility
   # reasons and for migrated data between versions after upgrade.
