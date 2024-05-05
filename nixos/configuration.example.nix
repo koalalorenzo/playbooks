@@ -5,6 +5,8 @@
     ./hardware-configuration.nix
     ./common.nix
     ./nomad.nix
+    ./nomad-client.nix
+    # ./nomad-server.nix
 
     # Sops encryption
     "${builtins.fetchTarball {
@@ -16,6 +18,8 @@
 
   # Is it a VM?
   #services.spice-vdagentd.enable = true;
+  #virtualisation.vmware.guest.enable = true;
+  #virtualisation.vmware.guest.headless = true;
 
   # First version being used for the setup. Do not change it in the future, 
   # unless it is a brand new setup from scratch. It is used for compatibility
