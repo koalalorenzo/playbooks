@@ -29,6 +29,7 @@
           openssh
           radicle-cli
           sops
+          rsync
         ];
       };
     }
