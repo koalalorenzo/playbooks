@@ -1,7 +1,22 @@
+keys:
+  - &safe_gpg 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
+  - &safe_age age1hv77jtx2x5dczummreqqksw0nr54nqz6mdpwljdveme2lz8csp7qjhnr50
+  - &node_storage0 age15qauah7skmftfg5u4z4l526uas5gqaze6k6d09fm7jnga0zzuqtsfy3m5n
+  - &node_compute0 age12gjnss76aeqqly8jwh05c3na44r6nu5ws04v07xedj9fwf38letsewvd6r
+  - &node_compute1 age1dyqrgtfmayzq4a9hsd743jzlkmty0ac4q8wwjggwadumzy3hj3us86m32q
+  - &node_compute2 age1f9uy7mcfdm7skndsa9p5zu9xqfs8hahxtzg75e4vktrkvqc9qu5q89fdzf
+  - &node_edge0 age123602hjzp7w95ndcfhz23dj7mza8fdm5kav2ttsyg5uk7qq39c8sxs5tyy
+  - &node_batch0-qemu age1xrwvrmq8r4w47ka64ptx8qkc0zaek9056gmen9tkrwvdk08p5pfq7c78h3
 creation_rules:
-  - pgp: 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
-    age: age1hv77jtx2x5dczummreqqksw0nr54nqz6mdpwljdveme2lz8csp7qjhnr50
-  - age: age15qauah7skmftfg5u4z4l526uas5gqaze6k6d09fm7jnga0zzuqtsfy3m5n
-  - age: age12gjnss76aeqqly8jwh05c3na44r6nu5ws04v07xedj9fwf38letsewvd6r
-  - age: age1dyqrgtfmayzq4a9hsd743jzlkmty0ac4q8wwjggwadumzy3hj3us86m32q
-  - age: age1f9uy7mcfdm7skndsa9p5zu9xqfs8hahxtzg75e4vktrkvqc9qu5q89fdzf
+  - path_regex: .*\.sops\..*
+    key_groups:
+      - pgp:
+          - *safe_gpg
+        age:
+          - *safe_age
+          - *node_storage0
+          - *node_compute0
+          - *node_compute1
+          - *node_compute2
+          - *node_edge0
+          - *node_batch0-qemu
