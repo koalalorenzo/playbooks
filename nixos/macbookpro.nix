@@ -10,6 +10,9 @@
   # Adds applet2 loader
   # hardware.apple-t2.enableAppleSetOsLoader = true;
 
+  # Is it a VM on Mac M1? Add rosetta for x86_64
+  virtualisation.rosetta.enable = true;
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
