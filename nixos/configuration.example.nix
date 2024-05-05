@@ -8,11 +8,11 @@
 
     # Sops encryption
     "${builtins.fetchTarball {
-      url = "https://github.com/Mic92/sops-nix/archive/f1b0adc27265274e3b0c9b872a8f476a098679bd.tar.gz";
+      url = "https://github.com/Mic92/sops-nix/archive/298b235f664f925b433614dc33380f0662adfc3f.tar.gz";
     }}/modules/sops"
   ];
 
-  # networking.hostName = "compute2";
+  # networking.hostName = "batch0-qemu";
 
   # Is it a VM?
   #services.spice-vdagentd.enable = true;

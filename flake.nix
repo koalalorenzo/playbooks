@@ -13,21 +13,22 @@
     {
       devShell = pkgs.mkShell {
         buildInputs = with pkgs; [
-          pkgs.coreutils
-          pkgs.moreutils
-          pkgs.jinja2-cli
-          pkgs.python311Packages.jinja2
-          pkgs.python311Packages.jinja2-ansible-filters
-          pkgs.nomad
-          pkgs.consul
-          pkgs.gnumake
-          pkgs.python311Packages.dnspython
-          pkgs.python311Packages.ansible
-          pkgs.jq
-          pkgs.git
-          pkgs.mosh
-          pkgs.openssh
-          pkgs.radicle-cli
+          coreutils
+          moreutils
+          jinja2-cli
+          python311Packages.jinja2
+          python311Packages.jinja2-ansible-filters
+          nomad
+          consul
+          gnumake
+          python311Packages.dnspython
+          python311Packages.ansible
+          jq
+          git
+          mosh
+          openssh
+          radicle-cli
+          sops
         ];
       };
     }
