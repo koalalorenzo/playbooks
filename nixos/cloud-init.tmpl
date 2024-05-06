@@ -3,6 +3,9 @@
 
 {% set names = imports.split(',') -%}
 {% set contents = imports_content.split(',') -%}
+{% set extra = extra.split(',') -%}
+{% set extra_contents = extra_content.split(',') -%}
+
 write_files:
   - path: /etc/nixos/host.nix
     permissions: "0644"
@@ -17,8 +20,17 @@ write_files:
       
         environment.systemPackages = with pkgs; [ vim helix ];
       }
+
 {% for item in contents %}
   - path: /etc/nixos/{{ names[loop.index0] }}
+    permissions: "0644"
+    encoding: base64
+    content: |
+      {{ item }}
+{% endfor %}
+
+{% for item in extra_contents %}
+  - path: /etc/nixos/{{ extra[loop.index0] }}
     permissions: "0644"
     encoding: base64
     content: |
