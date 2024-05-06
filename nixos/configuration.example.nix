@@ -1,11 +1,12 @@
 { config, lib, pkgs, networking, ... }:
 {
-  imports = lib.mkMerge [ 
+  imports = [ 
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./common.nix
-    ./nomad.nix
-    ./nomad-client.nix
+    # ./consul.nix
+    # ./nomad.nix
+    # ./nomad-client.nix
     # ./nomad-server.nix
 
     # Sops encryption
@@ -14,12 +15,28 @@
     }}/modules/sops"
   ];
 
-  # networking.hostName = "batch0-qemu";
+  # networking.hostName = "nixos";
 
-  # Is it a VM?
+  ## Is it a VM?
   #services.spice-vdagentd.enable = true;
+  #services.spice-autorandr.enable = true;
+  #console.enable = true;
+  
   #virtualisation.vmware.guest.enable = true;
   #virtualisation.vmware.guest.headless = true;
+
+  #virtualisation.qemu.guestAgent.enable = true;
+  #services.qemuGuest.enable = true;
+
+  #virtualisation.virtualbox.guest.enable = true;
+
+  #virtualisation.hypervGuest.enable = true;
+
+  # Disable docs and manual pages
+  documentation.doc.enable = false;
+  documentation.man.enable = false;
+  documentation.nixos.enable = false;
+  documentation.info.enable = false;
 
   # First version being used for the setup. Do not change it in the future, 
   # unless it is a brand new setup from scratch. It is used for compatibility
