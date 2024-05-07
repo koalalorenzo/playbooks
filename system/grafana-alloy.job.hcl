@@ -247,72 +247,72 @@ job "grafana" {
 
           // Docker Integration
 
-          prometheus.exporter.cadvisor "integrations_cadvisor" {
-              docker_only = true
-          }
-          
-          discovery.relabel "integrations_cadvisor" {
-              targets = prometheus.exporter.cadvisor.integrations_cadvisor.targets
+          // prometheus.exporter.cadvisor "integrations_cadvisor" {
+          //     docker_only = true
+          // }
+          // 
+          // discovery.relabel "integrations_cadvisor" {
+          //     targets = prometheus.exporter.cadvisor.integrations_cadvisor.targets
 
-              rule {
-                  target_label = "job"
-                  replacement  = "integrations/docker"
-              }
+          //     rule {
+          //         target_label = "job"
+          //         replacement  = "integrations/docker"
+          //     }
 
-              rule {
-                  target_label = "instance"
-                  replacement  = "{{ env "attr.unique.hostname" }}"
-              }
+          //     rule {
+          //         target_label = "instance"
+          //         replacement  = "{{ env "attr.unique.hostname" }}"
+          //     }
 
-              rule {
-            		source_labels = ["__name__"]
-            		regex         = "up|container_cpu_usage_seconds_total|container_fs_inodes_free|container_fs_inodes_total|container_fs_limit_bytes|container_fs_usage_bytes|container_last_seen|container_memory_usage_bytes|container_network_receive_bytes_total|container_network_tcp_usage_total|container_network_transmit_bytes_total|container_spec_memory_reservation_limit_bytes|machine_memory_bytes|machine_scrape_error"
-            		action        = "keep"
-            	}
-          }
-          
-          prometheus.scrape "integrations_cadvisor" {
-              targets    = discovery.relabel.integrations_cadvisor.output
-              forward_to = [prometheus.remote_write.metrics_service.receiver]
-          }
+          //     rule {
+          //   		source_labels = ["__name__"]
+          //   		regex         = "up|container_cpu_usage_seconds_total|container_fs_inodes_free|container_fs_inodes_total|container_fs_limit_bytes|container_fs_usage_bytes|container_last_seen|container_memory_usage_bytes|container_network_receive_bytes_total|container_network_tcp_usage_total|container_network_transmit_bytes_total|container_spec_memory_reservation_limit_bytes|machine_memory_bytes|machine_scrape_error"
+          //   		action        = "keep"
+          //   	}
+          // }
+          // 
+          // prometheus.scrape "integrations_cadvisor" {
+          //     targets    = discovery.relabel.integrations_cadvisor.output
+          //     forward_to = [prometheus.remote_write.metrics_service.receiver]
+          // }
 
-          discovery.docker "logs_integrations_docker" {
-              host             = "unix:///var/run/docker.sock"
-              refresh_interval = "10s"
-          }
-          
-          discovery.relabel "logs_integrations_docker" {
-              targets = []
+          // discovery.docker "logs_integrations_docker" {
+          //     host             = "unix:///var/run/docker.sock"
+          //     refresh_interval = "10s"
+          // }
+          // 
+          // discovery.relabel "logs_integrations_docker" {
+          //     targets = []
 
-              rule {
-                  target_label = "job"
-                  replacement  = "integrations/docker"
-              }
+          //     rule {
+          //         target_label = "job"
+          //         replacement  = "integrations/docker"
+          //     }
 
-              rule {
-                  target_label = "instance"
-                  replacement  = "{{ env "attr.unique.hostname" }}"
-              }
+          //     rule {
+          //         target_label = "instance"
+          //         replacement  = "{{ env "attr.unique.hostname" }}"
+          //     }
 
-              rule {
-                  source_labels = ["__meta_docker_container_name"]
-                  regex         = "/(.*)"
-                  target_label  = "container"
-              }
+          //     rule {
+          //         source_labels = ["__meta_docker_container_name"]
+          //         regex         = "/(.*)"
+          //         target_label  = "container"
+          //     }
 
-              rule {
-                  source_labels = ["__meta_docker_container_log_stream"]
-                  target_label  = "stream"
-              }
-          }
+          //     rule {
+          //         source_labels = ["__meta_docker_container_log_stream"]
+          //         target_label  = "stream"
+          //     }
+          // }
 
-          loki.source.docker "logs_integrations_docker" {
-              host             = "unix:///var/run/docker.sock"
-              targets          = discovery.docker.logs_integrations_docker.targets
-              forward_to       = [loki.write.grafana_cloud_loki.receiver]
-              relabel_rules    = discovery.relabel.logs_integrations_docker.rules
-              refresh_interval = "10s"
-          }
+          // loki.source.docker "logs_integrations_docker" {
+          //     host             = "unix:///var/run/docker.sock"
+          //     targets          = discovery.docker.logs_integrations_docker.targets
+          //     forward_to       = [loki.write.grafana_cloud_loki.receiver]
+          //     relabel_rules    = discovery.relabel.logs_integrations_docker.rules
+          //     refresh_interval = "10s"
+          // }
 
           // Consul Discovery
 
