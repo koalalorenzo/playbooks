@@ -13,6 +13,8 @@
     {
       devShell = pkgs.mkShell {
         buildInputs = with pkgs; [
+          age
+          gnupg
           coreutils
           moreutils
           jinja2-cli
@@ -27,6 +29,7 @@
           git
           mosh
           openssh
+          ssh-to-age
           radicle-cli
           sops
           rsync
