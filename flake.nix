@@ -30,7 +30,7 @@
           mosh
           openssh
           ssh-to-age
-          radicle-cli
+          radicle-node
           sops
           rsync
         ];
