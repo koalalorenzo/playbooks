@@ -29,9 +29,8 @@
   services.mbpfan.enable = true;
 
   # Install packages
-  environment = with pkgs; {
-    systemPackages = [
-      pkgs.nano # No ESC keyboard on my old mac
-    ];
-  };
+  environment.systemPackages = with pkgs; [
+    acpi
+    nano # No ESC keyboard on my old mac
+  ];
 }
