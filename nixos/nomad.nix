@@ -1,8 +1,6 @@
 { config, lib, pkgs, boot, sops, ... }: {
   # Install packages
   environment.systemPackages = with pkgs; [
-    nomad_1_6
-    consul
     nfs-utils
   ];
 
@@ -29,7 +27,7 @@
 
   services.nomad = {
     enable = true;
-    package = pkgs.nomad_1_6;
+    package = (import (fetchTarball "channel:nixos-unstable") {}).nomad;
     dropPrivileges = false;
     extraSettingsPaths = [ "/etc/nomad.d" ];
   };

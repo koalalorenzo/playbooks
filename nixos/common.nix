@@ -64,6 +64,7 @@
   # Adds tailscale connectivity
   services.tailscale.enable = true;
   services.tailscale.extraUpFlags = "--ssh --accept-routes";
+  services.tailscale.package = (import (fetchTarball "channel:nixos-unstable") {}).tailscale;
 
   # At and Cron for scheduling
   services.atd.enable = true;
@@ -71,22 +72,22 @@
 
   # Various packages needed 
   environment.systemPackages = with pkgs; [
-    pkgs.acl
-    pkgs.age
-    pkgs.curl
-    pkgs.git
-    pkgs.gnupg
-    pkgs.helix
-    pkgs.htop
-    pkgs.iotop
-    pkgs.iperf
-    pkgs.mosh
-    pkgs.python3 # Ansible requires it
-    pkgs.retry
-    pkgs.service-wrapper
-    pkgs.tmux
-    pkgs.vim
-    pkgs.zfs
+    acl
+    age
+    curl
+    git
+    gnupg
+    helix
+    htop
+    iotop
+    iperf
+    mosh
+    python3 # Ansible requires it
+    retry
+    service-wrapper
+    tmux
+    vim
+    zfs
   ];
 
   users.users.koalalorenzo = {

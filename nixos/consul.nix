@@ -1,7 +1,6 @@
 { config, lib, pkgs, boot, sops, ... }: {
   # Install packages
   environment.systemPackages = with pkgs; [
-    consul
     retry
   ];
 
@@ -61,6 +60,7 @@
 
   # Load Configuration for Consul
   services.consul.enable = true;
+  services.consul.package = (import (fetchTarball "channel:nixos-unstable") {}).consul;
 
   environment.etc = {
     "consul.d/consul.hcl" = {
