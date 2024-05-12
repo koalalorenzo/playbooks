@@ -15,10 +15,10 @@ job "csi-nfs-node" {
       kill_timeout = "60s"
 
       config {
-        image = "registry.k8s.io/sig-storage/nfsplugin:v4.6.0"
+        image = "registry.k8s.io/sig-storage/nfsplugin:v4.7.0"
 
         args = [
-          "--v=5",
+          "--v=2",
           "--nodeid=${attr.unique.hostname}",
           "--endpoint=unix:///csi/csi.sock",
           "--drivername=nfs.csi.k8s.io"
