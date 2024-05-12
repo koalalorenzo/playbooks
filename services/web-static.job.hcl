@@ -62,10 +62,21 @@ job "web-static" {
           location / {
             root   /var/www;
             index  index.html index.htm;
+
             autoindex on;
 
-            # No cache plz
-            add_header Cache-Control 'private no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+            # Better Cache
+            
+            expires 6h;
+            add_header Cache-Control "must-revalidate, stale-if-error=86400";
+
+            location ~* \.(js|jpg|gif|png|css|import|pck|wasm)$ {
+               expires 31d;
+            }
+            
+            # Disabled: No cache plz
+            # add_header Cache-Control 'private no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+            
             # Allow Godot Games
             add_header Cross-Origin-Opener-Policy 'same-origin';
             add_header Cross-Origin-Embedder-Policy 'require-corp';
