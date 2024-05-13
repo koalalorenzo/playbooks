@@ -2,10 +2,17 @@ job "web-static" {
   type = "service"
 
   group "server" {
+    count = 2
+    
     network {
       port "http" {
         to = 80
       }
+    }
+
+    constraint {
+      operator = "distinct_hosts"
+      value    = "true"
     }
 
     service {
