@@ -30,7 +30,7 @@ all:
     storage0:
     compute0:
     compute1:
-    # compute2:
+    compute2:
 
   children:
     nomad:
@@ -64,16 +64,16 @@ all:
               read_only: true
         compute0:
         compute1:
-        # compute2:
-        #   host_volumes:
-        #     - name: "traefik"
-        #       path: "/etc/traefik"
-        #       read_only: false
-        #     - name: "nix-store"
-        #       path: "/nix/store"
-        #       read_only: true
-        #   nomad_client_options:
-        #     "driver.denylist": "exec,java"
+        compute2:
+          host_volumes:
+            - name: "traefik"
+              path: "/etc/traefik"
+              read_only: false
+            - name: "nix-store"
+              path: "/nix/store"
+              read_only: true
+          nomad_client_options:
+            "driver.denylist": "exec,java"
         edge0:
           host_volumes:
             - name: "traefik"
