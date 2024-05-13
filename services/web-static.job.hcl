@@ -73,6 +73,10 @@ job "web-static" {
             location ~* \.(js|jpg|gif|png|css|import|pck|wasm)$ {
                expires 31d;
             }
+
+            location ~* \.(html|htm|xml|rss)$ {
+               expires 1h;
+            }
             
             # Disabled: No cache plz
             # add_header Cache-Control 'private no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
