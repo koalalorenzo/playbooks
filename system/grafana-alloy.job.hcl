@@ -72,6 +72,10 @@ job "grafana" {
         ]
       }
 
+      meta {
+        scrape_logs = "false"
+      }
+
 
       template {
         destination = "local/config.alloy"
