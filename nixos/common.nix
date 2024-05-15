@@ -81,6 +81,7 @@
     htop
     iotop
     iperf
+    mailutils
     mosh
     python3 # Ansible requires it
     retry
