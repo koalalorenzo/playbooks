@@ -25,8 +25,6 @@ all:
       "driver.denylist": "java"
 
   hosts:
-    edge0:
-    batch0:
     storage0:
     compute0:
     compute1:
@@ -72,25 +70,6 @@ all:
             - name: "nix-store"
               path: "/nix/store"
               read_only: true
-          nomad_client_options:
-            "driver.denylist": "exec,java"
-        edge0:
-          host_volumes:
-            - name: "traefik"
-              path: "/etc/traefik"
-              read_only: false
-            - name: "nix-store"
-              path: "/nix/store"
-              read_only: true
-          nomad_node_class: "edge"
-          nomad_client_options:
-            "driver.denylist": "exec,java"
-        batch0:
-          host_volumes:
-            - name: "nix-store"
-              path: "/nix/store"
-              read_only: true
-          nomad_node_class: "batch"
           nomad_client_options:
             "driver.denylist": "exec,java"
 
