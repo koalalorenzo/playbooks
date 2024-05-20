@@ -39,6 +39,15 @@ in
   ## Boot GRUB
   # boot.loader.grub.device = "nodev";
 
+  ## Homelab options:
+  # homelab.nomad.node_class = "compute";
+  # homelab.nomad.options = ''
+  #   "driver.denylist" = "exec,java"
+  # '';
+  # homelab.nomad.meta = ''
+  #   "traefik" = "true"
+  # '';
+  
   ## Is it a VM?
   #services.spice-vdagentd.enable = true;
   #services.spice-autorandr.enable = true;
