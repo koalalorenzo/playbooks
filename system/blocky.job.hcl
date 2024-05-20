@@ -126,6 +126,7 @@ blocking:
         /api.epicgames.dev/
         /epicgames.dev/
         /epicgames.com/
+        /cloud.unity3d.com/
     ads: *generic_white_list
     malware:
       - |
