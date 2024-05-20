@@ -41,12 +41,10 @@ in
 
   ## Homelab options:
   # homelab.nomad.node_class = "compute";
-  # homelab.nomad.options = ''
-  #   "driver.denylist" = "exec,java"
-  # '';
-  # homelab.nomad.meta = ''
-  #   "traefik" = "true"
-  # '';
+  # homelab.nomad.traefik = false;
+  # homelab.nomad.options = ''"driver.denylist" = "exec,java"'';
+  # homelab.nomad.meta = ''"key" = "valye"'';
+  
   
   ## Is it a VM?
   #services.spice-vdagentd.enable = true;

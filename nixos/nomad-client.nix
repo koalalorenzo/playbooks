@@ -21,10 +21,6 @@
         default = false;
       };
 
-      meta_traefik = lib.mkOption {
-        type = lib.types.str;
-        default = ''"traefik" = "true"'';
-      };
     };
     # End homelab.nomad options
   };
@@ -102,7 +98,7 @@
     virtualisation.containers.enable = true;
     services.nomad.enableDocker = true;
 
-    environment.etc = {
+    environment.etc = lib.mkMerge [{
       "nomad.d/client.hcl" = {
         text = ''
             client {
@@ -127,12 +123,25 @@
 
               meta {
                 ${config.homelab.nomad.meta}
-                ${if config.homelab.nomad.traefik  then config.homelab.nomad.meta_traefik else ""}
+                ${if config.homelab.nomad.traefik  then ''"traefik" = "true"'' else ""}
               }
 
               options {
                 ${config.homelab.nomad.options}
               }
+
+              host_volume "ca-certificates" {
+                path = "/etc/ssl/certs"
+                read_only = true
+              }
+  
+              ${ if config.homelab.nomad.traefik then ''
+              host_volume "traefik" {
+                path = "/etc/traefik"
+                read_only = false
+              }
+              '' else ""}
+              
             }
 
             plugin "raw_exec" {
@@ -159,7 +168,15 @@
             }
         '';
       };
-    };
+    }
+    
+    (lib.mkIf config.homelab.nomad.traefik {
+      "traefik/.keep" = { 
+        text = ''# KEEP FILE #'';
+      };
+    })
+    
+    ];
     # end file edit
   };
   # End nix config 
