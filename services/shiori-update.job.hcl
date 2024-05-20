@@ -8,8 +8,8 @@ job "shiori-update" {
   }
 
   affinity {
-    attribute = node.class
-    value     = "batch"
+    attribute = meta.run_batch
+    value     = "true"
     weight    = 90
   }
 

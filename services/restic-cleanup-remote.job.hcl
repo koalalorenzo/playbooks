@@ -9,8 +9,8 @@ job "restic-cleanup-remote" {
   }
 
   affinity {
-    attribute = node.class
-    value     = "batch"
+    attribute = meta.run_batch
+    value     = "true"
     weight    = 90
   }
 

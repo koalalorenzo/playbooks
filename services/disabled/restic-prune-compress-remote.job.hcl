@@ -2,9 +2,10 @@ job "restic-prune-compress-remote" {
   type     = "batch"
   priority = 65
 
-  constraint {
-    attribute = node.class
-    value     = "compute"
+  affinity {
+    attribute = meta.run_batch
+    value     = "true"
+    weight    = 90
   }
 
   group "restic" {
