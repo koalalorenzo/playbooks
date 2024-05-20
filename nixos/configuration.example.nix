@@ -1,8 +1,14 @@
 { config, lib, pkgs, networking, ... }:
+let
+  unstableTarball =
+    fetchTarball
+      https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
+in
 {
   imports = [ 
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    
     ./common.nix
     # ./consul.nix
     # ./nomad.nix
@@ -15,7 +21,23 @@
     }}/modules/sops"
   ];
 
+  nixpkgs.config.allowUnfree = true;
+
+  nixpkgs.config = {
+    packageOverrides = pkgs: {
+      unstable = import unstableTarball {
+        config = config.nixpkgs.config;
+      };
+    };
+  };
+
   # networking.hostName = "nixos";
+
+  ## Boot EFI
+  # boot.loader.systemd-boot.enable = true;
+  
+  ## Boot GRUB
+  # boot.loader.grub.device = "nodev";
 
   ## Is it a VM?
   #services.spice-vdagentd.enable = true;

@@ -60,7 +60,7 @@
 
   # Load Configuration for Consul
   services.consul.enable = true;
-  services.consul.package = (import (fetchTarball "channel:nixos-unstable") {}).consul;
+  services.consul.package = pkgs.unstable.consul;
 
   environment.etc = {
     "consul.d/consul.hcl" = {

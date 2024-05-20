@@ -1,4 +1,5 @@
 { config, lib, pkgs, boot, sops, ... }: {
+  nixpkgs.config.allowUnfree = true;
   # Install packages
   environment.systemPackages = with pkgs; [
     nfs-utils
@@ -27,7 +28,7 @@
 
   services.nomad = {
     enable = true;
-    package = (import (fetchTarball "channel:nixos-unstable") {}).nomad;
+    package = pkgs.unstable.nomad;
     dropPrivileges = false;
     extraSettingsPaths = [ "/etc/nomad.d" ];
   };

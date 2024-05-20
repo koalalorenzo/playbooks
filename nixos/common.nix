@@ -64,7 +64,7 @@
   # Adds tailscale connectivity
   services.tailscale.enable = true;
   services.tailscale.extraUpFlags = "--ssh --accept-routes";
-  services.tailscale.package = (import (fetchTarball "channel:nixos-unstable") {}).tailscale;
+  services.tailscale.package = pkgs.unstable.tailscale;
 
   # At and Cron for scheduling
   services.atd.enable = true;
