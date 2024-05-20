@@ -15,6 +15,16 @@
         type = lib.types.str;
         default = "";
       };
+
+      traefik = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+      };
+
+      meta_traefik = lib.mkOption {
+        type = lib.types.str;
+        default = ''"traefik" = "true"'';
+      };
     };
     # End homelab.nomad options
   };
@@ -117,6 +127,7 @@
 
               meta {
                 ${config.homelab.nomad.meta}
+                ${if config.homelab.nomad.traefik  then config.homelab.nomad.meta_traefik else ""}
               }
 
               options {
