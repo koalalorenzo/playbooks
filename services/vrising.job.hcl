@@ -13,10 +13,11 @@ job "vrising" {
     }
 
     network {
-      port "steamfifteen" { to = 27015 }
-      port "steamsixteen" { to = 27016 }
-      port "game" { }
-      port "query" { }
+      port "steamfifteen" { static = 27015 }
+      port "steamsixteen" { static = 27016 }
+      port "game" { static = 9876 }
+      port "query" { static = 9877 }
+      port "http" { to = 8080 }
     }
 
 
@@ -43,7 +44,7 @@ job "vrising" {
 
       volume_mount {
         volume      = "vrising"
-        destination = "/mnt/vrising/"
+        destination = "/mnt/vrising/persistentdata"
       }
 
       template {
@@ -52,15 +53,14 @@ job "vrising" {
         change_mode = "restart"
         data        = <<EOH
           SERVERNAME="pan-rising"
-          GAMEPORT={{ env `NOMAD_PORT_game` }}
-          QUERYPORT={{ env `NOMAD_PORT_query` }}
           LOGDAYS=3
         EOH
       }
 
       resources {
-        cpu    = 2000  # 2 Ghz
-        memory = 4096 # 4 GB
+        cpu    = 4000  # 4 Ghz
+        memory = 8192 # 8 GB
+        # memory = 10240 # 10 GB
       }
     }
 
