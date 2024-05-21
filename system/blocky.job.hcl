@@ -115,24 +115,29 @@ blocking:
         /apple.com/
         #/datadoghq.eu/
         #/static.datadoghq.com/
+        /sentry.io/
         # GitHub Actions
         /github.com/
         /actions.githubusercontent.com/
         /blob.core.windows.net/
         /ghcr.io/
         /stats.grafana.org/
+        /grafana.com/
+        /grafana.net/
         /github-cloud.githubusercontent.com/
         /github-cloud.s3.amazonaws.com/
+        # Videogames
         /api.epicgames.dev/
         /epicgames.dev/
         /epicgames.com/
+        /api.epicgames.dev/
         /cloud.unity3d.com/
-    ads: *generic_white_list
-    malware:
-      - |
+        # Google
         /www.googleapis.com/
         /accounts.google.com/
         /calendar.google.com/
+    ads: *generic_white_list
+    malware: *generic_white_list
   blackLists:
     suspicious:
       - https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
