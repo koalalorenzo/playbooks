@@ -12,6 +12,12 @@ job "blocky" {
       mode     = "delay"
     }
 
+    affinity {
+      attribute = attr.cpu.arch
+      value     = "arm64"
+      weight    = 75
+    }
+
     network {
       dns { servers = ["1.1.1.1", "1.0.0.1"] }
       port "http" {}
@@ -91,8 +97,6 @@ upstreams:
 bootstrapDns:
   - https://9.9.9.9/dns-query
   - https://1.1.1.1/dns-query
-  - 194.242.2.9
-  - 2a07:e340::9
 ports:
   dns: {{ env `NOMAD_PORT_dns` }}
   http: {{ env `NOMAD_PORT_http` }}
