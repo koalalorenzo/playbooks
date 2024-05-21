@@ -17,7 +17,7 @@ job "vrising" {
       port "steamsixteen" { static = 27016 }
       port "game" { static = 9876 }
       port "query" { static = 9877 }
-      port "http" { to = 8080 }
+      port "rcon" { to = 25575 }
     }
 
 
@@ -61,6 +61,26 @@ job "vrising" {
         cpu    = 4000  # 4 Ghz
         memory = 8192 # 8 GB
         # memory = 10240 # 10 GB
+      }
+
+      service {
+        name = "vrising"
+        port = "rcon"
+
+        check {
+          name     = "alive"
+          type     = "tcp"
+          port     = "rcon"
+          interval = "120s"
+          timeout  = "15s"
+        }
+
+
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.vrising.rule=Host(`vrising.elates.it`) || Host(`vrising.ts.elates.it`)",
+          "traefik.http.routers.vrising.tls.certresolver=letsencrypt",
+        ]
       }
     }
 
