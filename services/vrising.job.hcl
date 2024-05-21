@@ -67,15 +67,6 @@ job "vrising" {
         name = "vrising"
         port = "rcon"
 
-        check {
-          name     = "alive"
-          type     = "tcp"
-          port     = "rcon"
-          interval = "120s"
-          timeout  = "15s"
-        }
-
-
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.vrising.rule=Host(`vrising.elates.it`) || Host(`vrising.ts.elates.it`)",
