@@ -204,81 +204,81 @@ job "grafana" {
             }
           }
 
-          loki.source.journal "logs_integrations_integrations_node_exporter_journal_scrape" {
-            max_age       = "24h0m0s"
-            relabel_rules = discovery.relabel.logs_integrations_integrations_node_exporter_journal_scrape.rules
-            forward_to    = [loki.write.grafana_cloud_loki.receiver]
-          }
-
-          local.file_match "logs_integrations_integrations_node_exporter_direct_scrape" {
-            path_targets = [{
-              __address__ = "localhost",
-              __path__    = "/var/log/{syslog,messages,*.log}",
-              instance    = "{{ env "attr.unique.hostname" }}",
-              job         = "integrations/node_exporter",
-            }]
-          }
-
-          discovery.relabel "logs_integrations_integrations_node_exporter_journal_scrape" {
-            targets = []
-
-            rule {
-              source_labels = ["__journal__systemd_unit"]
-              target_label  = "unit"
-            }
-
-            rule {
-              source_labels = ["__journal__boot_id"]
-              target_label  = "boot_id"
-            }
-
-            rule {
-              source_labels = ["__journal__transport"]
-              target_label  = "transport"
-            }
-
-            rule {
-              source_labels = ["__journal_priority_keyword"]
-              target_label  = "level"
-            }
-          }
-
-          loki.source.file "logs_integrations_integrations_node_exporter_direct_scrape" {
-            targets    = local.file_match.logs_integrations_integrations_node_exporter_direct_scrape.targets
-            forward_to = [loki.write.grafana_cloud_loki.receiver]
-          }
-
-
-          // Docker Integration
-
-          // prometheus.exporter.cadvisor "integrations_cadvisor" {
-          //     docker_only = true
+          // loki.source.journal "logs_integrations_integrations_node_exporter_journal_scrape" {
+          //   max_age       = "24h0m0s"
+          //   relabel_rules = discovery.relabel.logs_integrations_integrations_node_exporter_journal_scrape.rules
+          //   forward_to    = [loki.write.grafana_cloud_loki.receiver]
           // }
-          // 
-          // discovery.relabel "integrations_cadvisor" {
-          //     targets = prometheus.exporter.cadvisor.integrations_cadvisor.targets
 
-          //     rule {
-          //         target_label = "job"
-          //         replacement  = "integrations/docker"
-          //     }
-
-          //     rule {
-          //         target_label = "instance"
-          //         replacement  = "{{ env "attr.unique.hostname" }}"
-          //     }
-
-          //     rule {
-          //   		source_labels = ["__name__"]
-          //   		regex         = "up|container_cpu_usage_seconds_total|container_fs_inodes_free|container_fs_inodes_total|container_fs_limit_bytes|container_fs_usage_bytes|container_last_seen|container_memory_usage_bytes|container_network_receive_bytes_total|container_network_tcp_usage_total|container_network_transmit_bytes_total|container_spec_memory_reservation_limit_bytes|machine_memory_bytes|machine_scrape_error"
-          //   		action        = "keep"
-          //   	}
+          // local.file_match "logs_integrations_integrations_node_exporter_direct_scrape" {
+          //   path_targets = [{
+          //     __address__ = "localhost",
+          //     __path__    = "/var/log/{syslog,messages,*.log}",
+          //     instance    = "{{ env "attr.unique.hostname" }}",
+          //     job         = "integrations/node_exporter",
+          //   }]
           // }
-          // 
-          // prometheus.scrape "integrations_cadvisor" {
-          //     targets    = discovery.relabel.integrations_cadvisor.output
-          //     forward_to = [prometheus.remote_write.metrics_service.receiver]
+
+          // discovery.relabel "logs_integrations_integrations_node_exporter_journal_scrape" {
+          //   targets = []
+
+          //   rule {
+          //     source_labels = ["__journal__systemd_unit"]
+          //     target_label  = "unit"
+          //   }
+
+          //   rule {
+          //     source_labels = ["__journal__boot_id"]
+          //     target_label  = "boot_id"
+          //   }
+
+          //   rule {
+          //     source_labels = ["__journal__transport"]
+          //     target_label  = "transport"
+          //   }
+
+          //   rule {
+          //     source_labels = ["__journal_priority_keyword"]
+          //     target_label  = "level"
+          //   }
           // }
+
+          // loki.source.file "logs_integrations_integrations_node_exporter_direct_scrape" {
+          //   targets    = local.file_match.logs_integrations_integrations_node_exporter_direct_scrape.targets
+          //   forward_to = [loki.write.grafana_cloud_loki.receiver]
+          // }
+
+
+          //Docker Integration
+
+          prometheus.exporter.cadvisor "integrations_cadvisor" {
+              docker_only = true
+          }
+           
+          discovery.relabel "integrations_cadvisor" {
+              targets = prometheus.exporter.cadvisor.integrations_cadvisor.targets
+
+              rule {
+                  target_label = "job"
+                  replacement  = "integrations/docker"
+              }
+
+              rule {
+                  target_label = "instance"
+                  replacement  = "{{ env "attr.unique.hostname" }}"
+              }
+
+              rule {
+            		source_labels = ["__name__"]
+            		regex         = "up|container_cpu_usage_seconds_total|container_fs_inodes_free|container_fs_inodes_total|container_fs_limit_bytes|container_fs_usage_bytes|container_last_seen|container_memory_usage_bytes|container_network_receive_bytes_total|container_network_tcp_usage_total|container_network_transmit_bytes_total|container_spec_memory_reservation_limit_bytes|machine_memory_bytes|machine_scrape_error"
+            		action        = "keep"
+             }
+          }
+          
+          prometheus.scrape "integrations_cadvisor" {
+            targets    = discovery.relabel.integrations_cadvisor.output
+            forward_to = [prometheus.remote_write.metrics_service.receiver]
+          }
 
           // discovery.docker "logs_integrations_docker" {
           //     host             = "unix:///var/run/docker.sock"
