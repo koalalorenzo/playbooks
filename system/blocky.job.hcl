@@ -12,10 +12,9 @@ job "blocky" {
       mode     = "delay"
     }
 
-    affinity {
+    constraint {
       attribute = attr.cpu.arch
       value     = "arm64"
-      weight    = 75
     }
 
     network {
