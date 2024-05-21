@@ -18,6 +18,8 @@ job "grafana" {
     }
 
     network {
+      dns { servers = ["1.1.1.1", "1.0.0.1"] }
+
       port "http" {
         static = 27373
       }
@@ -60,6 +62,7 @@ job "grafana" {
         ]
 
         ports = ["http"]
+        dns_servers = ["1.1.1.1", "1.0.0.1"]
 
         volumes = [
           "local/config.alloy:/etc/alloy/config.alloy",
