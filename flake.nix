@@ -33,6 +33,7 @@
           radicle-node
           sops
           rsync
+          nixos-generators
         ];
       };
     }
