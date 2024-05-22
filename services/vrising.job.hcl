@@ -17,7 +17,7 @@ job "vrising" {
       port "steamsixteen" { static = 27016 }
       port "game" { static = 9876 }
       port "query" { static = 9877 }
-      port "rcon" { to = 25575 }
+      port "rcon" { static = 25575 }
     }
 
 
@@ -52,7 +52,7 @@ job "vrising" {
         env         = true
         change_mode = "restart"
         data        = <<EOH
-          SERVERNAME="pan-rising"
+          SERVERNAME="Pan Rising"
           LOGDAYS=3
         EOH
       }
@@ -60,7 +60,6 @@ job "vrising" {
       resources {
         cpu    = 4000  # 4 Ghz
         memory = 8192 # 8 GB
-        # memory = 10240 # 10 GB
       }
 
       service {
