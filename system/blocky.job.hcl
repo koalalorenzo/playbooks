@@ -86,6 +86,8 @@ job "blocky" {
         data        = <<EOF
 minTlsServeVersion: 1.3
 upstreams:
+  init:
+    strategy: fast
   strategy: parallel_best
   groups:
     default:
@@ -104,7 +106,7 @@ blocking:
     strategy: fast
     concurrency: 2
     refreshPeriod: 8h
-    maxErrorsPerSource: -1
+    maxErrorsPerSource: 10
     downloads:
       cooldown: 5s
       timeout: 1m
