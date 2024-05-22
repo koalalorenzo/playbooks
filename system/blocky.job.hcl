@@ -120,6 +120,8 @@ blocking:
         /apple.com/
         #/datadoghq.eu/
         #/static.datadoghq.com/
+        /sentry/
+        *.sentry-cdn.com
         /sentry.io/
         # GitHub Actions
         /github.com/
@@ -132,10 +134,13 @@ blocking:
         /github-cloud.githubusercontent.com/
         /github-cloud.s3.amazonaws.com/
         # Videogames
+        *.epicgames.dev
+        *.epicgames.com
         /api.epicgames.dev/
         /epicgames.dev/
         /epicgames.com/
         /api.epicgames.dev/
+        /on.epicgames.com/
         /cloud.unity3d.com/
         # Google
         /www.googleapis.com/
