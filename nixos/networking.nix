@@ -1,7 +1,7 @@
 { config, lib, pkgs, networking, ... }:
 {
   networking.networkmanager.enable = true;
-  networking.enableIPv6 = true;
+  networking.enableIPv6 = false;
 
   # Sets DNS to Cloudflare
   networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];

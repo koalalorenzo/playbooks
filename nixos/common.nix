@@ -30,8 +30,8 @@
 
   services.openssh.enable = true;
   services.openssh.settings = {
-    PasswordAuthentication = false;
-    PermitRootLogin = "no";
+    PasswordAuthentication = lib.mkDefault false;
+    PermitRootLogin = lib.mkDefault "no";
   };
 
   # Adds tailscale connectivity
@@ -71,7 +71,7 @@
     openssh.authorizedKeys.keys = [''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNkwS8ZkLWgSZh9o4y1Y+Wa07d251UQAX4u6V1DWRNk'' ];
   };
 
-  users.users.root.openssh.authorizedKeys.keys = [''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNkwS8ZkLWgSZh9o4y1Y+Wa07d251UQAX4u6V1DWRNk'' ];
+  users.users.root.openssh.authorizedKeys.keys = lib.mkForce [''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNkwS8ZkLWgSZh9o4y1Y+Wa07d251UQAX4u6V1DWRNk'' ];
 
   boot.tmp.cleanOnBoot = true;
 
