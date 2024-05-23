@@ -7,6 +7,39 @@
   boot.supportedFilesystems = [ "zfs" "ext4" ];
   boot.zfs.forceImportRoot = false;
 
+  # Sanoid for ZFS automatic backup
+  services.sanoid = {
+    enable = true;
+    
+    templates.default = {
+      yearly  = 4;
+      monthly = 12;
+      daily   = 32;
+      hourly  = 48;
+      
+      autosnap  = true;
+      autoprue  = true;
+    };
+
+    templates.frequent = {
+      monthly = 3;
+      daily   = 15;
+      hourly  = 72;
+      
+      autosnap  = true;
+      autoprune = true;
+    };
+
+    datasets.main.useTemplate = "default";
+    datasets.main.recursive = true;
+    datasets."main/share".useTemplate = "frequent";
+    datasets."main/share".recursive = "frequent";
+    datasets."main/multimedia".useTemplate = "frequent";
+    datasets."main/multimedia".recursive = true;
+    datasets."main/downloads".useTemplate = "frequent";
+    datasets."main/downloads".recursive = true;
+  };
+
   services.rpcbind.enable = true; # needed for NFS
   networking.firewall.allowedTCPPorts = [ 2049 ]; # Open port for NFS
 
@@ -79,7 +112,4 @@
     enable = true;
     openFirewall = true;
   };
-
-  networking.firewall.enable = true;
-  networking.firewall.allowPing = true;
 }
