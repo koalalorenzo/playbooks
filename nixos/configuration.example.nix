@@ -61,11 +61,11 @@ in
 
   #virtualisation.hypervGuest.enable = true;
 
-  # Disable docs and manual pages
-  documentation.doc.enable = false;
-  documentation.man.enable = false;
-  documentation.nixos.enable = false;
-  documentation.info.enable = false;
+  ## Disable docs and manual pages
+  # documentation.doc.enable = false;
+  # documentation.man.enable = false;
+  # documentation.nixos.enable = false;
+  # documentation.info.enable = false;
 
   # First version being used for the setup. Do not change it in the future, 
   # unless it is a brand new setup from scratch. It is used for compatibility
