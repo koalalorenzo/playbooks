@@ -32,7 +32,7 @@ job "postgres" {
       user           = "1000"
       kill_signal    = "SIGTERM"
       kill_timeout   = "30s"
-      shutdown_delay = "3s"
+      shutdown_delay = "5s"
 
       config {
         image = "postgres:16.1-alpine"
@@ -56,10 +56,12 @@ job "postgres" {
         destination = "/var/lib/postgresql/data"
         read_only   = false
       }
+      
       resources {
-        cpu    = 1000
-        memory = 512
+        cpu    = 1500
+        memory = 768
       }
+      
       service {
         name = "postgres"
         port = "postgres"
@@ -67,7 +69,7 @@ job "postgres" {
         check {
           name     = "alive"
           type     = "tcp"
-          interval = "60s"
+          interval = "30s"
           timeout  = "3s"
         }
       }
