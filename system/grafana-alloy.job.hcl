@@ -18,15 +18,13 @@ job "grafana" {
     }
 
     network {
-      dns { servers = ["1.1.1.1", "1.0.0.1"] }
-
       port "http" {
         static = 27373
       }
     }
 
     service {
-      name = "alloy"
+      name = "grafana-alloy"
       port = "http"
 
       # check {
@@ -47,14 +45,14 @@ job "grafana" {
       kill_timeout = "30s"
 
       config {
-        image = "grafana/alloy:latest"
+        image = "grafana/alloy:v1.1.0"
         args = [
           "run",
           "--server.http.listen-addr=0.0.0.0:${NOMAD_PORT_http}",
           "--server.http.enable-pprof=false",
           "--cluster.enabled=true",
-          "--cluster.join-addresses=home.elates.it:${NOMAD_PORT_http}",
-          "--cluster.rejoin-interval=3600s", # Avoid split brain issues
+          "--cluster.join-addresses=${ALLOY_CLUSTER_JOIN_ADDRESSES}",
+          "--cluster.rejoin-interval=60s",
           "--cluster.advertise-address=${NOMAD_ADDR_http}",
           "--cluster.name=elates.it",
           "--storage.path=/var/lib/alloy/data",
@@ -62,7 +60,6 @@ job "grafana" {
         ]
 
         ports = ["http"]
-        dns_servers = ["1.1.1.1", "1.0.0.1"]
 
         volumes = [
           "local/config.alloy:/etc/alloy/config.alloy",
@@ -75,16 +72,31 @@ job "grafana" {
         ]
       }
 
+      template {
+        destination = "${NOMAD_SECRETS_DIR}/env.vars"
+        env         = true
+        change_mode = "restart"
+        splay       = "30s"
+        data        = <<EOF
+          ALLOY_CLUSTER_JOIN_ADDRESSES = "{{ range service "grafana-alloy" }}{{ .Address}}:{{ .Port }},{{ end }}storage0:{{ env `NOMAD_PORT_http`}}"
+        EOF
+
+        wait {
+          min     = "10s"
+          max     = "35s"
+        }
+      }
+
+
       meta {
         scrape_logs = "false"
       }
-
 
       template {
         destination = "local/config.alloy"
         data        = <<EOF
           logging {
-            level  = "info"
+            level  = "warn"
             format = "logfmt"
           }
 
@@ -331,8 +343,12 @@ job "grafana" {
           }
 
           prometheus.scrape "consul_discovery" {
-              targets    = discovery.consul.consul_discovery.targets
-              forward_to = [prometheus.remote_write.metrics_service.receiver]
+            clustering {
+                enabled = true
+            }
+
+            targets    = discovery.consul.consul_discovery.targets
+            forward_to = [prometheus.remote_write.metrics_service.receiver]
           }
 
           // Consul Integration
@@ -356,6 +372,10 @@ job "grafana" {
           }
 
           prometheus.scrape "integrations_consul_exporter" {
+            clustering {
+                enabled = true
+            }
+
           	targets    = discovery.relabel.integrations_consul_exporter.output
           	forward_to = [prometheus.relabel.integrations_consul_exporter.receiver]
           	job_name   = "integrations/consul_exporter"
