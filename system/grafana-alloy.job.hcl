@@ -51,7 +51,7 @@ job "grafana" {
           "--server.http.listen-addr=0.0.0.0:${NOMAD_PORT_http}",
           "--server.http.enable-pprof=false",
           "--cluster.enabled=true",
-          "--cluster.join-addresses=${ALLOY_CLUSTER_JOIN_ADDRESSES}",
+          "--cluster.join-addresses=home.elates.it:${NOMAD_PORT_http}",
           "--cluster.rejoin-interval=60s",
           "--cluster.advertise-address=${NOMAD_ADDR_http}",
           "--cluster.name=elates.it",
@@ -59,7 +59,9 @@ job "grafana" {
           "/etc/alloy/config.alloy"
         ]
 
-        ports = ["http"]
+        ports        = ["http"]
+        network_mode = "host"
+        privileged   = true
 
         volumes = [
           "local/config.alloy:/etc/alloy/config.alloy",
@@ -70,21 +72,6 @@ job "grafana" {
           "/run:/host/run:ro,rslave",
           "/:/host/root:ro,rslave",
         ]
-      }
-
-      template {
-        destination = "${NOMAD_SECRETS_DIR}/env.vars"
-        env         = true
-        change_mode = "restart"
-        splay       = "30s"
-        data        = <<EOF
-          ALLOY_CLUSTER_JOIN_ADDRESSES = "{{ range service "grafana-alloy" }}{{ .Address}}:{{ .Port }},{{ end }}storage0:{{ env `NOMAD_PORT_http`}}"
-        EOF
-
-        wait {
-          min     = "10s"
-          max     = "35s"
-        }
       }
 
 
@@ -346,7 +333,6 @@ job "grafana" {
             clustering {
                 enabled = true
             }
-
             targets    = discovery.consul.consul_discovery.targets
             forward_to = [prometheus.remote_write.metrics_service.receiver]
           }
@@ -375,7 +361,6 @@ job "grafana" {
             clustering {
                 enabled = true
             }
-
           	targets    = discovery.relabel.integrations_consul_exporter.output
           	forward_to = [prometheus.relabel.integrations_consul_exporter.receiver]
           	job_name   = "integrations/consul_exporter"
