@@ -28,6 +28,8 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
+  services.avahi.enable = true;
+
   services.openssh.enable = true;
   services.openssh.settings = {
     PasswordAuthentication = lib.mkDefault false;
