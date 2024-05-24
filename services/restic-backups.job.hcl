@@ -67,7 +67,7 @@ job "restic-backups" {
       }
 
       resources {
-        cpu    = 2000
+        cpu    = 1000
         memory = 1024
       }
     }
