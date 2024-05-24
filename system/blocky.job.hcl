@@ -9,7 +9,14 @@ job "blocky" {
       delay    = "5s"
       interval = "20s"
       attempts = 3
-      mode     = "delay"
+    }
+
+    # Reschedule the tasks somewhere else if they fail, max_delay of 1 minute
+    reschedule {
+      delay          = "15s"
+      delay_function = "exponential"
+      max_delay      = "1m"
+      unlimited      = true
     }
 
     constraint {

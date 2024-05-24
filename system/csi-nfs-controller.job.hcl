@@ -20,9 +20,15 @@ job "csi-nfs-controller" {
       delay    = "5s"
       interval = "5m"
       attempts = 55
-      mode     = "delay"
     }
 
+    # Reschedule the tasks somewhere else if they fail, max_delay of 1 minute
+    reschedule {
+      delay          = "15s"
+      delay_function = "exponential"
+      max_delay      = "1m"
+      unlimited      = true
+    }
 
     task "nfs-controller" {
       driver       = "docker"

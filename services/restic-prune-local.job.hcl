@@ -15,6 +15,14 @@ job "restic-prune-local" {
   }
 
   group "restic" {
+    # Try to reschedule within 2 hours starting with a delay of 15 minutes
+    reschedule {
+      interval       = "4h"
+      unlimited      = true
+      delay          = "15m"
+      delay_function = "exponential"
+    }
+    
     task "restic" {
       driver       = "exec"
       kill_timeout = "300s"

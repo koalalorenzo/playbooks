@@ -13,7 +13,6 @@ job "mysql" {
       attempts = 5
       interval = "30m"
       delay    = "20s"
-      mode     = "delay"
     }
 
     volume "mysql" {

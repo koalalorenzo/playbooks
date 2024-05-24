@@ -13,7 +13,6 @@ job "redis" {
       attempts = 5
       interval = "5m"
       delay    = "30s"
-      mode     = "delay"
     }
 
     volume "data" {
