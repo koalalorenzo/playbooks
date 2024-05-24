@@ -11,9 +11,9 @@ job "grafana" {
     }
 
     restart {
-      delay    = "5s"
-      interval = "5m"
-      attempts = 55
+      delay    = "10s"
+      interval = "1m"
+      attempts = 5
       mode     = "delay"
     }
 
