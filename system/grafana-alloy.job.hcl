@@ -75,13 +75,14 @@ job "grafana" {
       }
 
 
-      meta {
-        scrape_logs = "false"
-      }
-
       template {
         destination = "local/config.alloy"
-        data        = <<EOF
+        change_mode = "restart"
+
+        # Pick a random number of max 30s and wait before restart
+        splay = "30s"
+
+        data = <<EOF
           logging {
             level  = "warn"
             format = "logfmt"
@@ -152,7 +153,7 @@ job "grafana" {
           }
 
 
-          // From UI of Grafana Cloud
+          // Node Exporter from UI of Grafana Cloud
 
           discovery.relabel "integrations_node_exporter" {
             targets = prometheus.exporter.unix.integrations_node_exporter.targets
@@ -256,7 +257,7 @@ job "grafana" {
           prometheus.exporter.cadvisor "integrations_cadvisor" {
               docker_only = true
           }
-           
+
           discovery.relabel "integrations_cadvisor" {
               targets = prometheus.exporter.cadvisor.integrations_cadvisor.targets
 
@@ -269,17 +270,21 @@ job "grafana" {
                   target_label = "instance"
                   replacement  = "{{ env "attr.unique.hostname" }}"
               }
-
-              rule {
-            		source_labels = ["__name__"]
-            		regex         = "up|container_cpu_usage_seconds_total|container_fs_inodes_free|container_fs_inodes_total|container_fs_limit_bytes|container_fs_usage_bytes|container_last_seen|container_memory_usage_bytes|container_network_receive_bytes_total|container_network_tcp_usage_total|container_network_transmit_bytes_total|container_spec_memory_reservation_limit_bytes|machine_memory_bytes|machine_scrape_error"
-            		action        = "keep"
-             }
           }
-          
+
+          prometheus.relabel "integrations_cadvisor" {
+          	forward_to = [prometheus.remote_write.metrics_service.receiver]
+
+          	rule {
+          		source_labels = ["__name__"]
+          		regex         = "up|container_cpu_usage_seconds_total|container_fs_inodes_free|container_fs_inodes_total|container_fs_limit_bytes|container_fs_usage_bytes|container_last_seen|container_memory_usage_bytes|container_network_receive_bytes_total|container_network_tcp_usage_total|container_network_transmit_bytes_total|container_spec_memory_reservation_limit_bytes|machine_memory_bytes|machine_scrape_error"
+          		action        = "keep"
+          	}
+          }
+
           prometheus.scrape "integrations_cadvisor" {
             targets    = discovery.relabel.integrations_cadvisor.output
-            forward_to = [prometheus.remote_write.metrics_service.receiver]
+            forward_to = [prometheus.relabel.integrations_cadvisor.receiver]
           }
 
           // discovery.docker "logs_integrations_docker" {
@@ -321,10 +326,10 @@ job "grafana" {
           // }
 
           // Consul Discovery
+          // Extract metrics from services with the "prometheus" tag
 
           discovery.consul "consul_discovery" {
-             server = "https://consul.elates.it"
-             // server = "http://127.0.0.1:8500"
+             server = "http://{{ env `CONSUL_HTTP_ADDR` }}"
              tags   = ["prometheus"]
              refresh_interval = "60s"
           }
@@ -333,14 +338,15 @@ job "grafana" {
             clustering {
                 enabled = true
             }
+
             targets    = discovery.consul.consul_discovery.targets
             forward_to = [prometheus.remote_write.metrics_service.receiver]
           }
 
           // Consul Integration
+          // Scrape The Consul agent itself
           prometheus.exporter.consul "integrations_consul_exporter" {
-             server = "https://consul.elates.it"
-             // server = "http://127.0.0.1:8500"
+          	server = "http://{{ env `CONSUL_HTTP_ADDR` }}"
           }
 
           discovery.relabel "integrations_consul_exporter" {
@@ -348,7 +354,7 @@ job "grafana" {
 
           	rule {
           		target_label = "instance"
-          		replacement  = "{{ env "attr.unique.hostname" }}"
+          		replacement  = "{{ env `attr.unique.hostname` }}"
           	}
 
           	rule {
@@ -359,11 +365,12 @@ job "grafana" {
 
           prometheus.scrape "integrations_consul_exporter" {
             clustering {
-                enabled = true
+              enabled = true
             }
-          	targets    = discovery.relabel.integrations_consul_exporter.output
-          	forward_to = [prometheus.relabel.integrations_consul_exporter.receiver]
-          	job_name   = "integrations/consul_exporter"
+
+            targets    = discovery.relabel.integrations_consul_exporter.output
+            forward_to = [prometheus.relabel.integrations_consul_exporter.receiver]
+            job_name   = "integrations/consul_exporter"
           }
 
           prometheus.relabel "integrations_consul_exporter" {
@@ -374,8 +381,13 @@ job "grafana" {
           		regex         = "up|consul_raft_leader|consul_raft_leader_lastcontact_count|consul_raft_peers|consul_up"
           		action        = "keep"
           	}
-          }
 
+          	rule {
+          		source_labels = ["__name__"]
+          		regex         = "consul_health_service_query"
+          		action        = "keep"
+          	}
+          }
         EOF
       }
 
