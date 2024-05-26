@@ -68,6 +68,7 @@ job "restic-cleanup" {
             --keep-monthly 12 \
             --keep-yearly 5 \
             --keep-tag keep \
+            --prune \
             $RESTIC_COMMON_FLAGS
         EOF
       }
