@@ -16,16 +16,6 @@ job "restic-prune" {
         args    = ["local/backup.sh"]
       }
 
-      volume_mount {
-        volume      = "personal"
-        destination = "/main/personal"
-      }
-
-      volume_mount {
-        volume      = "backups"
-        destination = "/main/backups"
-      }
-
       artifact {
         source = "https://github.com/restic/restic/releases/download/v0.16.4/restic_0.16.4_${attr.kernel.name}_${attr.cpu.arch}.bz2"
         destination = "${NOMAD_ALLOC_DIR}/"
@@ -82,18 +72,6 @@ job "restic-prune" {
         cpu    = 1000
         memory = 1024
       }
-    }
-
-    volume "backups" {
-      type      = "host"
-      source    = "backups"
-      read_only = true
-    }
-
-    volume "personal" {
-      type      = "host"
-      source    = "personal"
-      read_only = true
     }
   }
 }
