@@ -7,6 +7,11 @@ job "restic-backup" {
   }
 
   group "restic" {
+    constraint {
+      operator  = "distinct_hosts"
+      value     = "true"
+    }
+    
     task "restic" {
       driver       = "exec"
       kill_timeout = "120s"
@@ -47,7 +52,7 @@ job "restic-backup" {
           RESTIC_REPOSITORY="{{ .RESTIC_REPOSITORY }}"
           RESTIC_COMMON_FLAGS="{{ .RESTIC_COMMON_FLAGS }}"
           {{ end }}
-          
+
           RESTIC_HOSTNAME="nas.elates.it"
         EOH
       }
@@ -70,7 +75,7 @@ job "restic-backup" {
           ${NOMAD_ALLOC_DIR}/restic self-update
 
           echo "Startint backing up the backups"
-          ${NOMAD_ALLOC_DIR}/restic backup ${NOMAD_META_volume_to_backup} --host $RESTIC_HOSTNAME $RESTIC_COMMON_FLAGS
+          ${NOMAD_ALLOC_DIR}/restic backup "${NOMAD_META_volume_to_backup}" --host $RESTIC_HOSTNAME $RESTIC_COMMON_FLAGS
           sleep 5
         EOF
       }
