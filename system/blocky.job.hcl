@@ -80,7 +80,7 @@ job "blocky" {
 
 
       config {
-        image       = "ghcr.io/0xerr0r/blocky:v0.23"
+        image       = "ghcr.io/0xerr0r/blocky:v0.24"
         force_pull  = false
         volumes     = ["local/config.yml:/app/config.yml"]
         ports       = ["http", "dns"]
