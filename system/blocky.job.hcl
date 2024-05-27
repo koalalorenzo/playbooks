@@ -120,7 +120,7 @@ blocking:
       attempts: 10
   blockType: nxDomain
   blockTTL: 12h
-  whiteLists:
+  allowList:
     tracking: &generic_white_list
       - |
         /icloud.com/
@@ -155,7 +155,7 @@ blocking:
         /calendar.google.com/
     ads: *generic_white_list
     malware: *generic_white_list
-  blackLists:
+  denylists:
     suspicious:
       - https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
       - https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
