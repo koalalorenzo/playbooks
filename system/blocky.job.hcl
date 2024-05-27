@@ -120,7 +120,7 @@ blocking:
       attempts: 10
   blockType: nxDomain
   blockTTL: 12h
-  allowList:
+  allowlists:
     tracking: &generic_white_list
       - |
         /icloud.com/
