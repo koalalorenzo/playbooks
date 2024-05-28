@@ -1,9 +1,4 @@
 { config, lib, pkgs, networking, ... }:
-let
-  unstableTarball =
-    fetchTarball
-      https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz;
-in
 {
   imports = [ 
     # Include the results of the hardware scan.
@@ -17,7 +12,7 @@ in
 
     # Sops encryption
     "${builtins.fetchTarball {
-      url = "https://github.com/Mic92/sops-nix/archive/10dc39496d5b027912038bde8d68c836576ad0bc.tar.gz";
+      url = "https://github.com/Mic92/sops-nix/archive/master.tar.gz";
     }}/modules/sops"
   ];
 
@@ -25,7 +20,7 @@ in
 
   nixpkgs.config = {
     packageOverrides = pkgs: {
-      unstable = import unstableTarball {
+      unstable = import <nixos-unstable> {
         config = config.nixpkgs.config;
       };
     };
