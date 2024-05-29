@@ -59,7 +59,7 @@ job "vrising" {
 
       resources {
         cpu    = 4000  # 4 Ghz
-        memory = 8192 # 8 GB
+        memory = 12288 # 12 GB
       }
 
       service {
