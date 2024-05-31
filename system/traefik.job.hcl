@@ -8,10 +8,6 @@ job "traefik" {
   }
 
   group "traefik" {
-    # If there the Nomad server is disconected for more than 1 min, and 
-    # allocation does not have a heartbeat for 1 min, then kill it
-    max_client_disconnect = "1m"
-
     update {
       max_parallel     = 1
       health_check     = "checks"
