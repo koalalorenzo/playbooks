@@ -28,7 +28,19 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  services.avahi.enable = true;
+  # Avahi mdns local discovery
+  services.avahi = {
+      enable = true;
+      nssmdns = true;
+      publish = {
+        enable = true;
+        addresses = true;
+        domain = true;
+        hinfo = true;
+        userServices = true;
+        workstation = true;
+      };
+  };  
 
   services.openssh.enable = true;
   services.openssh.settings = {
