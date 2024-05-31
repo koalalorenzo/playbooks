@@ -22,13 +22,8 @@ job "restic-backup" {
       }
 
       volume_mount {
-        volume      = "personal"
-        destination = "/main/personal"
-      }
-
-      volume_mount {
-        volume      = "backups"
-        destination = "/main/backups"
+        volume      = "main-pool"
+        destination = "/main"
       }
 
       artifact {
@@ -86,15 +81,9 @@ job "restic-backup" {
       }
     }
 
-    volume "backups" {
+    volume "main-pool" {
       type      = "host"
-      source    = "backups"
-      read_only = true
-    }
-
-    volume "personal" {
-      type      = "host"
-      source    = "personal"
+      source    = "main-pool"
       read_only = true
     }
   }
