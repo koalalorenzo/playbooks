@@ -75,10 +75,8 @@ job "vrising" {
     }
 
     volume "vrising" {
-      type            = "csi"
+      type            = "host"
       source          = "vrising"
-      attachment_mode = "file-system"
-      access_mode     = "single-node-writer"
     }
   }
 }
