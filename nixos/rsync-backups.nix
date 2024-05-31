@@ -11,7 +11,7 @@
       openssh
     ];
     script = ''
-      rsync -avzh --exclude "*.log" --progress /opt/vrising 192.168.197.5:/main/share/
+      rsync -avzh --delete --exclude "*.log" --progress /opt/vrising 192.168.197.5:/main/share/
     '';
   };
 
