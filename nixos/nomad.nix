@@ -38,7 +38,7 @@
       text = ''
         datacenter = "dc1"
         data_dir  = "/opt/nomad/data"
-        bind_addr = "0.0.0.0"
+        bind_addr = {{ GetInterfaceIPs \"tailscale0\" | exclude "type" "IPv6" }}"
 
         log_rotate_duration = "24h"
         log_rotate_max_files = 7
@@ -70,9 +70,9 @@
 
         advertise {
           # Defaults to the first private IP address. Using Tailscale instead
-          http = "{{ GetPrivateInterfaces | include \"network\" \"100.64.0.0/10\" | attr \"address\" }}"
-          rpc = "{{ GetPrivateInterfaces | include \"network\" \"100.64.0.0/10\" | attr \"address\" }}"
-          serf = "{{ GetPrivateInterfaces | include \"network\" \"100.64.0.0/10\" | attr \"address\" }}"
+          http = "{{ GetInterfaceIP \"tailscale0\" }}"
+          rpc = "{{ GetInterfaceIP \"tailscale0\" }}"
+          serf = "{{ GetInterfaceIP \"tailscale0\" }}"
         }
       '';
     };
