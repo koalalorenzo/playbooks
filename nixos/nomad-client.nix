@@ -21,6 +21,10 @@
         default = false;
       };
 
+      host_volumes = lib.mkOption {
+        type = lib.types.str;
+        default = "";
+      };
     };
     # End homelab.nomad options
   };
@@ -141,7 +145,9 @@
                 read_only = false
               }
               '' else ""}
-              
+
+              # Custom host_volumes
+              ${config.homelab.nomad.host_volumes}
             }
 
             plugin "raw_exec" {

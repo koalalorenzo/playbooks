@@ -36,11 +36,20 @@
   # boot.loader.grub.device = "nodev";
 
   ## Homelab options:
-  # homelab.nomad.node_class = "compute";
-  # homelab.nomad.traefik = false;
-  # homelab.nomad.options = ''"driver.denylist" = "exec,java"'';
-  # homelab.nomad.meta = ''"key" = "valye"'';
-  
+  # homelab.nomad = {
+  #  node_class = "compute";
+  #  traefik = false;
+  #  
+  #  options = ''"driver.denylist" = "exec,java"'';
+  #  meta = ''"key" = "valye"'';
+  #  
+  #  host_volumes = ''
+  #    host_volume "vrising" {
+  #      path = "/opt/vrising"
+  #      read_only = false
+  #    }
+  #  '';
+  # };
   
   ## Is it a VM?
   #services.spice-vdagentd.enable = true;
