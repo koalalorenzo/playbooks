@@ -82,7 +82,10 @@
     isNormalUser = true;
     initialPassword = "password";
     extraGroups = [ "wheel" "networkmanager" "consul" "nomad" "docker" ];
-    openssh.authorizedKeys.keys = [''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNkwS8ZkLWgSZh9o4y1Y+Wa07d251UQAX4u6V1DWRNk'' ];
+    openssh.authorizedKeys.keys = [
+      ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNkwS8ZkLWgSZh9o4y1Y+Wa07d251UQAX4u6V1DWRNk''
+      ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElGbiLlkcIihAz0Qix1lwHHunNr1c32PVNiVQn66fmC koalalorenzo@storage0''
+    ];
   };
 
   users.users.root.openssh.authorizedKeys.keys = lib.mkForce [''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNkwS8ZkLWgSZh9o4y1Y+Wa07d251UQAX4u6V1DWRNk'' ];
