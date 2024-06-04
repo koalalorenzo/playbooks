@@ -2,7 +2,7 @@
 #! nix-shell -p jinja2-cli jq moreutils coreutils python311Packages.jinja2 python311Packages.jinja2-ansible-filters bash -i bash
 
 CLOUD_PROVIDER="hetzner"
-NIX_CHANNEL="nixos-23.11"
+NIX_CHANNEL="nixos-24.05"
 
 IMPORT_FILES=(
   "common.nix"

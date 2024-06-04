@@ -72,5 +72,5 @@ in
   # First version being used for the setup. Do not change it in the future, 
   # unless it is a brand new setup from scratch. It is used for compatibility
   # reasons and for migrated data between versions after upgrade.
-  system.stateVersion = "23.11"; # Don't change it
+  system.stateVersion = "24.05"; # Don't change it
 }
