@@ -1,4 +1,4 @@
-{ config, lib, pkgs, networking, ... }:
+{ config, lib, pkgs, networking, sops ... }:
 {
   networking.networkmanager.enable = true;
   networking.enableIPv6 = false;
@@ -26,4 +26,20 @@
   # Allow Mosh and SSH
   networking.firewall.allowedTCPPorts = [ 22 ];
   networking.firewall.allowedUDPPortRanges = [{ from = 60000; to = 61000; }];
+
+  sops = {
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+
+    secrets."networks/LookMa.nmconnection" = {
+      owner = "root";
+      path = "/etc/NetworkManager/system-connections/LookMa.nmconnection";
+      sopsFile = ./secrets/networks.yaml;
+    };
+
+    secrets."networks/LookMa5G.nmconnection" = {
+      owner = "root";
+      path = "/etc/NetworkManager/system-connections/LookMa5G.nmconnection";
+      sopsFile = ./secrets/networks.yaml;
+    };
+  };
 }
