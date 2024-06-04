@@ -6,6 +6,12 @@ job "restic-cleanup" {
     meta_required = ["repository"]
   }
 
+  # Disable retry
+  reschedule {
+    attempts  = 0
+    unlimited = false
+  }
+  
   group "restic" {
     task "restic" {
       driver       = "exec"

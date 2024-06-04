@@ -28,8 +28,8 @@ job "restic-backup-timer" {
           set -eux
 
           # Run Backups
-          nomad job dispatch -meta volume_to_backup="/main/backups" restic-backup
-          nomad job dispatch -meta volume_to_backup="/main/personal" restic-backup
+          nomad job dispatch -meta path_to_backup="/main/backups" restic-backup
+          nomad job dispatch -meta path_to_backup="/main/personal" restic-backup
         EOF
       }
 

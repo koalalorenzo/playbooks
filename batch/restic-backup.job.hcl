@@ -3,7 +3,13 @@ job "restic-backup" {
   priority = 73
 
   parameterized {
-    meta_required = ["volume_to_backup"]
+    meta_required = ["path_to_backup"]
+  }
+
+  # Disable re-trying
+  reschedule {
+    attempts  = 0
+    unlimited = false
   }
 
   group "restic" {
@@ -13,17 +19,12 @@ job "restic-backup" {
     }
     
     task "restic" {
-      driver       = "exec"
+      driver       = "raw_exec"
       kill_timeout = "120s"
 
       config {
         command = "/bin/bash"
         args    = ["local/backup.sh"]
-      }
-
-      volume_mount {
-        volume      = "main-pool"
-        destination = "/main"
       }
 
       artifact {
@@ -66,12 +67,11 @@ job "restic-backup" {
             chmod +x ${NOMAD_ALLOC_DIR}/restic
           fi
           set -exu
-          
-          ${NOMAD_ALLOC_DIR}/restic self-update
 
-          echo "Startint backing up the backups"
-          ${NOMAD_ALLOC_DIR}/restic backup "${NOMAD_META_volume_to_backup}" --host $RESTIC_HOSTNAME $RESTIC_COMMON_FLAGS
-          sleep 5
+          ${NOMAD_ALLOC_DIR}/restic self-update
+          echo "Startint backing up the backups in ${NOMAD_META_path_to_backup}"
+          ${NOMAD_ALLOC_DIR}/restic backup "${NOMAD_META_path_to_backup}" --host $RESTIC_HOSTNAME $RESTIC_COMMON_FLAGS
+          sleep 1
         EOF
       }
 

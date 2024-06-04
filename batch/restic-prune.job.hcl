@@ -6,6 +6,12 @@ job "restic-prune" {
     meta_required = ["repository"]
   }
 
+  # Disable reschedule
+  reschedule {
+    attempts  = 0
+    unlimited = false
+  }
+
   group "restic" {
     task "restic" {
       driver       = "exec"
