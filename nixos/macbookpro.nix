@@ -11,7 +11,7 @@
   # hardware.apple-t2.enableAppleSetOsLoader = true;
 
   # Is it a VM on Mac M1? Add rosetta for x86_64
-  virtualisation.rosetta.enable = true;
+  virtualisation.rosetta.enable = config.nixpkgs.localSystem.isAarch;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
