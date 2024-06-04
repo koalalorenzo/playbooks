@@ -37,25 +37,32 @@
 
 
   # Load Secrets
-  sops.defaultSopsFile = ./secrets/consul.sops.yaml;
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  sops = {
+    defaultSopsFile = ./secrets/consul.sops.yaml;
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
-  sops.secrets."consul/certs/dc1-server-consul-0-key.pem" = {
-    owner = "consul";
-  };
-  sops.secrets."consul/certs/dc1-server-consul-0.pem" = {
-    owner = "consul";
-  };
-  sops.secrets."consul/certs/consul-agent-ca-key.pem" = {
-    owner = "consul";
-  };
-  sops.secrets."consul/certs/consul-agent-ca.pem" = {
-    owner = "consul";
-  };
+    secrets."consul/certs/dc1-server-consul-0-key.pem" = {
+      restartUnits = [ "consul.service" ];
+      owner = "consul";
+    };
+    secrets."consul/certs/dc1-server-consul-0.pem" = {
+      restartUnits = [ "consul.service" ];
+      owner = "consul";
+    };
+    secrets."consul/certs/consul-agent-ca-key.pem" = {
+      restartUnits = [ "consul.service" ];
+      owner = "consul";
+    };
+    secrets."consul/certs/consul-agent-ca.pem" = {
+      restartUnits = [ "consul.service" ];
+      owner = "consul";
+    };
 
-  sops.secrets."consul/encryption.hcl" = {
-    owner = "consul";
-    path = "/etc/consul.d/encryption.hcl";
+    secrets."consul/encryption.hcl" = {
+      restartUnits = [ "consul.service" ];
+      owner = "consul";
+      path = "/etc/consul.d/encryption.hcl";
+    };
   };
 
   # Load Configuration for Consul
