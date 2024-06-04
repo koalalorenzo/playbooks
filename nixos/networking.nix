@@ -1,4 +1,4 @@
-{ config, lib, pkgs, networking, sops ... }:
+{ config, lib, pkgs, networking, sops, ... }:
 {
   networking.networkmanager.enable = true;
   networking.enableIPv6 = false;
@@ -33,13 +33,13 @@
     secrets."networks/LookMa.nmconnection" = {
       owner = "root";
       path = "/etc/NetworkManager/system-connections/LookMa.nmconnection";
-      sopsFile = ./secrets/networks.yaml;
+      sopsFile = ./secrets/networks.sops.yaml;
     };
 
     secrets."networks/LookMa5G.nmconnection" = {
       owner = "root";
       path = "/etc/NetworkManager/system-connections/LookMa5G.nmconnection";
-      sopsFile = ./secrets/networks.yaml;
+      sopsFile = ./secrets/networks.sops.yaml;
     };
   };
 }
