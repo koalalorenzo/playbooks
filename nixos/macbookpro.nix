@@ -10,6 +10,9 @@
   # Adds applet2 loader
   # hardware.apple-t2.enableAppleSetOsLoader = true;
 
+  # Enable SSD TRIM and adds better Filesystem performance
+  fileSystems."/".options = [ "noatime" "nodiratime" "discard" ];
+
   # Is it a VM on Mac M1? Add rosetta for x86_64
   virtualisation.rosetta.enable = config.nixpkgs.localSystem.isAarch;
 
