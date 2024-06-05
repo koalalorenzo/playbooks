@@ -38,7 +38,7 @@
       text = ''
         datacenter = "dc1"
         data_dir  = "/opt/nomad/data"
-        bind_addr = {{ GetInterfaceIPs \"tailscale0\" | exclude "type" "IPv6" }}"
+        bind_addr = "{{ GetInterfaceIP \"tailscale0\" }}"
 
         log_rotate_duration = "24h"
         log_rotate_max_files = 7
