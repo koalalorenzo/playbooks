@@ -50,3 +50,34 @@ file, We can update the files:
 ```bash
 find . -type f -name "*.sops.*" -print -exec sops updatekeys {} -y \;
 ```
+
+## Install on NixOS
+
+Add the following channels:
+```bash
+nix-channel --add https://github.com/NixOS/nixos-hardware/archive/master.tar.gz nixos-hardware
+nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
+nix-channel --add https://nixos.org/channels/nixos-24.05 nixos
+nix-channel --update
+```
+
+Copy over the nix configurations:
+```bash
+rsync 
+```
+
+On the new machine start configuring it:
+
+```bash
+cd /etc/nixos/
+cp configuration.example.nix configuration.nix
+
+# Generate hardware config if not present 
+nixos-generate-config --no-filesystems
+
+# Change, enable, disable and set things up:
+vim configuration.nix
+
+# Build the new system on next reboot:
+sudo nixos-rebuild boot --upgrade-all
+```
