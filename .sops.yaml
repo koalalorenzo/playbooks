@@ -1,7 +1,7 @@
 keys:
   - &safe_gpg 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
   - &node_storage0 age15qauah7skmftfg5u4z4l526uas5gqaze6k6d09fm7jnga0zzuqtsfy3m5n
-  - &node_compute0 age12gjnss76aeqqly8jwh05c3na44r6nu5ws04v07xedj9fwf38letsewvd6r
+  - &node_compute0 age1yq5m2qs0ghd87wclpg9vcntql9sxfex06xs6d4efk6n2d80mkp9qrk70yv
   - &node_compute1 age1dyqrgtfmayzq4a9hsd743jzlkmty0ac4q8wwjggwadumzy3hj3us86m32q
   - &node_compute2 age1f9uy7mcfdm7skndsa9p5zu9xqfs8hahxtzg75e4vktrkvqc9qu5q89fdzf
   - &node_edge0 age123602hjzp7w95ndcfhz23dj7mza8fdm5kav2ttsyg5uk7qq39c8sxs5tyy
