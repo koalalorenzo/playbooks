@@ -2,9 +2,10 @@ job "restic-server" {
   type     = "service"
   priority = 60
 
-  constraint {
+  affinity {
     attribute = node.class
-    value     = "storage"
+    value     = "compute"
+    weight    = 80
   }
 
   group "main" {

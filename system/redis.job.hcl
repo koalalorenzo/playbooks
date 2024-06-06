@@ -5,7 +5,7 @@ job "redis" {
   group "redis" {
     affinity {
       attribute = node.class
-      value     = "storage"
+      value     = "compute"
       weight    = 80
     }
 
