@@ -13,11 +13,24 @@ job "vrising" {
     }
 
     network {
-      port "steamfifteen" { static = 27015 }
-      port "steamsixteen" { static = 27016 }
-      port "game" { static = 9876 }
-      port "query" { static = 9877 }
-      port "rcon" { static = 25575 }
+      mode = "host"
+      port "steamfifteen" {
+        static = 27015
+      }
+
+      port "steamsixteen" {
+        static = 27016
+      }
+
+      port "game" {
+        static = 9876
+      }
+      port "query" {
+        static = 9877
+      }
+      port "rcon" {
+        static = 25575
+      }
     }
 
 
@@ -33,7 +46,7 @@ job "vrising" {
       kill_timeout = "65s"
 
       config {
-        image = "trueosiris/vrising:2.1"
+        image        = "trueosiris/vrising:2.1"
         network_mode = "host"
 
         ports = [
@@ -75,8 +88,8 @@ job "vrising" {
     }
 
     volume "vrising" {
-      type            = "host"
-      source          = "vrising"
+      type   = "host"
+      source = "vrising"
     }
   }
 }
