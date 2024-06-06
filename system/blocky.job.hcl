@@ -6,8 +6,8 @@ job "blocky" {
     count = 2
 
     restart {
-      delay    = "5s"
-      interval = "20s"
+      delay    = "10s"
+      interval = "30s"
       attempts = 3
     }
 
@@ -244,12 +244,12 @@ caching:
   prefetchExpires: 3h
   prefetchThreshold: 30
   prefetchMaxItemsCount: 512
-{{ range service "postgres" }}
+{{ range $index, $element := service "postgres" }}{{if eq $index 0}}
 queryLog:
   type: postgresql
   logRetentionDays: 90
   target: postgres://{{ with nomadVar "nomad/jobs/blocky" }}{{ .POSTGRES_USERNAME }}:{{ .POSTGRES_PASSWORD }}{{ end }}@{{ .Address }}:{{ .Port }}/blocky?sslmode=disable
-{{ end }}
+{{ end }}{{ end }}
 prometheus:
   enable: true
   path: /metrics
@@ -292,7 +292,7 @@ EOF
   update {
     max_parallel     = 1
     canary           = 1
-    min_healthy_time = "30s"
+    min_healthy_time = "60s"
     healthy_deadline = "2m"
     auto_revert      = true
     auto_promote     = true
