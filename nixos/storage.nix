@@ -22,9 +22,11 @@
     };
 
     templates.frequent = {
+      yearly  = 0;
       monthly = 3;
       daily   = 15;
-      hourly  = 48;
+      hourly  = 24;
+      # frequent = 8;
       
       autosnap  = true;
       autoprune = true;
@@ -32,10 +34,18 @@
 
     datasets.main.useTemplate = "default";
     datasets.main.recursive = true;
-    datasets."main/share".useTemplate = "frequent";
-    datasets."main/share".recursive = true;
-    datasets."main/multimedia".useTemplate = "frequent";
+    datasets."main/share/postgres".useTemplate = "frequent";
+    datasets."main/share/redis".useTemplate = "frequent";
+    datasets."main/share/restic".useTemplate = "frequent";
+    
+    datasets."main/share/7d2d".useTemplate = "frequent";
+    datasets."main/share/7d2d".recursive = true;
+    datasets."main/share/vrising".useTemplate = "frequent";
+    datasets."main/share/web-static".useTemplate = "frequent";
+    
+    # datasets."main/multimedia".useTemplate = "frequent";
     datasets."main/downloads".useTemplate = "frequent";
+    # Disabled
     datasets."main/share/nix-cache".autosnap = false;
     datasets."main/share/nix-cache".autoprune = false;
   };
