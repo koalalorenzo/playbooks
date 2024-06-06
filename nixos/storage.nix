@@ -4,7 +4,7 @@
 
   # boot.zfs.devNodes = "/dev/disk/by-partuuid/";
 
-  boot.supportedFilesystems = [ "zfs" "ext4" ];
+  boot.supportedFilesystems = [ "zfs" "ext4" "ntfs" ];
   boot.zfs.forceImportRoot = false;
 
   # Sanoid for ZFS automatic backup
@@ -15,7 +15,7 @@
       yearly  = 4;
       monthly = 12;
       daily   = 32;
-      hourly  = 48;
+      hourly  = 24;
       
       autosnap  = true;
       autoprue  = true;
@@ -24,7 +24,7 @@
     templates.frequent = {
       monthly = 3;
       daily   = 15;
-      hourly  = 72;
+      hourly  = 48;
       
       autosnap  = true;
       autoprune = true;
@@ -33,11 +33,11 @@
     datasets.main.useTemplate = "default";
     datasets.main.recursive = true;
     datasets."main/share".useTemplate = "frequent";
-    datasets."main/share".recursive = "frequent";
+    datasets."main/share".recursive = true;
     datasets."main/multimedia".useTemplate = "frequent";
-    datasets."main/multimedia".recursive = true;
     datasets."main/downloads".useTemplate = "frequent";
-    datasets."main/downloads".recursive = true;
+    datasets."main/share/nix-cache".autosnap = false;
+    datasets."main/share/nix-cache".autoprune = false;
   };
 
   services.rpcbind.enable = true; # needed for NFS
