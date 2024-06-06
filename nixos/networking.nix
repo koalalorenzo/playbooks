@@ -2,6 +2,7 @@
 {
   networking.networkmanager.enable = true;
   networking.enableIPv6 = false;
+  networking.usePredictableInterfaceNames = lib.mkForce true;
 
   # Sets DNS to Cloudflare
   networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];

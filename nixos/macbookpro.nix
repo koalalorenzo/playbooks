@@ -16,6 +16,10 @@
   # Is it a VM on Mac M1? Add rosetta for x86_64
   virtualisation.rosetta.enable = config.nixpkgs.localSystem.isAarch;
 
+  boot.kernelModules = [ "wl" ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
+  boot.blacklistedKernelModules = [ "b43" "bcma" ];
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
