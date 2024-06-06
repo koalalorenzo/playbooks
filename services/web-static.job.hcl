@@ -37,7 +37,8 @@ job "web-static" {
       type            = "csi"
       source          = "web-static"
       attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      access_mode     = "multi-node-reader-only"
+      read_only       = true
     }
 
     task "nginx" {
