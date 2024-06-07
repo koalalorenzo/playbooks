@@ -10,7 +10,7 @@ job "restic-cleanup-timer" {
 
   group "trigger" {
     task "script" {
-      driver       = "exec"
+      driver       = "raw_exec"
 
       config {
         command = "/bin/bash"
@@ -28,6 +28,7 @@ job "restic-cleanup-timer" {
           set -eux
 
           nomad job dispatch -meta repository="b2:restic-koalalorenzo:/" restic-cleanup
+          sleep 15
           nomad job dispatch -meta repository="rest:https://restic.elates.it" restic-cleanup
         EOF
       }

@@ -14,7 +14,7 @@ job "restic-cleanup" {
   
   group "restic" {
     task "restic" {
-      driver       = "exec"
+      driver       = "raw_exec"
       kill_timeout = "120s"
 
       config {

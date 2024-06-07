@@ -1,6 +1,6 @@
 job "restic-prune" {
   type     = "batch"
-  priority = 73
+  priority = 40
 
   parameterized {
     meta_required = ["repository"]
@@ -14,7 +14,7 @@ job "restic-prune" {
 
   group "restic" {
     task "restic" {
-      driver       = "exec"
+      driver       = "raw_exec"
       kill_timeout = "120s"
 
       config {

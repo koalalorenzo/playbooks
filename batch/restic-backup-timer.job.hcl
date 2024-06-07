@@ -3,14 +3,15 @@ job "restic-backup-timer" {
   priority = 70
 
   periodic {
-    crons            = ["0 2 * * 1,5"]
+    # Every third day at 2:05 to avoid clashing with :00 to avoid issues 
+    crons            = ["05 2 */3 * *"]
     time_zone        = "CET"
     prohibit_overlap = true
   }
 
   group "trigger" {
     task "script" {
-      driver       = "exec"
+      driver       = "raw_exec"
 
       config {
         command = "/bin/bash"
