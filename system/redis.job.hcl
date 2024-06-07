@@ -1,6 +1,6 @@
 job "redis" {
   type     = "service"
-  priority = 80
+  priority = 75
 
   group "redis" {
     affinity {
@@ -10,9 +10,7 @@ job "redis" {
     }
 
     restart {
-      attempts = 5
-      interval = "5m"
-      delay    = "30s"
+      attempts = 3
     }
 
     volume "data" {
@@ -64,7 +62,7 @@ EOH
 
       resources {
         cpu    = 1000
-        memory = 512
+        memory = 256
       }
 
       service {
@@ -75,7 +73,7 @@ EOH
           name     = "alive"
           type     = "tcp"
           interval = "60s"
-          timeout  = "3s"
+          timeout  = "5s"
         }
       }
     }

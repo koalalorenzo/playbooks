@@ -1,6 +1,6 @@
 job "postgres" {
   type     = "service"
-  priority = 80
+  priority = 75
 
   group "postgres" {
     affinity {
