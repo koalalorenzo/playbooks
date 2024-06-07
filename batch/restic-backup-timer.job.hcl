@@ -31,6 +31,7 @@ job "restic-backup-timer" {
           # Run Backups
           nomad job dispatch -meta path_to_backup="/main/backups" restic-backup
           nomad job dispatch -meta path_to_backup="/main/personal" restic-backup
+          nomad job dispatch -meta path_to_backup="/main/multimedia/Photos" restic-backup
         EOF
       }
 
