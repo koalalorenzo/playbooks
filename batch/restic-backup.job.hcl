@@ -4,6 +4,7 @@ job "restic-backup" {
 
   parameterized {
     meta_required = ["path_to_backup"]
+    meta_optional = ["extra_flags"]
   }
 
   # Disable re-trying
@@ -70,7 +71,7 @@ job "restic-backup" {
 
           ${NOMAD_ALLOC_DIR}/restic self-update
           echo "Startint backing up the backups in ${NOMAD_META_path_to_backup}"
-          ${NOMAD_ALLOC_DIR}/restic backup "${NOMAD_META_path_to_backup}" --host $RESTIC_HOSTNAME $RESTIC_COMMON_FLAGS
+          ${NOMAD_ALLOC_DIR}/restic backup ${NOMAD_META_path_to_backup} --host $RESTIC_HOSTNAME $RESTIC_COMMON_FLAGS ${NOMAD_META_extra_flags}
           sleep 1
         EOF
       }
