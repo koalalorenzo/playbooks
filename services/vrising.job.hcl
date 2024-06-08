@@ -76,14 +76,13 @@ job "vrising" {
       }
 
       service {
-        name = "vrising"
+        name = "vrising-rcon"
         port = "rcon"
+      }
 
-        tags = [
-          "traefik.enable=true",
-          "traefik.http.routers.vrising.rule=Host(`vrising.elates.it`) || Host(`vrising.ts.elates.it`)",
-          "traefik.http.routers.vrising.tls.certresolver=letsencrypt",
-        ]
+      service {
+        name = "vrising"
+        port = "steamfifteen"
       }
     }
 
