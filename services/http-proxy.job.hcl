@@ -46,6 +46,10 @@ job "http-proxy" {
         volumes = [
           "local/squid.conf:/etc/squid/squid.conf",
         ]
+
+        ulimit {
+          nofile = "524288:524288"
+        }
       }
 
       template {
