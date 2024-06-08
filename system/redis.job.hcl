@@ -74,6 +74,11 @@ EOH
           type     = "tcp"
           interval = "60s"
           timeout  = "5s"
+
+          check_restart {
+            limit = 3
+            grace = "30s"
+          }
         }
       }
     }

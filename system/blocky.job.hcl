@@ -50,6 +50,11 @@ job "blocky" {
 
         success_before_passing   = 1
         failures_before_critical = 3
+
+        check_restart {
+          limit = 3
+          grace = "30s"
+        }
       }
 
     }

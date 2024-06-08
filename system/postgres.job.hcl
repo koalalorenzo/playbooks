@@ -70,9 +70,14 @@ job "postgres" {
           type     = "tcp"
           interval = "30s"
           timeout  = "3s"
+
+          check_restart {
+            limit = 3
+            grace = "30s"
+          }
         }
       }
-    }
-  }
+    } # Task
+  } # Group
 }
 

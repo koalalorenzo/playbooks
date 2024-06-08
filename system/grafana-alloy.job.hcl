@@ -27,17 +27,18 @@ job "grafana" {
       name = "grafana-alloy"
       port = "http"
 
-      # check {
-      #   name     = "alive"
-      #   type     = "tcp"
-      #   port     = "http"
-      #   interval = "30s"
-      #   timeout  = "15s"
-      # }
+      check {
+        name     = "alive"
+        type     = "tcp"
+        port     = "http"
+        interval = "30s"
+        timeout  = "15s"
 
-      tags = [
-        "traefik.enable=false",
-      ]
+        check_restart {
+          limit = 3
+          grace = "30s"
+        }
+      }
     }
 
     task "alloy" {

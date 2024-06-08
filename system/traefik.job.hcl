@@ -60,6 +60,11 @@ job "traefik" {
         timeout  = "15s"
       }
 
+      check_restart {
+        limit = 3
+        grace = "30s"
+      }
+
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.http.rule=Host(`traefik.elates.it`) || Host(`traefik.ts.elates.it`)",
