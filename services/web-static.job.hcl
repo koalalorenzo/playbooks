@@ -25,6 +25,11 @@ job "web-static" {
         port     = "http"
         interval = "120s"
         timeout  = "15s"
+
+        check_restart {
+          limit = 3
+          grace = "30s"
+        }
       }
 
       tags = [

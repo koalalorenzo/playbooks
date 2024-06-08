@@ -27,6 +27,10 @@ job "iperf3" {
 
         success_before_passing   = 1
         failures_before_critical = 3
+
+        check_restart {
+          grace = "10s"
+        }
       }
 
     }

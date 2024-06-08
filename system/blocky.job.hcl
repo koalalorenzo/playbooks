@@ -313,6 +313,3 @@ EOF
     healthy_deadline = "2m"
   }
 }
-
-
-

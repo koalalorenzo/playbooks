@@ -58,6 +58,11 @@ job "shiori" {
           type     = "tcp"
           interval = "600s"
           timeout  = "5s"
+          
+          check_restart {
+            limit = 3
+            grace = "30s"
+          }
         }
 
         tags = [
