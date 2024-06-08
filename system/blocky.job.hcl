@@ -95,6 +95,8 @@ job "blocky" {
       template {
         destination = "local/config.yml"
         change_mode = "restart"
+
+        splay = "60s"
         data        = <<EOF
 minTlsServeVersion: 1.3
 upstreams:
