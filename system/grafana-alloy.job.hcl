@@ -208,50 +208,111 @@ job "grafana" {
             }
           }
 
-          // loki.source.journal "logs_integrations_integrations_node_exporter_journal_scrape" {
-          //   max_age       = "24h0m0s"
-          //   relabel_rules = discovery.relabel.logs_integrations_integrations_node_exporter_journal_scrape.rules
-          //   forward_to    = [loki.write.grafana_cloud_loki.receiver]
-          // }
+          loki.source.journal "logs_integrations_integrations_node_exporter_journal_scrape" {
+            max_age       = "1h0m0s"
+            path          = "/host/root/var/log/journal"
+            relabel_rules = discovery.relabel.logs_integrations_integrations_node_exporter_journal_scrape.rules
+            forward_to    = [loki.process.global.receiver]
+          }
 
+          // Disabled as in Ubuntu it is too chatty
           // local.file_match "logs_integrations_integrations_node_exporter_direct_scrape" {
-          //   path_targets = [{
-          //     __address__ = "localhost",
-          //     __path__    = "/var/log/{syslog,messages,*.log}",
-          //     instance    = "{{ env "attr.unique.hostname" }}",
-          //     job         = "integrations/node_exporter",
-          //   }]
+          //  path_targets = [{
+          //    __address__ = "localhost",
+          //    __path__    = "/host/root/var/log/{syslog,fail2ban,messages}",
+          //    instance    = "{{ env "attr.unique.hostname" }}",
+          //    job         = "integrations/node_exporter",
+          //  }]
           // }
 
-          // discovery.relabel "logs_integrations_integrations_node_exporter_journal_scrape" {
-          //   targets = []
+          discovery.relabel "logs_integrations_integrations_node_exporter_journal_scrape" {
+            targets = []
 
-          //   rule {
-          //     source_labels = ["__journal__systemd_unit"]
-          //     target_label  = "unit"
-          //   }
+            rule {
+              source_labels = ["__journal__systemd_unit"]
+              target_label  = "unit"
+            }
 
-          //   rule {
-          //     source_labels = ["__journal__boot_id"]
-          //     target_label  = "boot_id"
-          //   }
+            rule {
+              source_labels = ["__journal__boot_id"]
+              target_label  = "boot_id"
+            }
 
-          //   rule {
-          //     source_labels = ["__journal__transport"]
-          //     target_label  = "transport"
-          //   }
+            rule {
+              source_labels = ["__journal__transport"]
+              target_label  = "transport"
+            }
+            
+            rule {
+              source_labels = ["__journal__hostname"]
+              target_label  = "instance"
+            }
 
-          //   rule {
-          //     source_labels = ["__journal_priority_keyword"]
-          //     target_label  = "level"
-          //   }
-          // }
+            rule {
+              source_labels = ["__journal_priority_keyword"]
+              target_label  = "level"
+            }
+          }
 
           // loki.source.file "logs_integrations_integrations_node_exporter_direct_scrape" {
-          //   targets    = local.file_match.logs_integrations_integrations_node_exporter_direct_scrape.targets
-          //   forward_to = [loki.write.grafana_cloud_loki.receiver]
+          //  targets    = local.file_match.logs_integrations_integrations_node_exporter_direct_scrape.targets
+          //  forward_to = [loki.process.global.receiver]
           // }
 
+
+          // Custom Loki process rules
+          loki.echo "debug" {}
+          
+          loki.process "global" {
+            forward_to = [loki.write.grafana_cloud_loki.receiver, loki.echo.debug.receiver]
+            stage.decolorize {}
+
+            stage.limit {
+              rate  = 5 // max 5 lines per sec
+              burst = 15
+              drop  = true
+            }
+
+            stage.drop {
+              older_than          = "1h"
+              drop_counter_reason = "too old"
+            }
+
+            stage.drop {
+              longer_than         = "1KB"
+              drop_counter_reason = "too long"
+            }
+
+            stage.drop {
+              source = "level,msg"
+              expression =  ".*(trace|debug|DEBUG).*"
+              drop_counter_reason = "no info"
+            }
+
+            // stage.sampling {
+            //     rate = 0.25
+            //     drop_counter_reason = "logs_sampling"
+            // }
+            
+            stage.drop {
+              source = "unit,msg"
+              expression  = ".*tailscale.*"
+              drop_counter_reason = "no tailscale"
+            }
+            
+            stage.drop {
+              source = "unit"
+              expression  = ".*consul.*"
+              drop_counter_reason = "consul"
+            }
+
+            // Force labels
+            stage.labels {
+              values = {
+                instance = "{{ env "attr.unique.hostname" }}",
+              }
+            }
+          }
 
           //Docker Integration
 
