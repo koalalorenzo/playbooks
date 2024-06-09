@@ -233,6 +233,11 @@ job "grafana" {
             targets = []
 
             rule {
+              target_label = "job"
+              replacement  = "integrations/node_exporter_journal"
+            }
+
+            rule {
               source_labels = ["__journal__systemd_unit"]
               target_label  = "unit"
             }
