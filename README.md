@@ -40,11 +40,11 @@ When creating a new host, you need to encrypt the file accordingly using age.
 You can get the SSH-to-age key by running:
 
 ```bash
-nix-shell -p ssh-to-age --run 'ssh-keyscan storage0 | ssh-to-age'
+nix-shell -p ssh-to-age --run "ssh-keyscan ${IP_ADDRESS} | ssh-to-age"
 ```
 
-where `storage0` is the host name/ip address. After adding the key to `.sops.yaml`
-file, We can update the files:
+where `${IP_ADDRESS}` is the host name/ip address. After adding the key to 
+`.sops.yaml` file, We can update the files:
 
 
 ```bash
@@ -53,7 +53,7 @@ find . -type f -name "*.sops.*" -print -exec sops updatekeys {} -y \;
 
 ## Install on NixOS
 
-Add the following channels:
+Add the following channels, by running these commands as root:
 ```bash
 nix-channel --add https://github.com/NixOS/nixos-hardware/archive/master.tar.gz nixos-hardware
 nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
@@ -63,7 +63,7 @@ nix-channel --update
 
 Copy over the nix configurations:
 ```bash
-rsync 
+rsync ./nixos/* nixos@${IP_ADDRESS}:/etc/nixos/
 ```
 
 On the new machine start configuring it:
@@ -73,11 +73,13 @@ cd /etc/nixos/
 cp configuration.example.nix configuration.nix
 
 # Generate hardware config if not present 
-nixos-generate-config --no-filesystems
+nixos-generate-config # [ --no-filesystems ]
 
 # Change, enable, disable and set things up:
 vim configuration.nix
 
 # Build the new system on next reboot:
-sudo nixos-rebuild boot --upgrade-all
+nixos-rebuild boot --upgrade-all
 ```
+
+Et voila! on next reboot the homelab node will be ready

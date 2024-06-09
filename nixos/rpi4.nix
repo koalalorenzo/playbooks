@@ -16,14 +16,8 @@
       generic-extlinux-compatible.enable = true;
     };
   };
-
-  fileSystems = {
-    "/" = {
-      device = "/dev/disk/by-label/NIXOS_SD";
-      fsType = "ext4";
-      options = [ "noatime" ];
-    };
-  };
+  
+  fileSystems."/".options = [ "noatime" ];
   
   hardware = {
     raspberry-pi."4".apply-overlays-dtmerge.enable = true;
