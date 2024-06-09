@@ -32,7 +32,7 @@ job "http-proxy" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.tcp.routers.http-proxy.rule=HostSNI(`proxy.elates.it`) || Host(`proxy.ts.elates.it`)",
+        "traefik.tcp.routers.http-proxy.rule=HostSNI(`*`)",
         "traefik.tcp.routers.http-proxy.entrypoints=http-proxy",
       ]
     }
