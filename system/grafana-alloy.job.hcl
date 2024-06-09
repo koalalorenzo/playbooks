@@ -67,6 +67,7 @@ job "grafana" {
         volumes = [
           "local/config.alloy:/etc/alloy/config.alloy",
           "/var/run/docker.sock:/var/run/docker.sock",
+          "/run/containerd/containerd.sock:/run/containerd/containerd.sock",
           "/var/logs:/var/logs:ro,rslave",
           "/sys:/host/sys:ro,rslave",
           "/proc:/host/proc:ro,rslave",
@@ -329,8 +330,8 @@ job "grafana" {
             }
 
             stage.limit {
-              rate  = 30 // max 20 lines per sec
-              burst = 60
+              rate  = 20 // max 20 lines per sec
+              burst = 40
               drop  = true
             }
           }
