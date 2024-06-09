@@ -83,3 +83,12 @@ nixos-rebuild boot --upgrade-all
 ```
 
 Et voila! on next reboot the homelab node will be ready
+
+After reboot, remember to check that everything is fine, login with Tailscale
+and restart the daemons if needed:
+
+```bash
+sudo tailscale up
+sudo systemctl restart consul.service nomad.service
+sudo journalctl -f -u consul.service -u nomad.service
+```
