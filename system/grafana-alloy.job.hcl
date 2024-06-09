@@ -73,6 +73,10 @@ job "grafana" {
           "/run:/host/run:ro,rslave",
           "/:/host/root:ro,rslave",
         ]
+
+        labels {
+          persist_logs = "true"
+        }
       }
 
 
@@ -420,7 +424,7 @@ job "grafana" {
             }
 
             stage.match {
-              selector = "{keep_logs!=\"true\"}"
+              selector = "{persist_logs!=\"true\"}"
               action   = "drop"
 
               drop_counter_reason = "manually_excluded"

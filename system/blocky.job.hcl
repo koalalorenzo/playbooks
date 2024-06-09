@@ -90,6 +90,10 @@ job "blocky" {
         volumes     = ["local/config.yml:/app/config.yml"]
         ports       = ["http", "dns"]
         dns_servers = ["1.1.1.1", "1.0.0.1"]
+
+        labels {
+          persist_logs = "true"
+        }
       }
 
       template {

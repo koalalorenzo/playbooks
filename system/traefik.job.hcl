@@ -92,6 +92,10 @@ job "traefik" {
           "local/traefik.yaml:/etc/traefik/traefik.yaml",
           "local/services.yaml:/etc/traefik/services.yaml",
         ]
+
+        labels {
+          persist_logs = "true"
+        }
       }
 
       volume_mount {
