@@ -51,7 +51,7 @@
 
   # Adds tailscale connectivity
   services.tailscale.enable = true;
-  services.tailscale.extraUpFlags = "--ssh --accept-routes";
+  services.tailscale.extraUpFlags = "--ssh --accept-dns";
   services.tailscale.package = pkgs.unstable.tailscale;
 
   # At and Cron for scheduling
