@@ -9,7 +9,7 @@ job "http-proxy" {
 
   group "squid" {
     network {
-      port "http" {  }
+      port "http" {}
     }
 
     service {
@@ -23,7 +23,7 @@ job "http-proxy" {
 
         interval = "60s"
         timeout  = "15s"
-        
+
         check_restart {
           limit = 3
           grace = "60s"
@@ -32,12 +32,13 @@ job "http-proxy" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.atuin.rule=Host(`proxy.elates.it`) || Host(`proxy.ts.elates.it`)",
+        "traefik.tcp.routers.http-proxy.rule=HostSNI(`proxy.elates.it`) || Host(`proxy.ts.elates.it`)",
+        "traefik.tcp.routers.http-proxy.entrypoints=http-proxy",
       ]
     }
 
     task "squid" {
-      driver       = "docker"
+      driver = "docker"
 
       config {
         image = "ubuntu/squid"

@@ -58,12 +58,13 @@
         80 # Traefik: HTTP
         443 # Traefik: HTTPS
         853 # DNS over TLS / QUIC
-        8081 # Traefik
         1900 # Jellyfin DLNA / upnp
+        3128 # Squid HTTP Proxy
+        3478 # Steam Client
+        5201 # Iperf 3
         7359 # Jellyfin autodiscovery
         7777 # Terraria
-        5201 # Iperf 3
-        3478 # Steam Client
+        8081 # Traefik
       ];
 
       allowedUDPPorts = [
@@ -72,12 +73,13 @@
         80 # Traefik HTTP
         443 # Traefik HTTPS
         853 # DNS over TLS / QUIC
-        8081 # Traefik
         1900 # Jellyfin DLNA / upnp
+        3128 # Squid HTTP Proxy
+        3478 # Steam Client
+        5201 # Iperf 3
         7359 # Jellyfin autodiscovery
         7777 # Terraria
-        5201 # Iperf 3
-        3478 # Steam Client
+        8081 # Traefik
       ];
 
       allowedUDPPortRanges = [

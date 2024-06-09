@@ -151,6 +151,9 @@ entryPoints:
 
   iperf-udp:
     address: ":5201/udp"
+  
+  http-proxy:
+    address: ":3128"
 
 certificatesResolvers:
   letsencrypt:
