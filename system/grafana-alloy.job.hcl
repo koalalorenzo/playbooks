@@ -279,7 +279,7 @@ job "grafana" {
             }
 
             stage.drop {
-              longer_than         = "2KB"
+              longer_than         = "1KB"
               drop_counter_reason = "too_long"
             }
 
@@ -299,12 +299,6 @@ job "grafana" {
           loki.process "journal" {
             forward_to = [loki.process.global.receiver]
             
-            stage.limit {
-              rate  = 10 // max 10 lines per sec
-              burst = 20
-              drop  = true
-            }
-
             stage.drop {
               source = "level"
               expression =  ".*(trace|debug|DEBUG|info|INFO).*"
@@ -327,6 +321,12 @@ job "grafana" {
               source = "unit"
               expression  = ".*cron.*"
               drop_counter_reason = "cron"
+            }
+
+            stage.limit {
+              rate  = 30 // max 20 lines per sec
+              burst = 60
+              drop  = true
             }
           }
 
@@ -398,8 +398,14 @@ job "grafana" {
 
               rule {
                 action = "labelmap"
-                regex  = "___meta_docker_container_label_com_hashicorp_nomad_(.*)"
+                regex  = "__meta_docker_container_label_com_hashicorp_nomad_(.*)"
                 replacement = "nomad_$${1}"
+              }
+
+              rule {
+                action = "labelmap"
+                regex  = "__meta_docker_container_label_persist_logs"
+                replacement = "persist_logs"
               }
           }
 
