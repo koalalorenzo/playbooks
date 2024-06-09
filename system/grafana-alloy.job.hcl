@@ -212,7 +212,7 @@ job "grafana" {
             max_age       = "1h0m0s"
             path          = "/host/root/var/log/journal"
             relabel_rules = discovery.relabel.logs_integrations_integrations_node_exporter_journal_scrape.rules
-            forward_to    = [loki.process.global.receiver]
+            forward_to    = [loki.process.journal.receiver]
           }
 
           // Disabled as in Ubuntu it is too chatty
@@ -254,6 +254,7 @@ job "grafana" {
             }
           }
 
+          // Disabled due to noisy Ubuntu machines
           // loki.source.file "logs_integrations_integrations_node_exporter_direct_scrape" {
           //  targets    = local.file_match.logs_integrations_integrations_node_exporter_direct_scrape.targets
           //  forward_to = [loki.process.global.receiver]
@@ -262,31 +263,20 @@ job "grafana" {
 
           // Custom Loki process rules
           loki.echo "debug" {}
-          
+
           loki.process "global" {
-            forward_to = [loki.write.grafana_cloud_loki.receiver, loki.echo.debug.receiver]
+            forward_to = [loki.write.grafana_cloud_loki.receiver]
+            
             stage.decolorize {}
 
-            stage.limit {
-              rate  = 5 // max 5 lines per sec
-              burst = 15
-              drop  = true
+            stage.drop {
+              older_than          = "2h"
+              drop_counter_reason = "too_old"
             }
 
             stage.drop {
-              older_than          = "1h"
-              drop_counter_reason = "too old"
-            }
-
-            stage.drop {
-              longer_than         = "1KB"
-              drop_counter_reason = "too long"
-            }
-
-            stage.drop {
-              source = "level,msg"
-              expression =  ".*(trace|debug|DEBUG|info|INFO).*"
-              drop_counter_reason = "no info"
+              longer_than         = "2KB"
+              drop_counter_reason = "too_long"
             }
 
             // stage.sampling {
@@ -294,10 +284,33 @@ job "grafana" {
             //     drop_counter_reason = "logs_sampling"
             // }
             
+            // Force labels
+            stage.labels {
+              values = {
+                instance = "{{ env "attr.unique.hostname" }}",
+              }
+            }
+          }
+          
+          loki.process "journal" {
+            forward_to = [loki.process.global.receiver]
+            
+            stage.limit {
+              rate  = 10 // max 10 lines per sec
+              burst = 20
+              drop  = true
+            }
+
+            stage.drop {
+              source = "level"
+              expression =  ".*(trace|debug|DEBUG|info|INFO).*"
+              drop_counter_reason = "wrong_level"
+            }
+            
             stage.drop {
               source = "unit,msg"
               expression  = ".*tailscale.*"
-              drop_counter_reason = "no tailscale"
+              drop_counter_reason = "tailscale"
             }
             
             stage.drop {
@@ -305,12 +318,11 @@ job "grafana" {
               expression  = ".*consul.*"
               drop_counter_reason = "consul"
             }
-
-            // Force labels
-            stage.labels {
-              values = {
-                instance = "{{ env "attr.unique.hostname" }}",
-              }
+            
+            stage.drop {
+              source = "unit"
+              expression  = ".*cron.*"
+              drop_counter_reason = "cron"
             }
           }
 
@@ -349,43 +361,72 @@ job "grafana" {
             forward_to = [prometheus.relabel.integrations_cadvisor.receiver]
           }
 
-          // discovery.docker "logs_integrations_docker" {
-          //     host             = "unix:///var/run/docker.sock"
-          //     refresh_interval = "10s"
-          // }
-          // 
-          // discovery.relabel "logs_integrations_docker" {
-          //     targets = []
+          // Docker Integration (logs)
 
-          //     rule {
-          //         target_label = "job"
-          //         replacement  = "integrations/docker"
-          //     }
+          discovery.docker "logs_integrations_docker" {
+              host             = "unix:///var/run/docker.sock"
+              refresh_interval = "10s"
+          }
+          
+          discovery.relabel "logs_integrations_docker" {
+              targets = []
 
-          //     rule {
-          //         target_label = "instance"
-          //         replacement  = "{{ env "attr.unique.hostname" }}"
-          //     }
+              rule {
+                  target_label = "job"
+                  replacement  = "integrations/docker"
+              }
 
-          //     rule {
-          //         source_labels = ["__meta_docker_container_name"]
-          //         regex         = "/(.*)"
-          //         target_label  = "container"
-          //     }
+              rule {
+                  target_label = "instance"
+                  replacement  = "{{ env "attr.unique.hostname" }}"
+              }
 
-          //     rule {
-          //         source_labels = ["__meta_docker_container_log_stream"]
-          //         target_label  = "stream"
-          //     }
-          // }
+              rule {
+                  source_labels = ["__meta_docker_container_name"]
+                  regex         = "/(.*)"
+                  target_label  = "container"
+              }
 
-          // loki.source.docker "logs_integrations_docker" {
-          //     host             = "unix:///var/run/docker.sock"
-          //     targets          = discovery.docker.logs_integrations_docker.targets
-          //     forward_to       = [loki.process.global.receiver]
-          //     relabel_rules    = discovery.relabel.logs_integrations_docker.rules
-          //     refresh_interval = "10s"
-          // }
+              rule {
+                  source_labels = ["__meta_docker_container_log_stream"]
+                  target_label  = "stream"
+              }
+
+              rule {
+                action = "labelmap"
+                regex  = "___meta_docker_container_label_com_hashicorp_nomad_(.*)"
+                replacement = "nomad_$${1}"
+              }
+          }
+
+          loki.source.docker "logs_integrations_docker" {
+              host             = "unix:///var/run/docker.sock"
+              targets          = discovery.docker.logs_integrations_docker.targets
+              forward_to       = [loki.process.docker.receiver]
+              relabel_rules    = discovery.relabel.logs_integrations_docker.rules
+              refresh_interval = "10s"
+          }
+
+          // Custom rules/stages to process logs from Docker container before sending to global process
+          loki.process "docker" {
+            forward_to = [loki.process.global.receiver]
+
+            // stage.docker {}
+
+            stage.drop {
+              source = "service_name,container"
+              expression = ".*nfs.*"
+              drop_counter_reason = "nfs"
+            }
+
+            stage.match {
+              selector = "{keep_logs!=\"true\"}"
+              action   = "drop"
+
+              drop_counter_reason = "manually_excluded"
+            }
+          }
+
 
           // Consul Discovery
           // Extract metrics from services with the "prometheus" tag
