@@ -53,6 +53,10 @@ job "vrising" {
           "game",
           "query",
         ]
+
+        labels {
+          persist_logs = "true"
+        }
       }
 
       volume_mount {
