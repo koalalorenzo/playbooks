@@ -285,7 +285,7 @@ job "grafana" {
 
             stage.drop {
               source = "level,msg"
-              expression =  ".*(trace|debug|DEBUG).*"
+              expression =  ".*(trace|debug|DEBUG|info|INFO).*"
               drop_counter_reason = "no info"
             }
 
@@ -382,7 +382,7 @@ job "grafana" {
           // loki.source.docker "logs_integrations_docker" {
           //     host             = "unix:///var/run/docker.sock"
           //     targets          = discovery.docker.logs_integrations_docker.targets
-          //     forward_to       = [loki.write.grafana_cloud_loki.receiver]
+          //     forward_to       = [loki.process.global.receiver]
           //     relabel_rules    = discovery.relabel.logs_integrations_docker.rules
           //     refresh_interval = "10s"
           // }
