@@ -185,7 +185,27 @@
     })
     
     ];
-    # end file edit
+
+    systemd.services.nomad-drain-shutdown = {
+      enable = true;
+      description = "Automatic drain the nomad client when shutting down";
+
+      serviceConfig.Type = "oneshot";
+      serviceConfig.User = "root";
+      path = with pkgs; [
+        config.services.nomad.package
+        bash
+      ];
+
+      script = ''
+        nomad node drain -enable -self -ignore-system -yes -deadline 1m
+      '';
+
+      before = ["halt.target" "shutdown.target" "reboot.target"];
+      # requisite = ["nomad.service" "tailscaled.service"];
+      wantedBy = ["halt.target" "shutdown.target" "reboot.target"];
+    };
+
   };
   # End nix config 
 }
