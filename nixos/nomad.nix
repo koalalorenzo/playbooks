@@ -28,7 +28,7 @@
 
   services.nomad = {
     enable = true;
-    package = pkgs.unstable.nomad;
+    package = pkgs.unstable.nomad_1_8;
     dropPrivileges = false;
     extraSettingsPaths = [ "/etc/nomad.d" ];
   };
