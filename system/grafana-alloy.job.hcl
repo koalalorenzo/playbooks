@@ -457,8 +457,13 @@ job "grafana" {
             forward_to = [loki.process.global.receiver]
             
             stage.match {
-              selector = "{container!~\"(traefik|restic|web-static).*\"}"
+              selector = "{container!~\"(traefik|restic|nginx).*\"}"
               action = "drop"
+            }
+
+            stage.drop {
+              source = "service_name,container"
+              expression = ".*restic-server.*"
             }
           }
 
