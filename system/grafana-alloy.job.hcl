@@ -218,7 +218,7 @@ job "grafana" {
             max_age       = "1h0m0s"
             path          = "/host/root/var/log/journal"
             relabel_rules = discovery.relabel.logs_integrations_integrations_node_exporter_journal_scrape.rules
-            forward_to    = [loki.process.journal.receiver, loki.process.journal_always.receiver]
+            forward_to    = [loki.process.journal.receiver]
           }
 
           // Disabled as in Ubuntu it is too chatty
@@ -295,50 +295,27 @@ job "grafana" {
             //     rate = 0.25
             //     drop_counter_reason = "logs_sampling"
             // }
-            
-            // Force labels
-            stage.labels {
-              values = {
-                instance = "{{ env "attr.unique.hostname" }}",
-              }
-            }
           }
 
-          // Arbritary rules to allow always the logs to be sent to global
-          loki.process "journal_always" {
-            forward_to = [loki.process.global.receiver]
-            
-            stage.match {
-              selector = "{unit!~\"(ssh|vrising-backup).*\"}"
-              action = "drop"
-            }
-          }
-          
           loki.process "journal" {
             forward_to = [loki.process.global.receiver]
 
-            stage.drop {
-              source = "level"
-              expression =  "(trace|debug|DEBUG|info|INFO)"
-              drop_counter_reason = "wrong_level"
+            // Ignore log level lower than INFO, on every service but some
+            stage.match {
+              selector = "{unit!~\"(ssh|vrising-backup).*\"}"
+              action = "keep"
+
+              stage.drop {
+                source = "level"
+                expression =  "(trace|debug|DEBUG|info|INFO)"
+                drop_counter_reason = "wrong_level"
+              }
             }
-            
-            stage.drop {
-              source = "unit,msg"
-              expression  = ".*tailscale.*"
-              drop_counter_reason = "tailscale"
-            }
-            
+
             stage.drop {
               source = "unit"
-              expression  = ".*consul.*"
-              drop_counter_reason = "consul"
-            }
-            
-            stage.drop {
-              source = "unit"
-              expression  = ".*cron.*"
-              drop_counter_reason = "cron"
+              expression  = ".*(tailscale|consul|cron).*"
+              drop_counter_reason = "silenced_services"
             }
 
             stage.drop {
@@ -447,32 +424,28 @@ job "grafana" {
           loki.source.docker "logs_integrations_docker" {
               host             = "unix:///var/run/docker.sock"
               targets          = discovery.docker.logs_integrations_docker.targets
-              forward_to       = [loki.process.docker.receiver, loki.process.docker_always.receiver]
+              forward_to       = [loki.process.docker.receiver]
               relabel_rules    = discovery.relabel.logs_integrations_docker.rules
               refresh_interval = "5s"
           }
-
-          // Arbritary rules to allow always the logs to be sent to global
-          loki.process "docker_always" {
-            forward_to = [loki.process.global.receiver]
-            
-            stage.match {
-              selector = "{container!~\"(traefik|restic|nginx).*\"}"
-              action = "drop"
-            }
-
-            stage.drop {
-              source = "service_name,container"
-              expression = ".*restic-server.*"
-            }
-          }
-
 
           // Custom rules/stages to process logs from Docker container before sending to global process
           loki.process "docker" {
             forward_to = [loki.process.global.receiver]
 
             // stage.docker {}
+
+            // Adds a perist_log="true" to traefik, restic and nginx
+            stage.match {
+              selector = "{container=~\"(traefik|restic|nginx).*\"}"
+              action = "keep"
+
+              stage.static_labels {
+                  values = {
+                    persist_logs = "true",
+                  }
+              }
+            }
 
             stage.drop {
               source = "service_name,container"
@@ -492,30 +465,14 @@ job "grafana" {
               drop_counter_reason = "generic_context_canceled"
             }
 
-            // Unity / Epic / Errors that are not useful
+            // Unity / Epic / Errors that are not useful from vrising
             stage.match {
-              selector = "{container=~\"gameserver-.*\"}"
-              drop_counter_reason = "gameserver_spam"
+              selector = "{container=~\"(gameserver|vrising).*\"}"
+              action = "keep"
 
               stage.drop {
-                source = "level"
-                expression = "(unknown|)"
-              }
-              
-              stage.drop {
-                expression = ".*Unity.Entities.*"
-              }
-
-              stage.drop {
-                expression = ".*Epic.OnlineServices.*"
-              }
-
-              stage.drop {
-                expression = ".*UnityEngine.*"
-              }
-
-              stage.drop {
-                expression = ".*ProjectM.EOS.*"
+                expression = ".*(Unity|Epic.OnlineServices|EOS|eos).*"
+                drop_counter_reason = "gameserver_spam_engine"
               }
             }
           }
