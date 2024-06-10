@@ -447,10 +447,21 @@ job "grafana" {
           loki.source.docker "logs_integrations_docker" {
               host             = "unix:///var/run/docker.sock"
               targets          = discovery.docker.logs_integrations_docker.targets
-              forward_to       = [loki.process.docker.receiver]
+              forward_to       = [loki.process.docker.receiver, loki.process.docker_always.receiver]
               relabel_rules    = discovery.relabel.logs_integrations_docker.rules
               refresh_interval = "5s"
           }
+
+          // Arbritary rules to allow always the logs to be sent to global
+          loki.process "docker_always" {
+            forward_to = [loki.process.global.receiver]
+            
+            stage.match {
+              selector = "{container!~\"(traefik|restic|web-static).*\"}"
+              action = "drop"
+            }
+          }
+
 
           // Custom rules/stages to process logs from Docker container before sending to global process
           loki.process "docker" {
