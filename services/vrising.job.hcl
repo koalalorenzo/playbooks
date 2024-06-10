@@ -41,7 +41,7 @@ job "vrising" {
       mode     = "delay"
     }
 
-    task "gameserver" {
+    task "vrising" {
       driver       = "docker"
       kill_timeout = "65s"
 
