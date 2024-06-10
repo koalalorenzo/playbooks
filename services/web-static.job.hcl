@@ -58,6 +58,10 @@ job "web-static" {
         volumes = [
           "local/default:/etc/nginx/conf.d/default.conf",
         ]
+
+        labels {
+          persist_logs = "true"
+        }
       }
 
       volume_mount {
