@@ -218,7 +218,7 @@ job "grafana" {
             max_age       = "1h0m0s"
             path          = "/host/root/var/log/journal"
             relabel_rules = discovery.relabel.logs_integrations_integrations_node_exporter_journal_scrape.rules
-            forward_to    = [loki.process.journal.receiver, loki.process.always.receiver]
+            forward_to    = [loki.process.journal.receiver, loki.process.journal_always.receiver]
           }
 
           // Disabled as in Ubuntu it is too chatty
@@ -305,7 +305,7 @@ job "grafana" {
           }
 
           // Arbritary rules to allow always the logs to be sent to global
-          loki.process "always" {
+          loki.process "journal_always" {
             forward_to = [loki.process.global.receiver]
             
             stage.match {
