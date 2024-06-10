@@ -331,6 +331,11 @@ job "grafana" {
               drop_counter_reason = "cron"
             }
 
+            stage.drop {
+              expression  = ".*UFW BLOCK.*(192.168.197.11|192.168.197.220|224.0.0.251).*"
+              drop_counter_reason = "firewall_mdns"
+            }
+
             stage.limit {
               rate  = 20 // max 20 lines per sec
               burst = 40
@@ -454,6 +459,11 @@ job "grafana" {
               action   = "drop"
 
               drop_counter_reason = "manually_excluded"
+            }
+
+            stage.drop {
+              expression = ".*context canceled.*"
+              drop_counter_reason = "generic_context_canceled"
             }
           }
 
