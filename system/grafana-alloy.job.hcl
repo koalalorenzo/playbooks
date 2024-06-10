@@ -354,6 +354,19 @@ job "grafana" {
                   target_label = "instance"
                   replacement  = "{{ env "attr.unique.hostname" }}"
               }
+
+              rule {
+                  source_labels = ["__meta_docker_container_name"]
+                  regex         = "/(.*)"
+                  target_label  = "container"
+              }
+
+              rule {
+                action = "labelmap"
+                regex  = "__meta_docker_container_label_com_hashicorp_nomad_(.*)"
+                replacement = "nomad_$${1}"
+              }
+
           }
 
           prometheus.relabel "integrations_cadvisor" {
