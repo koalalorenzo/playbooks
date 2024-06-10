@@ -1,5 +1,5 @@
 {
-	"data": "ENC[AES256_GCM,data:S2ovFnn7l3vHwXsrYt8uwlCKkqX1r0Ip0SHLwq91d9R/HN6tnDXrvRM7E+c5YtMV/ccIBPT5DJ1OU8t6bZ8al4G9KiOmxjwjyb0cxTh/Au1XRiSTrbDq5a0o4slMELf02EbE/IfG8QZBt92vem3hCTgHVQap5h0WLM54j7YDK78SuTPNu+ChoSm92E4Kf0lNfQ9N7Oy2l+QYA9kH7N9Cyq6DMlZQeytv8bGYPfjQx3Epo9YZMEso7nJIyg==,iv:50pvYj/mWqUr37MFfkJkHBApFxaPLIULjn0GD7081/A=,tag:lvVFCKerylXKivaz4UdafQ==,type:str]",
+	"data": "ENC[AES256_GCM,data:OmkPMqP1DdIj5jy/pWAaXywDvVzhu0Loba/okwTwv7ziZCH9YjKe4EP4tMsdAMqPqCePAZNyu/hr8QbciGXlqd3sL65OaAdTe/ABvortLjwF3S8UEaEt5tF4SmPx1J+v4oCkWvi7pi2sgJJuFKQfON+nugM27803D8CpIxrSORVsAJQDo3cllKTmyiQlt9lyvJ04u49OFbKPujgGjeUpPXcaeK8ENeXTRhvM7TPIq+BJ8iIHwcQ5T+qYOA==,iv:CC+ztgekSo3PKPkK6Hxe6yacmOOAYF4xeXOp19ruNdw=,tag:uNI+2RxCnZ2o69Me8fhhnQ==,type:str]",
 	"sops": {
 		"kms": null,
 		"gcp_kms": null,
@@ -23,8 +23,8 @@
 				"enc": "-----BEGIN AGE ENCRYPTED FILE-----\nYWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBFdEdaQmtYMHVjRG95OXF5\nOVdXVmc4OVMxa1BOTkNWNjlYTjBWM0w3eWpJCk5zVDRDb2JFeWQ0QWthREpISmlD\nczljYVhMNHBJeXhtVnFQb3RMdTNvWjgKLS0tIHFPeHBNZXVzS1F3TlVGS0wzdnBr\neXBJL1U0L1RHdUR1S3hmYUx0d1lQWlEKB/cPhfptf5trhgbNthQTIczOx7qo3jjB\nqg76+di+91iyGmDjv8iQKqOwDabffqki2pdwn78WgT5d7Rt2zZUGyA==\n-----END AGE ENCRYPTED FILE-----\n"
 			}
 		],
-		"lastmodified": "2024-06-09T18:45:59Z",
-		"mac": "ENC[AES256_GCM,data:azxM3He5SbnnsC+L1Ron+CMzEmbpLfdTS5EHyHSvM2mEMoSophLrs8tpz1CRVr8Bm6ZsnYvDZj7qdkKv+JdAF5lLXsDWSAa6B4pI0BRpcPq3ozUWU7XPIWkjzJW+ouef09DBfvqT49NO8H98v1oDTuAd9Lrb55oTKkf36vj4R5w=,iv:b4J0SKbqjjIIdRBgDikJ7R1ckmKnNdPra/nGxGecNZI=,tag:Kxuc/nMBfX5GGyUa+SLH/A==,type:str]",
+		"lastmodified": "2024-06-10T10:23:34Z",
+		"mac": "ENC[AES256_GCM,data:LlBOpEDos1O3m1LKxfwwQclPsE+KB9RolPIE+o5ytoQ9BunZOdu9Ya4t96xQYLf6HMrnuUJRHydXEt/RbjWHsMeN9nnsS89kW8H1BRxv8yVXojznqY/z3IfS3U1V8vnryBsaZWZnvO+aA/44DGET6EOHNxqbQMV1LnbdC2q+U8g=,iv:JqAIf2/mf5mor3GY2SHx57YB5XKW2Df1s7DVkbiWLgY=,tag:P0U6+MFnM1MTWU/KsuSl3w==,type:str]",
 		"pgp": [
 			{
 				"created_at": "2024-06-09T18:43:26Z",
@@ -33,6 +33,6 @@
 			}
 		],
 		"unencrypted_suffix": "_unencrypted",
-		"version": "3.7.3"
+		"version": "3.8.1"
 	}
 }
