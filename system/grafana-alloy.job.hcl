@@ -465,6 +465,33 @@ job "grafana" {
               expression = ".*context canceled.*"
               drop_counter_reason = "generic_context_canceled"
             }
+
+            // Unity / Epic / Errors that are not useful
+            stage.match {
+              selector = "{container=~\"gameserver-.*\"}"
+              drop_counter_reason = "gameserver_spam"
+
+              stage.drop {
+                source = "level"
+                expression = "(unknown|)"
+              }
+              
+              stage.drop {
+                expression = ".*Unity.Entities.*"
+              }
+
+              stage.drop {
+                expression = ".*Epic.OnlineServices.*"
+              }
+
+              stage.drop {
+                expression = ".*UnityEngine.*"
+              }
+
+              stage.drop {
+                expression = ".*ProjectM.EOS.*"
+              }
+            }
           }
 
 
