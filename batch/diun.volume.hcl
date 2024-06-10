@@ -18,5 +18,5 @@ parameters {
 
 mount_options {
   fs_type     = "nfs"
-  mount_flags = ["timeo=600", "hard", "intr", "nolock"]
+  mount_flags = ["timeo=600", "hard", "nolock"]
 }
