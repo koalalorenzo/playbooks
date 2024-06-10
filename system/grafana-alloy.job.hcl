@@ -73,6 +73,7 @@ job "grafana" {
           "/proc:/host/proc:ro,rslave",
           "/run:/host/run:ro,rslave",
           "/:/host/root:ro,rslave",
+          "/tmp/alloy:/var/lib/alloy/data",
         ]
 
         labels {
@@ -274,6 +275,7 @@ job "grafana" {
           // Custom Loki process rules
           loki.echo "debug" {}
 
+          // Global Process rules
           loki.process "global" {
             forward_to = [loki.write.grafana_cloud_loki.receiver]
             
@@ -366,7 +368,6 @@ job "grafana" {
                 regex  = "__meta_docker_container_label_com_hashicorp_nomad_(.*)"
                 replacement = "nomad_$${1}"
               }
-
           }
 
           prometheus.relabel "integrations_cadvisor" {
@@ -388,7 +389,7 @@ job "grafana" {
 
           discovery.docker "logs_integrations_docker" {
               host             = "unix:///var/run/docker.sock"
-              refresh_interval = "10s"
+              refresh_interval = "5s"
           }
           
           discovery.relabel "logs_integrations_docker" {
@@ -433,7 +434,7 @@ job "grafana" {
               targets          = discovery.docker.logs_integrations_docker.targets
               forward_to       = [loki.process.docker.receiver]
               relabel_rules    = discovery.relabel.logs_integrations_docker.rules
-              refresh_interval = "10s"
+              refresh_interval = "5s"
           }
 
           // Custom rules/stages to process logs from Docker container before sending to global process
