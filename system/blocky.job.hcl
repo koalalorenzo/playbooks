@@ -94,6 +94,11 @@ job "blocky" {
         labels {
           persist_logs = "true"
         }
+
+        # Disable docker's healthcheck as we change the port
+        healthchecks {
+          disable = true
+        }
       }
 
       template {
