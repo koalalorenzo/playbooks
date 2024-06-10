@@ -40,6 +40,7 @@ job "restic-server" {
         "traefik.enable=true",
         "traefik.http.routers.resticserver.rule=Host(`restic.elates.it`)",
         "traefik.http.routers.resticserver.tls.certresolver=letsencrypt",
+        "prometheus",
       ]
 
     }
@@ -53,13 +54,18 @@ job "restic-server" {
       config {
         image = "restic/rest-server"
         ports = ["http"]
+
+      labels {
+          persist_logs = "true"
+        }
       }
+
       template {
         destination = "${NOMAD_SECRETS_DIR}/env.vars"
         env         = true
         change_mode = "restart"
         data        = <<EOF
-          OPTIONS="--prometheus --debug --no-auth --listen=:{{ env "NOMAD_PORT_http" }}"
+          OPTIONS="--prometheus --prometheus-no-auth --no-auth --listen=:{{ env "NOMAD_PORT_http" }}"
         EOF
       }
 
