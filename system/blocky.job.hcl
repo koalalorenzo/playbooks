@@ -45,7 +45,7 @@ job "blocky" {
         name     = "blocky-http"
         type     = "http"
         path     = "/api/blocking/status"
-        interval = "10s"
+        interval = "30s"
         timeout  = "5s"
 
         success_before_passing   = 1
@@ -71,11 +71,16 @@ job "blocky" {
       check {
         name     = "blicky-dns"
         type     = "tcp"
-        interval = "10s"
+        interval = "20s"
         timeout  = "2s"
 
         success_before_passing   = 1
         failures_before_critical = 3
+
+        check_restart {
+          limit = 3
+          grace = "30s"
+        }
       }
     }
 
@@ -331,8 +336,8 @@ EOF
   update {
     max_parallel     = 1
     canary           = 1
-    min_healthy_time = "60s"
-    healthy_deadline = "2m"
+    min_healthy_time = "1m"
+    healthy_deadline = "3m"
     auto_revert      = true
     auto_promote     = true
   }
@@ -341,7 +346,7 @@ EOF
   migrate {
     max_parallel     = 1
     health_check     = "checks"
-    min_healthy_time = "30s"
-    healthy_deadline = "2m"
+    min_healthy_time = "1m"
+    healthy_deadline = "3m"
   }
 }
