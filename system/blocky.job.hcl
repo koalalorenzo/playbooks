@@ -172,23 +172,31 @@ blocking:
     ads: *generic_white_list
     malware: *generic_white_list
   denylists:
+    # Some source: https://github.com/blocklistproject/Lists?tab=readme-ov-file#usage
     suspicious:
-      - https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
-      - https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
+      - https://blocklistproject.github.io/Lists/basic.txt
+      - https://blocklistproject.github.io/Lists/drugs.txt
+      - https://blocklistproject.github.io/Lists/fraud.txt
+      - https://blocklistproject.github.io/Lists/gambling.txt
+      - https://blocklistproject.github.io/Lists/phishing.txt
+      - https://blocklistproject.github.io/Lists/scam.txt
+      - https://blocklistproject.github.io/Lists/smart-tv.txt
+      - https://blocklistproject.github.io/Lists/tiktok.txt
       - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
-      - https://v.firebog.net/hosts/static/w3kbl.txt
       - https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
       - https://v.firebog.net/hosts/neohostsbasic.txt
+      - https://v.firebog.net/hosts/static/w3kbl.txt
     ads:
       - https://adaway.org/hosts.txt
-      - https://v.firebog.net/hosts/Admiral.txt
-      - https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
-      - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
-      - https://v.firebog.net/hosts/Easylist.txt
+      - https://blocklistproject.github.io/Lists/ads.txt
       - https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
       - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
+      - https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
       - https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts
       - https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts
+      - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+      - https://v.firebog.net/hosts/Admiral.txt
+      - https://v.firebog.net/hosts/Easylist.txt
       - https://v.firebog.net/hosts/Easyprivacy.txt
       - https://v.firebog.net/hosts/Prigent-Ads.txt
       - |
@@ -199,16 +207,30 @@ blocking:
         /static.media.net/
         /adservetx.media.net/
         /adc3-launch.adcolony.com/
+    piracy:
+      - https://blocklistproject.github.io/Lists/piracy.txt
+      - https://blocklistproject.github.io/Lists/torrent.txt
+      - https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
+      - |
+        /braflix/
+        /broflix/
+        /fmoviesz.to/
+        /binged.in/
+        /braflix.video/
+        /braflix.co/
+        /moviesjoy.is/
     tracking:
-      - https://small.oisd.nl/domainswild
-      - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
-      - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
-      - https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
-      - https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
-      - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/android-tracking.txt
-      - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt
-      - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/AmazonFireTV.txt
+      - https://blocklistproject.github.io/Lists/tracking.txt
+      - https://blocklistproject.github.io/Lists/adobe.txt
       - https://gist.githubusercontent.com/eterps/9ddb13a118a21a7d9c12c6165e0bbff5/raw/0ba4b04802a4b478d7777fb7abe76c8eac0c5bfc/Samsung%2520Smart-TV%2520Blocklist%2520Adlist%2520(for%2520PiHole)
+      - https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
+      - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
+      - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/AmazonFireTV.txt
+      - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV.txt
+      - https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/android-tracking.txt
+      - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+      - https://small.oisd.nl/domainswild
+      - https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt
       - |
         /realme.com/
         /mouseflow.com/
@@ -242,8 +264,9 @@ blocking:
       - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
       - https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
       - https://phishing.army/download/phishing_army_blocklist_extended.txt
-      - https://v.firebog.net/hosts/RPiList-Malware.txt
-      - https://v.firebog.net/hosts/RPiList-Phishing.txt
+      - https://blocklistproject.github.io/Lists/malware.txt
+      - https://blocklistproject.github.io/Lists/ransomware.txt
+
   clientGroupsBlock:
     default:
       - ads
