@@ -94,7 +94,7 @@ job "blocky" {
         force_pull  = false
         volumes     = ["local/config.yml:/app/config.yml"]
         ports       = ["http", "dns"]
-        dns_servers = ["1.1.1.1", "1.0.0.1"]
+        dns_servers = ["1.1.1.2", "1.0.0.1"]
 
         labels {
           persist_logs = "true"
