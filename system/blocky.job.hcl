@@ -176,24 +176,25 @@ blocking:
         /calendar.google.com/
     ads: *generic_white_list
     malware: *generic_white_list
+    suspicious: *generic_white_list
+    piracy: *generic_white_list
   denylists:
     # Some source: https://github.com/blocklistproject/Lists?tab=readme-ov-file#usage
     suspicious:
-      - https://blocklistproject.github.io/Lists/basic.txt
-      - https://blocklistproject.github.io/Lists/drugs.txt
-      - https://blocklistproject.github.io/Lists/fraud.txt
-      - https://blocklistproject.github.io/Lists/gambling.txt
-      - https://blocklistproject.github.io/Lists/phishing.txt
-      - https://blocklistproject.github.io/Lists/scam.txt
-      - https://blocklistproject.github.io/Lists/smart-tv.txt
-      - https://blocklistproject.github.io/Lists/tiktok.txt
+      - https://blocklistproject.github.io/Lists/alt-version/abuse-nl.txt
+      - https://blocklistproject.github.io/Lists/alt-version/drugs-nl.txt
+      - https://blocklistproject.github.io/Lists/alt-version/fraud-nl.txt
+      - https://blocklistproject.github.io/Lists/alt-version/gambling-nl.txt
+      - https://blocklistproject.github.io/Lists/alt-version/scam-nl.txt
+      - https://blocklistproject.github.io/Lists/alt-version/vaping-nl.txt
       - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts
       - https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
       - https://v.firebog.net/hosts/neohostsbasic.txt
       - https://v.firebog.net/hosts/static/w3kbl.txt
     ads:
       - https://adaway.org/hosts.txt
-      - https://blocklistproject.github.io/Lists/ads.txt
+      - https://blocklistproject.github.io/Lists/alt-version/ads-nl.txt
+      - https://blocklistproject.github.io/Lists/alt-version/smart-tv-nl.txt
       - https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
       - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts
       - https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt
@@ -213,8 +214,8 @@ blocking:
         /adservetx.media.net/
         /adc3-launch.adcolony.com/
     piracy:
-      - https://blocklistproject.github.io/Lists/piracy.txt
-      - https://blocklistproject.github.io/Lists/torrent.txt
+      - https://blocklistproject.github.io/Lists/alt-version/piracy-nl.txt
+      - https://blocklistproject.github.io/Lists/alt-version/torrent-nl.txt
       - https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt
       - |
         /braflix/
@@ -223,10 +224,10 @@ blocking:
         /binged.in/
         /braflix.video/
         /braflix.co/
+        /braflix.so/
         /moviesjoy.is/
     tracking:
-      - https://blocklistproject.github.io/Lists/tracking.txt
-      - https://blocklistproject.github.io/Lists/adobe.txt
+      - https://blocklistproject.github.io/Lists/alt-version/tracking-nl.txt
       - https://gist.githubusercontent.com/eterps/9ddb13a118a21a7d9c12c6165e0bbff5/raw/0ba4b04802a4b478d7777fb7abe76c8eac0c5bfc/Samsung%2520Smart-TV%2520Blocklist%2520Adlist%2520(for%2520PiHole)
       - https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt
       - https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts
@@ -265,17 +266,18 @@ blocking:
         /intercom.io/
         /samsungqbe.com/
     malware:
-      - https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt
+      - https://blocklistproject.github.io/Lists/alt-version/malware-nl.txt
+      - https://blocklistproject.github.io/Lists/alt-version/phishing-nl.txt
+      - https://blocklistproject.github.io/Lists/alt-version/ransomware-nl.txt
       - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
-      - https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
       - https://phishing.army/download/phishing_army_blocklist_extended.txt
-      - https://blocklistproject.github.io/Lists/malware.txt
-      - https://blocklistproject.github.io/Lists/ransomware.txt
+      - https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
 
   clientGroupsBlock:
     default:
       - ads
       - suspicious
+      - piracy
       - tracking
       - malware
 caching:
