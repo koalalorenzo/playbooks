@@ -25,7 +25,7 @@ job "blocky" {
     }
 
     network {
-      dns { servers = ["1.1.1.1", "1.0.0.1"] }
+      dns { servers = ["1.1.1.2", "1.0.0.1"] }
       port "http" {}
       port "dns" {}
     }
@@ -120,7 +120,7 @@ upstreams:
       - https://dns.nextdns.io/8bdcc5
 bootstrapDns:
   - https://9.9.9.9/dns-query
-  - https://1.1.1.1/dns-query
+  - https://1.1.1.2/dns-query
 ports:
   dns: {{ env `NOMAD_PORT_dns` }}
   http: {{ env `NOMAD_PORT_http` }}
@@ -129,9 +129,9 @@ blocking:
     strategy: fast
     concurrency: 2
     refreshPeriod: 12h
-    maxErrorsPerSource: 10
+    maxErrorsPerSource: 5
     downloads:
-      cooldown: 5s
+      cooldown: 15s
       timeout: 1m
       attempts: 5
   blockType: nxDomain
