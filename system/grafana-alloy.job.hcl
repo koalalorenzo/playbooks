@@ -492,8 +492,40 @@ job "grafana" {
                 enabled = true
             }
 
-            targets    = discovery.consul.consul_discovery.targets
+            targets    = discovery.relabel.consul_discovery.output
             forward_to = [prometheus.remote_write.metrics_service.receiver]
+          }
+
+          discovery.relabel "consul_discovery" {
+          	targets = discovery.consul.consul_discovery.targets
+
+          	rule {
+          		target_label = "instance"
+          		replacement  = "{{ env `attr.unique.hostname` }}"
+          	}
+
+        	  rule {
+                source_labels = ["__meta_docker_container_name"]
+                regex         = "/(.*)"
+                target_label  = "container"
+            }
+
+            rule {
+              action = "labelmap"
+              regex  = "__meta_docker_container_label_com_hashicorp_nomad_(.*)"
+              replacement = "nomad_$${1}"
+            }
+
+            rule {
+              action = "labelmap"
+              regex  = "__meta_docker_container_label_persist_logs"
+              replacement = "persist_logs"
+            }
+
+          	rule {
+          		target_label = "job"
+          		replacement  = "integrations/consul_discovery"
+          	}
           }
 
           // Consul Integration
