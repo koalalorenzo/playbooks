@@ -53,9 +53,10 @@ find . -type f -name "*.sops.*" -print -exec sops updatekeys {} -y \;
 
 ## Install on NixOS
 
-Add the following channels, by running these commands as root:
+Add the following channels, by running these commands as **root**:
 ```bash
 nix-channel --add https://github.com/NixOS/nixos-hardware/archive/master.tar.gz nixos-hardware
+nix-channel --add https://github.com/nix-community/home-manager/archive/release-24.05.tar.gz home-manager
 nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
 nix-channel --add https://nixos.org/channels/nixos-24.05 nixos
 nix-channel --update

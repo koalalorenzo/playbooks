@@ -1,29 +1,40 @@
-ANSIBLE_ARGS ?=-K
-
-PLAYBOOKS := $(wildcard *.yaml)
-ALL_PLAYBOOKS := $(wildcard */*.yaml)
-
-ANSIBLE_CONFIG=facts.cfg
-
 # Add some caffeine to prevent sleep while running
 ifeq ($(shell uname -s),Darwin)
 SHELL := caffeinate -i bash
 endif
 
-deps:
-	# Disabled datadog as we don't use it anymore
-	# ansible-galaxy install datadog.datadog
-	ansible-galaxy collection install community.sops
-	ansible-galaxy collection install community.dns
-.PHONY: deps
+################################################################################
+# NixOS
+################################################################################
+NIXOS_HOSTS := compute0 compute1 compute2
 
-$(ALL_PLAYBOOKS) $(PLAYBOOKS): deps
-	ansible-playbook -i ./inventory.yml $@ ${ANSIBLE_ARGS}
-.PHONY: $(ALL_PLAYBOOKS) $(PLAYBOOKS)
+nixos-config-sync_%:
+	rsync -avzh --delete --progress --partial-dir=".rsync-partial" \
+		--exclude "hardware-configuration.nix" \
+		--exclude "configuration.nix" \
+		nixos $*:/etc/
 
-all: deps
-	ansible-playbook -i ./inventory.yml $(PLAYBOOKS) common/reboot-uptime.yaml ${ANSIBLE_ARGS}
-.PHONY: all
+nixos-config-sync:
+	$(foreach var,$(NIXOS_HOSTS),$(MAKE) nixos-config-sync_$(var) || exit 1;)
+.PHONY: nixos-config-sync
+
+nixos-channel-update_%:
+	ssh $* sudo nix-channel --update
+
+nixos-channel-update:
+	$(foreach var,$(NIXOS_HOSTS),$(MAKE) nixos-rebuild_$(var) || exit 1;)
+.PHONY: nixos-channel-update
+
+nixos-rebuild_%:
+	ssh $* sudo nixos-rebuild boot --upgrade-all
+
+nixos-rebuild: nixos-channel-update
+	$(foreach var,$(NIXOS_HOSTS),$(MAKE) nixos-rebuild_$(var) || exit 1;)
+.PHONY: nixos-rebuild
+
+$(NIXOS_HOSTS):
+	$(MAKE) nixos-channel-update_$@ nixos-config-sync_$@ nixos-rebuild_$@
+.PHONY: $(NIXOS_HOSTS)
 
 ################################################################################
 # Nomad
