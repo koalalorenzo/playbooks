@@ -1,5 +1,7 @@
-{ config, lib, pkgs, networking, ... }:
+{ config, lib, pkgs, system, networking, ... }:
 {
+  imports = [ <home-manager/nixos> ];
+
   # Enables flaeks:
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
@@ -71,9 +73,7 @@
     iperf
     mailutils
     mosh
-    python3 # Ansible requires it
     retry
-    service-wrapper
     tmux
     vim
     zfs
@@ -87,6 +87,43 @@
       ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNkwS8ZkLWgSZh9o4y1Y+Wa07d251UQAX4u6V1DWRNk''
       ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIElGbiLlkcIihAz0Qix1lwHHunNr1c32PVNiVQn66fmC koalalorenzo@storage0''
     ];
+  };
+
+  home-manager.users.koalalorenzo = { pkgs, ... }: {
+    home.stateVersion = "24.05";
+    programs.zsh = {
+      enable = true;
+      oh-my-zsh = { 
+        enable = true;
+        plugins = ["git" "sudo" "nix-shell"];
+        theme = "robyrussel";
+      };
+    };
+
+    programs.atuin = {
+      enable = true;
+      enableZshIntegration = true;
+      
+      settings = {
+        auto_sync = true;
+        sync_frequency = "5m";
+        sync_address = "https://atuin.elates.it";
+        keymap_mode = "auto";
+        exit_mode = "return-query";
+        filter_mode = "host";
+        
+        sync = {
+          records = true;
+        };
+        
+        dotfiles = {
+          enabled = false;
+        };
+      };
+    };
+
+    # Let Home Manager install and manage itself.
+    programs.home-manager.enable = true;
   };
 
   users.users.root.openssh.authorizedKeys.keys = lib.mkForce [''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNkwS8ZkLWgSZh9o4y1Y+Wa07d251UQAX4u6V1DWRNk'' ];
