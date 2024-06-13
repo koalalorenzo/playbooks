@@ -19,21 +19,21 @@ nixos-config-sync:
 .PHONY: nixos-config-sync
 
 nixos-channel-update_%:
-	ssh $* sudo nix-channel --update
+	ssh $* sudo /etc/nixos/tools/set-channels.sh
 
 nixos-channel-update:
-	$(foreach var,$(NIXOS_HOSTS),$(MAKE) nixos-rebuild_$(var) || exit 1;)
+	$(foreach var,$(NIXOS_HOSTS),$(MAKE) nixos-channel-update_$(var) || exit 1;)
 .PHONY: nixos-channel-update
 
 nixos-rebuild_%:
-	ssh $* sudo nixos-rebuild boot --upgrade-all
+	ssh $* sudo tmux new-session -d -s on-boot 'bash nixos-rebuild boot --upgrade-all'
 
 nixos-rebuild: nixos-channel-update
 	$(foreach var,$(NIXOS_HOSTS),$(MAKE) nixos-rebuild_$(var) || exit 1;)
 .PHONY: nixos-rebuild
 
 $(NIXOS_HOSTS):
-	$(MAKE) nixos-channel-update_$@ nixos-config-sync_$@ nixos-rebuild_$@
+	$(MAKE) nixos-config-sync_$@ nixos-channel-update_$@  nixos-rebuild_$@
 .PHONY: $(NIXOS_HOSTS)
 
 ################################################################################
