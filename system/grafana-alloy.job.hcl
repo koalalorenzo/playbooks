@@ -291,12 +291,6 @@ job "grafana" {
               drop_counter_reason = "too_long"
             }
 
-            stage.drop {
-              source = "msg"
-              expression = "^[\t\n\f\r ]*$"
-              drop_counter_reason = "empty_line"
-            }
-
             // stage.sampling {
             //     rate = 0.25
             //     drop_counter_reason = "logs_sampling"
