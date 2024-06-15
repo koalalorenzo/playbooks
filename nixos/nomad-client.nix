@@ -32,16 +32,15 @@
   config = {
     # Install packages
     environment.systemPackages = with pkgs; [
+      # podman
       bzip2
-      gnupg
-      wget
       curl
+      docker
       gnupg
       nfs-utils
+      moreutils
       retry
-      # podman
-      docker
-      docker-compose
+      wget
     ];
 
     boot.kernel.sysctl = with boot; { 
@@ -103,6 +102,18 @@
     virtualisation.cri-o.enable = true;
     virtualisation.containers.enable = true;
     services.nomad.enableDocker = true;
+    services.nomad.extraPackages = with pkgs; [
+      bash
+      curl
+      wget
+      bzip2
+      gzip
+      moreutils
+
+      docker
+      cni-plugins
+      libcgroup
+    ];
 
     environment.etc = lib.mkMerge [{
       "nomad.d/client.hcl" = {
