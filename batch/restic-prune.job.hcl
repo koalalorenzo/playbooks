@@ -12,6 +12,13 @@ job "restic-prune" {
     unlimited = false
   }
 
+  affinity {
+    attribute = node.class
+    value     = "storage"
+    weight    = 75
+  }
+
+
   group "restic" {
     task "restic" {
       driver       = "raw_exec"
