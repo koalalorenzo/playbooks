@@ -14,6 +14,10 @@
     # ./nomad-client.nix
     # ./nomad-server.nix
 
+    # Other stuff
+    # <nixpkgs/nixos/modules/virtualisation/qemu-vm.nix> # Running in qemu?
+    # ./builder.nix # Builder?
+
     # Sops encryption
     "${builtins.fetchTarball {
       url = "https://github.com/Mic92/sops-nix/archive/master.tar.gz";
