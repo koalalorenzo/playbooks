@@ -9,7 +9,7 @@
   };
 
   config = {
-    networking.hostName = lib.mkDefault "builder";
+    networking.hostName = lib.mkDefault "nixos-builder";
 
     nix.settings = {
       experimental-features = [ "nix-command flakes" ];
@@ -57,13 +57,31 @@
       };
     };
 
+    # Automatic login at the console
+    services.getty.autologinUser = "builder";
+
     nix.sshServe = {
       enable = true;
       write = true;
       keys = config.homelab.authorized_keys;
     };
 
+    networking.networkmanager.enable = true;
     networking.firewall.allowedTCPPorts = [ 22 ];
+    # Avahi mdns local discovery
+    services.avahi = {
+        enable = true;
+        nssmdns4 = true;
+        nssmdns6 = false;
+        publish = {
+          enable = true;
+          addresses = true;
+          domain = true;
+          hinfo = true;
+          userServices = true;
+          workstation = true;
+        };
+    };
  
     environment.variables.EDITOR = "hx";
     environment.systemPackages = with pkgs; [
