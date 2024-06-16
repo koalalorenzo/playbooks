@@ -30,6 +30,9 @@
   };
 
   config = {
+    # Reduce to max 1 job to not stress the system
+    nix.settings.max-jobs = 1;
+
     # Install packages
     environment.systemPackages = with pkgs; [
       # podman
