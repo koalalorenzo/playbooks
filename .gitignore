@@ -2,3 +2,5 @@
 *.inventory
 .vscode
 .direnv/
+result/
+nixos.qcow2
