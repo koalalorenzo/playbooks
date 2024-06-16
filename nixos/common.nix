@@ -48,6 +48,12 @@
 
   # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
+  networking.timeServers = [
+    "0.dk.pool.ntp.org"
+    "1.dk.pool.ntp.org"
+    "2.dk.pool.ntp.org"
+    "3.dk.pool.ntp.org"
+  ];
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
