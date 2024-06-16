@@ -159,12 +159,14 @@
 
     secrets."ssh_keys/builder" = {
       owner = "root";
-      mode = "0644";
+      group = "adm";
+      mode = "0600";
       sopsFile = ./secrets/builder.sops.yaml;
     };
 
     secrets."ssh_keys/builder.pub" = {
       owner = "root";
+      group = "adm";
       mode = "0644";
       sopsFile = ./secrets/builder.sops.yaml;
     };
