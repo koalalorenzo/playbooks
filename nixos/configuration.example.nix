@@ -42,6 +42,11 @@
   ## Boot GRUB
   # boot.loader.grub.device = "nodev";
 
+  ## Homelab authorized keys:
+  homelab.authorized_keys = [
+    ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNkwS8ZkLWgSZh9o4y1Y+Wa07d251UQAX4u6V1DWRNk koalalorenzo@Lorenzos-MBP''
+  ];
+  
   ## Homelab options:
   # homelab.nomad = {
   #  node_class = "compute";
