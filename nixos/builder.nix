@@ -53,7 +53,10 @@
       builder = {
         isNormalUser = true;
         extraGroups = [ "wheel" ];
-        openssh.authorizedKeys.keys = config.homelab.authorized_keys;
+        openssh.authorizedKeys.keys = lib.mkMerge [
+          config.homelab.authorized_keys
+          [''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDrBQxkAWqTW7Wz+2HE9bA4yauFJ7/FgLRSpPHbabQ1E builder@nixos-builder'']
+        ];
       };
     };
 
