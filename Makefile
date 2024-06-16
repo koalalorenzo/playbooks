@@ -6,27 +6,29 @@ endif
 ################################################################################
 # NixOS
 ################################################################################
-NIXOS_HOSTS := compute0 compute1 compute2
+NIXOS_HOSTS ?= compute0 compute1 compute2
+NIXOS_ETC_PATH ?= /etc/
+SSH_USER_PREFIX ?=
 
 nixos-config-sync_%:
 	rsync -avzh --delete --progress --partial-dir=".rsync-partial" \
 		--exclude "hardware-configuration.nix" \
 		--exclude "configuration.nix" \
-		nixos $*:/etc/
+		nixos ${SSH_USER_PREFIX}$*:${NIXOS_ETC_PATH}
 
 nixos-config-sync:
 	$(foreach var,$(NIXOS_HOSTS),$(MAKE) nixos-config-sync_$(var) || exit 1;)
 .PHONY: nixos-config-sync
 
 nixos-channel-update_%:
-	ssh $* sudo /etc/nixos/tools/set-channels.sh
+	ssh ${SSH_USER_PREFIX}$* sudo ${NIXOS_ETC_PATH}/nixos/tools/set-channels.sh
 
 nixos-channel-update:
 	$(foreach var,$(NIXOS_HOSTS),$(MAKE) nixos-channel-update_$(var) || exit 1;)
 .PHONY: nixos-channel-update
 
 nixos-rebuild_%:
-	ssh $* sudo tmux new-session -d -s on-boot 'bash nixos-rebuild boot --upgrade-all'
+	ssh ${SSH_USER_PREFIX}$* sudo nixos-rebuild boot --upgrade-all
 
 nixos-rebuild: nixos-channel-update
 	$(foreach var,$(NIXOS_HOSTS),$(MAKE) nixos-rebuild_$(var) || exit 1;)
