@@ -28,7 +28,7 @@ nixos-channel-update:
 .PHONY: nixos-channel-update
 
 nixos-rebuild_%:
-	ssh ${SSH_USER_PREFIX}$* sudo nixos-rebuild boot --upgrade-all
+	ssh ${SSH_USER_PREFIX}$* sudo nixos-rebuild boot --upgrade-all -j0
 
 nixos-rebuild: nixos-channel-update
 	$(foreach var,$(NIXOS_HOSTS),$(MAKE) nixos-rebuild_$(var) || exit 1;)

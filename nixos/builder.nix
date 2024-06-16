@@ -36,6 +36,8 @@
 
     nix.settings.trusted-users = [ "builder" "nix-ssh" "@wheel" ];
     nix.settings.system-features = [ "kvm" "benchmark" "nixos-test" "big-parallel" ];
+    nix.settings.max-jobs = 4; # Max 4 jobs
+    nix.settings.cores = 0; # Use all available
 
     security.sudo.wheelNeedsPassword = false;
 
