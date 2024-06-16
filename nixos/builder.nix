@@ -35,7 +35,7 @@
     time.timeZone = "Europe/Copenhagen";
 
     nix.settings.trusted-users = [ "builder" "nix-ssh" "@wheel" ];
-    nix.settings.system-features = [ "kvm" "nixos-test" "big-parallel" ];
+    nix.settings.system-features = [ "kvm" "benchmark" "nixos-test" "big-parallel" ];
 
     security.sudo.wheelNeedsPassword = false;
 

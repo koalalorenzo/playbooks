@@ -1,26 +1,48 @@
-{ config, lib, pkgs, system, networking, ... }:
+{ config, lib, pkgs, system, sops, networking, ... }:
 {
   imports = [ <home-manager/nixos> ];
 
-  # Enables flaeks:
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix = {
+    distributedBuilds = true;
+    extraOptions = ''
+      builders-use-substitutes = true
+      # Free 2GB when 1024 GB are free
+      min-free = ${toString (1024 * 1024 * 1024)}
+      max-free = ${toString (2048 * 1024 * 1024)}
+    '';
 
-  # Sets up garbage collector
-  nix.gc = {
-    automatic = true;
-    dates = "monthly";
-    options = "--delete-older-than 30d";
+    # Optionally disable local building
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      # max-jobs = 0;
+    };
+
+    buildMachines = [ 
+      {
+        hostName = "nixos-builder.local";
+        sshUser = "builder";
+        sshKey = "/run/secrets/ssh_keys/builder";
+        system = "aarch64-linux";
+        maxJobs = 2;
+        speedFactor = 2;
+        # Supported features is badly documented, important to add these, 
+        # otherwise many big packages will still get build locally.
+        supportedFeatures = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+        mandatoryFeatures = [ ];
+      }
+    ];
+
+    # Sets up garbage collector
+    gc = {
+      automatic = true;
+      dates = "monthly";
+      options = "--delete-older-than 30d";
+    };
+
+    # Optimize automatically
+    optimise.automatic = true;
+    optimise.dates = [ "weekly" ];
   };
-
-  # Free 2GB when 1024 GB are free
-  nix.extraOptions = ''
-    min-free = ${toString (1024 * 1024 * 1024)}
-    max-free = ${toString (2048 * 1024 * 1024)}
-  '';
-
-  # Optimize automatically
-  nix.optimise.automatic = true;
-  nix.optimise.dates = [ "weekly" ];
 
   nixpkgs.config.allowUnfree = true;
 
@@ -131,4 +153,20 @@
   boot.tmp.cleanOnBoot = true;
 
   environment.variables.EDITOR = "hx";
+
+  sops = {
+    age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+
+    secrets."ssh_keys/builder" = {
+      owner = "root";
+      mode = "0644";
+      sopsFile = ./secrets/builder.sops.yaml;
+    };
+
+    secrets."ssh_keys/builder.pub" = {
+      owner = "root";
+      mode = "0644";
+      sopsFile = ./secrets/builder.sops.yaml;
+    };
+  };
 }
