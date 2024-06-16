@@ -1,0 +1,79 @@
+{ config, pkgs, lib, ... }:
+{
+  options = {
+    homelab.authorized_keys = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      description = "List of public SSH keys to authorized";
+      default = [];
+    };
+  };
+
+  config = {
+    networking.hostName = lib.mkDefault "builder";
+
+    nix.settings = {
+      experimental-features = [ "nix-command flakes" ];
+      auto-optimise-store = true;
+    };
+
+    # Free 4GB when 2GB are left free
+    nix.extraOptions = ''
+      min-free = ${toString (2048 * 1024 * 1024)}
+      max-free = ${toString (4096 * 1024 * 1024)}
+    '';
+
+    nixpkgs.config.allowUnfree = true;
+
+    documentation.doc.enable = false;
+    documentation.man.enable = false;
+    documentation.nixos.enable = false;
+    documentation.info.enable = false;
+
+    boot.tmp.cleanOnBoot = true;
+
+    i18n.defaultLocale = "en_US.UTF-8";
+    time.timeZone = "Europe/Copenhagen";
+
+    nix.settings.trusted-users = [ "builder" "nix-ssh" "@wheel" ];
+    nix.settings.system-features = [ "kvm" "nixos-test" "big-parallel" ];
+
+    security.sudo.wheelNeedsPassword = false;
+
+    services.openssh = {
+      enable = true;
+      settings = {
+        PermitRootLogin = "no";
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+      };
+    };
+
+    users.users = {
+      root.hashedPassword = "!"; # Disable root login
+      builder = {
+        isNormalUser = true;
+        extraGroups = [ "wheel" ];
+        openssh.authorizedKeys.keys = config.homelab.authorized_keys;
+      };
+    };
+
+    nix.sshServe = {
+      enable = true;
+      write = true;
+      keys = config.homelab.authorized_keys;
+    };
+
+    networking.firewall.allowedTCPPorts = [ 22 ];
+ 
+    environment.variables.EDITOR = "hx";
+    environment.systemPackages = with pkgs; [
+      curl
+      git
+      gnupg
+      helix
+      htop
+      iotop
+      tmux
+    ];
+  }; # end nix config
+}
