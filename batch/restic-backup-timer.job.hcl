@@ -9,9 +9,15 @@ job "restic-backup-timer" {
     prohibit_overlap = true
   }
 
+  affinity {
+    attribute = node.class
+    value     = "compute"
+    weight    = "90"
+  }
+
   group "trigger" {
     task "script" {
-      driver       = "raw_exec"
+      driver       = "exec"
 
       config {
         command = "/bin/bash"
@@ -25,13 +31,12 @@ job "restic-backup-timer" {
         perms         = "0755"
 
         data = <<EOF
-          #!/bin/bash
+          #! /usr/bin/env nix-shell
+          #! nix-shell -p bash coreutils nomad -i bash
           set -eux
 
           # Run Backups
-          nomad job dispatch -meta path_to_backup="/main/backups" restic-backup
-          nomad job dispatch -meta path_to_backup="/main/personal" restic-backup
-          nomad job dispatch -meta path_to_backup="/main/multimedia/Photos" restic-backup
+          nomad job dispatch -detach -meta path_to_backup="/main/backups /main/personal /main/multimedia/Photos" restic-backup
         EOF
       }
 
