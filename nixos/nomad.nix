@@ -33,6 +33,8 @@
     extraSettingsPaths = [ "/etc/nomad.d" ];
   };
 
+  systemd.services.nomad.after = [ "network-online.target" "consul.service" "tailscaled.service"];
+
   environment.etc = {
     "nomad.d/nomad.hcl" = {
       text = ''

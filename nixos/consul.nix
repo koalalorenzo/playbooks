@@ -68,6 +68,9 @@
   # Load Configuration for Consul
   services.consul.enable = true;
   services.consul.package = pkgs.unstable.consul;
+  systemd.services.consul.serviceConfig.Type = "notify";
+  systemd.services.consul.after = ["network-online.target" "tailscaled.service"];
+  systemd.services.consul.wants = [ "network-online.target" ];
 
   environment.etc = {
     "consul.d/consul.hcl" = {
