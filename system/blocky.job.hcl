@@ -299,11 +299,11 @@ queryLog:
 prometheus:
   enable: true
   path: /metrics
-{{ range service "redis" }}
+{{ range $index, $element := service "redis" }}{{if eq $index 0}}
 redis:
   required: false
   address: {{ .Address }}:{{ .Port }}
-{{ end }}
+{{ end }}{{ end }}
 log:
   level: warn
   timestamp: true
