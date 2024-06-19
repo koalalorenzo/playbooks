@@ -1,0 +1,50 @@
+logging {
+  level  = "debug"
+  format = "logfmt"
+}
+
+// Custom Loki process rules
+// loki.echo "debug" {}
+
+// Global Process rules
+loki.process "global" {
+  forward_to = [loki.write.grafana_cloud_loki.receiver]
+  
+  stage.decolorize {}
+
+  stage.drop {
+    older_than          = "2h"
+    drop_counter_reason = "too_old"
+  }
+
+  stage.drop {
+    longer_than         = "1KB"
+    drop_counter_reason = "too_long"
+  }
+
+  // stage.sampling {
+  //     rate = 0.25
+  //     drop_counter_reason = "logs_sampling"
+  // }
+}
+
+prometheus.remote_write "metrics_service" {
+    endpoint {
+        url = env("GCLOUD_HOSTED_METRICS_URL")
+        basic_auth {
+            username = env("GCLOUD_HOSTED_METRICS_ID")
+            password = env("GCLOUD_RW_API_KEY")
+        }
+    }
+}
+
+loki.write "grafana_cloud_loki" {
+  endpoint {
+    url = env("GCLOUD_HOSTED_LOGS_URL")
+
+    basic_auth {
+      username = env("GCLOUD_HOSTED_LOGS_ID")
+      password = env("GCLOUD_RW_API_KEY")
+    }
+  }
+}
