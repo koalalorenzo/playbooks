@@ -20,8 +20,17 @@
     ];
   };
 
-  systemd.services.alloy.serviceConfig.EnvironmentFile = "/run/secrets/alloy/vars";
-  systemd.services.alloy.reloadTriggers = ["/etc/alloy/config.alloy"];
+  networking.firewall.allowedTCPPorts = [ 27373 ];
+  networking.firewall.allowedUDPPorts = [ 27373 ];
+
+  systemd.services.alloy = {
+    serviceConfig = {
+      EnvironmentFile = "/run/secrets/alloy/vars";
+      DynamicUser = lib.mkForce false;
+    };
+
+    reloadTriggers = ["/etc/alloy/config.alloy"];
+  };
 
   environment.etc = {
     "alloy" = {

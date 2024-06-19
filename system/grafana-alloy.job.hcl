@@ -2,6 +2,12 @@ job "grafana" {
   type     = "system"
   priority = 90
 
+  constraint {
+    attribute = node.class
+    # operator = "!="
+    value = "storage"
+  }
+
   group "alloy" {
     update {
       max_parallel     = 1

@@ -1,5 +1,5 @@
 logging {
-  level  = "debug"
+  level  = "warn"
   format = "logfmt"
 }
 
@@ -75,7 +75,7 @@ discovery.relabel "consul_discovery" {
   rule {
     action = "labelmap"
     regex  = "__meta_docker_container_label_com_hashicorp_nomad_(.*)"
-    replacement = "nomad_$${1}"
+    replacement = "nomad_${1}"
   }
 
   rule {
@@ -156,7 +156,7 @@ discovery.relabel "integrations_cadvisor" {
     rule {
       action = "labelmap"
       regex  = "__meta_docker_container_label_com_hashicorp_nomad_(.*)"
-      replacement = "nomad_$${1}"
+      replacement = "nomad_${1}"
     }
 }
 
@@ -209,7 +209,7 @@ discovery.relabel "logs_integrations_docker" {
     rule {
       action = "labelmap"
       regex  = "__meta_docker_container_label_com_hashicorp_nomad_(.*)"
-      replacement = "nomad_$${1}"
+      replacement = "nomad_${1}"
     }
 
     rule {
@@ -381,7 +381,7 @@ prometheus.relabel "integrations_node_exporter" {
 
 loki.source.journal "logs_integrations_integrations_node_exporter_journal_scrape" {
   max_age       = "1h0m0s"
-  path          = "/host/root/var/log/journal"
+  path          = "/var/log/journal"
   relabel_rules = discovery.relabel.logs_integrations_integrations_node_exporter_journal_scrape.rules
   forward_to    = [loki.process.journal.receiver]
 }
@@ -449,6 +449,11 @@ loki.process "journal" {
       expression =  "(trace|debug|DEBUG|info|INFO)"
       drop_counter_reason = "wrong_level"
     }
+  }
+
+  stage.drop {
+    expression = ".*context canceled.*"
+    drop_counter_reason = "generic_context_canceled"
   }
 
   stage.drop {
