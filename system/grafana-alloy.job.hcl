@@ -483,6 +483,60 @@ job "grafana" {
             }
           }
 
+          // Nomad Discovery
+          discovery.nomad "nomad" {
+            refresh_interval = "60s"
+          }
+
+          prometheus.scrape "nomad" {
+            clustering {
+              enabled = true
+            }
+
+            targets    = discovery.nomad.nomad.targets
+            forward_to = [prometheus.relabel.nomad.receiver]
+
+            job_name   = "integrations/nomad_exporter"
+          }
+
+          prometheus.relabel "nomad" {
+            forward_to = [prometheus.remote_write.metrics_service.receiver]
+
+            rule {
+              target_label = "instance"
+              replacement  = constants.hostname
+            }
+
+            rule {
+              target_label = "job"
+              replacement = "integrations/nomad_exporter"
+            }
+
+            rule {
+                source_labels = ["__meta_docker_container_name"]
+                regex         = "/(.*)"
+                target_label  = "container"
+            }
+
+            rule {
+              action = "labelmap"
+              regex  = "__meta_docker_container_label_com_hashicorp_nomad_(.*)"
+              replacement = "docker_${1}"
+            }
+
+            rule {
+              action = "labelmap"
+              regex  = "__meta_nomad_(.*)"
+              replacement = "nomad_${1}"
+            }
+
+            // Keep only the labels with prometheus tag set. 
+            rule {
+              action = "keep"
+              source_labels = ["__meta_nomad_tags", "nomad_tags"]
+              regex = ".*prometheus.*"
+            }
+          }
 
           // Consul Discovery
           // Extract metrics from services with the "prometheus" tag
@@ -491,11 +545,6 @@ job "grafana" {
              server = "http://{{ env `CONSUL_HTTP_ADDR` }}"
              tags   = ["prometheus"]
              refresh_interval = "60s"
-          }
-
-          discovery.nomad "nomad" {
-            server = "https://nomad.elates.it"
-            refresh_interval = "60s"
           }
 
           prometheus.scrape "consul_discovery" {
@@ -508,7 +557,7 @@ job "grafana" {
           }
 
           discovery.relabel "consul_discovery" {
-          	targets = concat(discovery.consul.consul_discovery.targets, discovery.nomad.nomad.targets)
+          	targets = discovery.consul.consul_discovery.targets
 
           	rule {
           		target_label = "instance"

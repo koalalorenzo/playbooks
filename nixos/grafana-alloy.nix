@@ -30,6 +30,8 @@
     };
 
     reloadTriggers = ["/etc/alloy/config.alloy"];
+    after = ["network-online.target" "tailscaled.service"];
+    wants = [ "network-online.target" ];
   };
 
   environment.etc = {
