@@ -24,13 +24,21 @@ job "blocky" {
       value     = "arm64"
     }
 
+    constraint {
+      attribute = meta.run_dns
+      value     = "true"
+    }
+
     network {
       dns { servers = ["1.1.1.2", "1.0.0.1"] }
       port "http" {}
-      port "dns" {}
+      port "dns" {
+        static = 53
+      }
     }
 
     service {
+      provider = "nomad"
       name = "blocky-http"
       port = "http"
 
@@ -48,9 +56,6 @@ job "blocky" {
         interval = "30s"
         timeout  = "5s"
 
-        success_before_passing   = 1
-        failures_before_critical = 3
-
         check_restart {
           limit = 3
           grace = "30s"
@@ -60,22 +65,15 @@ job "blocky" {
     }
 
     service {
+      provider = "nomad"
       name = "blocky-dns"
       port = "dns"
-
-      tags = [
-        "traefik.enable=true",
-        "traefik.udp.routers.blocky-dns.entrypoints=dns-udp",
-      ]
 
       check {
         name     = "blicky-dns"
         type     = "tcp"
         interval = "20s"
         timeout  = "2s"
-
-        success_before_passing   = 1
-        failures_before_critical = 3
 
         check_restart {
           limit = 3
@@ -95,6 +93,8 @@ job "blocky" {
         volumes     = ["local/config.yml:/app/config.yml"]
         ports       = ["http", "dns"]
         dns_servers = ["1.1.1.2", "1.0.0.1"]
+        
+        network_mode = "host"
 
         labels {
           persist_logs = "true"
@@ -290,6 +290,27 @@ caching:
   prefetchExpires: 3h
   prefetchThreshold: 30
   prefetchMaxItemsCount: 512
+
+clientLookup:
+  upstream: 192.168.197.1
+  clients:
+    lorenzo-mbp:
+      - 192.168.197.26
+      - 100.111.226.22
+    storage0:
+      - 192.168.197.2
+      - 192.168.197.5
+      - 100.100.180.12
+    compute0:
+      - 192.168.197.4
+      - 100.98.104.116
+    compute1:
+      - 100.77.141.108
+      - 192.168.197.3
+    compute2:
+      - 100.114.69.32
+      - 192.168.197.6
+
 {{ range $index, $element := service "postgres" }}{{if eq $index 0}}
 queryLog:
   type: postgresql
@@ -335,20 +356,20 @@ EOF
   }
 
   # Manual updates 
-  update {
-    max_parallel     = 1
-    canary           = 1
-    min_healthy_time = "1m"
-    healthy_deadline = "3m"
-    auto_revert      = true
-    auto_promote     = true
-  }
+  # update {
+  #   max_parallel     = 1
+  #   canary           = 1
+  #   min_healthy_time = "1m"
+  #   healthy_deadline = "3m"
+  #   auto_revert      = true
+  #   auto_promote     = true
+  # }
 
-  # Migrations during node draining
-  migrate {
-    max_parallel     = 1
-    health_check     = "checks"
-    min_healthy_time = "1m"
-    healthy_deadline = "3m"
-  }
+  # # Migrations during node draining
+  # migrate {
+  #   max_parallel     = 1
+  #   health_check     = "checks"
+  #   min_healthy_time = "1m"
+  #   healthy_deadline = "3m"
+  # }
 }

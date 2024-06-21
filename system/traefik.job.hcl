@@ -23,10 +23,6 @@ job "traefik" {
     }
 
     network {
-      port "dns" {
-        static = 53
-      }
-
       port "http" {
         static = 80
       }
@@ -35,15 +31,9 @@ job "traefik" {
         static = 443
       }
 
-
       port "api" {
         static = 8081
       }
-
-      port "terraria" {
-        static = 7777
-      }
-
     }
 
     service {
@@ -86,7 +76,7 @@ job "traefik" {
         image        = "traefik:v2.11.2"
         network_mode = "host"
 
-        ports = ["http", "https", "api", "dns", "terraria"]
+        ports = ["http", "https", "api"]
 
         volumes = [
           "local/traefik.yaml:/etc/traefik/traefik.yaml",
@@ -138,17 +128,8 @@ entryPoints:
                - "*.ts.elates.it"
                - "*.elates.it"
 
-  dns-udp:
-    address: ":53/udp"
-  
   traefik:
     address: ":8081"
-
-  terraria-tcp:
-    address: ":7777"
-    
-  terraria-udp:
-    address: ":7777/udp"
 
   iperf-tcp:
     address: ":5201"
@@ -193,6 +174,7 @@ providers:
   nomad:
     endpoint:
       address: http://127.0.0.1:4646
+    exposedByDefault: false
     defaultRule: "Host(`{{"{{"}} .Name {{"}}"}}.elates.it`) || Host(`{{"{{"}} .Name {{"}}"}}.ts.elates.it`)"
 
   # Load config from Consul. Disable because unstalbe
