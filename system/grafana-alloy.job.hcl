@@ -58,7 +58,7 @@ job "grafana" {
           "--server.http.listen-addr=0.0.0.0:${NOMAD_PORT_http}",
           "--server.http.enable-pprof=false",
           "--cluster.enabled=true",
-          "--cluster.join-addresses=home.elates.it:${NOMAD_PORT_http}",
+          "--cluster.join-addresses=100.98.104.116:${NOMAD_PORT_http},100.77.141.108:${NOMAD_PORT_http}",
           "--cluster.rejoin-interval=60s",
           "--cluster.advertise-address=${NOMAD_ADDR_http}",
           "--cluster.name=elates.it",
@@ -493,6 +493,11 @@ job "grafana" {
              refresh_interval = "60s"
           }
 
+          discovery.nomad "nomad" {
+            server = "https://nomad.elates.it"
+            refresh_interval = "60s"
+          }
+
           prometheus.scrape "consul_discovery" {
             clustering {
                 enabled = true
@@ -503,7 +508,7 @@ job "grafana" {
           }
 
           discovery.relabel "consul_discovery" {
-          	targets = discovery.consul.consul_discovery.targets
+          	targets = concat(discovery.consul.consul_discovery.targets, discovery.nomad.nomad.targets)
 
           	rule {
           		target_label = "instance"
@@ -519,6 +524,12 @@ job "grafana" {
             rule {
               action = "labelmap"
               regex  = "__meta_docker_container_label_com_hashicorp_nomad_(.*)"
+              replacement = "nomad_container_$${1}"
+            }
+
+            rule {
+              action = "labelmap"
+              regex  = "__meta_nomad_(.*)"
               replacement = "nomad_$${1}"
             }
 

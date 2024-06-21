@@ -59,7 +59,7 @@ prometheus.scrape "consul_discovery" {
 }
 
 discovery.relabel "consul_discovery" {
-	targets = discovery.consul.consul_discovery.targets
+	targets = concat(discovery.consul.consul_discovery.targets, discovery.nomad.nomad.targets)
 
 	rule {
 		target_label = "instance"
@@ -84,10 +84,10 @@ discovery.relabel "consul_discovery" {
     replacement = "persist_logs"
   }
 
-	rule {
-		target_label = "job"
-		replacement  = "integrations/consul_discovery"
-	}
+  rule {
+  	target_label = "job"
+  	replacement  = "integrations/consul_discovery"
+  }
 }
 
 prometheus.exporter.self "integrations_alloy" { }
@@ -274,12 +274,16 @@ loki.process "docker" {
     }
   }
 }
-// Consul Discovery
+// Nomad and Consul Discovery
 // Extract metrics from services with the "prometheus" tag
 
 discovery.consul "consul_discovery" {
    tags   = ["prometheus"]
    refresh_interval = "60s"
+}
+
+discovery.nomad "nomad" {
+  refresh_interval = "60s"
 }
 
 // Consul Integration

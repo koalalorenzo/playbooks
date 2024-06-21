@@ -14,7 +14,7 @@
         "--server.http.listen-addr=0.0.0.0:27373"
         "--server.http.enable-pprof=false"
         "--cluster.enabled=true"
-        "--cluster.join-addresses=home.elates.it:27373"
+        "--cluster.join-addresses=100.98.104.116:27372,100.77.141.108:27373"
         "--cluster.rejoin-interval=60s"
         "--cluster.name=elates.it"
     ];
