@@ -61,11 +61,9 @@
         443 # Traefik: HTTPS
         853 # DNS over TLS / QUIC
         1900 # Jellyfin DLNA / upnp
-        3128 # Squid HTTP Proxy
         3478 # Steam Client
         5201 # Iperf 3
         7359 # Jellyfin autodiscovery
-        7777 # Terraria
         8081 # Traefik
       ];
 
@@ -76,7 +74,6 @@
         443 # Traefik HTTPS
         853 # DNS over TLS / QUIC
         1900 # Jellyfin DLNA / upnp
-        3128 # Squid HTTP Proxy
         3478 # Steam Client
         5201 # Iperf 3
         7359 # Jellyfin autodiscovery
