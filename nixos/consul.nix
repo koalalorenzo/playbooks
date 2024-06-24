@@ -66,16 +66,26 @@
   };
 
   # Load Configuration for Consul
-  services.consul.enable = true;
-  services.consul.package = pkgs.unstable.consul;
-  systemd.services.consul.serviceConfig.Type = "notify";
-  systemd.services.consul.after = ["network-online.target" "tailscaled.service"];
-  systemd.services.consul.wants = [ "network-online.target" ];
+  services.consul = {
+    enable = true;
+    package = pkgs.unstable.consul;
+    webUi = true;
+    extraConfigFiles = [
+      "/etc/consul.d/encryption.hcl"
+      "/etc/consul.d/consul.hcl"
+    ];
+  };
+
+  systemd.services.consul = {
+    serviceConfig.Type = "notify";
+    after = ["network-online.target" "tailscaled.service"];
+    wants = [ "network-online.target" ];
+  };
 
   environment.etc = {
     "consul.d/consul.hcl" = {
       text = ''
-          data_dir = "/opt/consul"
+          data_dir = "/var/lib/consul"
           datacenter = "dc1"
           server = true
           bootstrap_expect = 3
