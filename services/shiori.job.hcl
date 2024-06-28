@@ -23,7 +23,7 @@ job "shiori" {
       kill_timeout = "30s"
 
       config {
-        image = "ghcr.io/go-shiori/shiori:v1.6.3"
+        image = "ghcr.io/go-shiori/shiori:v1.7.0"
         ports = ["http"]
       }
 
@@ -52,18 +52,6 @@ job "shiori" {
       service {
         name = "shiori"
         port = "http"
-
-        check {
-          name     = "alive"
-          type     = "tcp"
-          interval = "600s"
-          timeout  = "5s"
-          
-          check_restart {
-            limit = 3
-            grace = "30s"
-          }
-        }
 
         tags = [
           "traefik.enable=true",
