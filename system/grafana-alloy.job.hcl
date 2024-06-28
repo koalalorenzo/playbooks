@@ -97,7 +97,7 @@ job "grafana" {
 
         data = <<EOF
           logging {
-            level  = "warn"
+            level  = "info"
             format = "logfmt"
           }
 
@@ -531,11 +531,11 @@ job "grafana" {
             }
 
             // Keep only the labels with prometheus tag set. 
-            rule {
-              action = "keep"
-              source_labels = ["__meta_nomad_tags", "nomad_tags"]
-              regex = ".*prometheus.*"
-            }
+            // rule {
+            //   action = "keep"
+            //   source_labels = [".*"]
+            //   regex = ".*prometheus.*"
+            // }
           }
 
           // Consul Discovery
