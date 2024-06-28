@@ -147,6 +147,7 @@
     name = "time-traveller"; 
     group = "users";
     shell = "/usr/sbin/nologin";
+    hashedPassword = "$6$rounds=150000$kd0UPzA/qxc2n7XO$VC5/mgG2eDQiDQ3HyICNaxHzHO9q80A01jEFx.Q/uGjRXysxrS.IhNIDwg6o6turBZy4uBf99/NBVkwcLHmAo/";
   };
   
   services.netatalk = {
