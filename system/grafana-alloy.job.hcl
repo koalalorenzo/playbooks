@@ -97,7 +97,7 @@ job "grafana" {
 
         data = <<EOF
           logging {
-            level  = "info"
+            level  = "warn"
             format = "logfmt"
           }
 
