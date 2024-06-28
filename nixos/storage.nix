@@ -21,12 +21,22 @@
       autoprue  = true;
     };
 
-    templates.frequent = {
+    template.daily = {
+      yearly = 0;
+      monthly = 2;
+      daily = 7;
+      hourly = 3;
+
+      autosnap  = true;
+      autoprue  = true;
+    }
+
+    templates.frequent_changes = {
       yearly  = 0;
       monthly = 3;
-      daily   = 15;
+      daily   = 8;
       hourly  = 24;
-      # frequent = 8;
+      # frequent_changes = 8;
       
       autosnap  = true;
       autoprune = true;
@@ -34,20 +44,20 @@
 
     datasets.main.useTemplate = "default";
     datasets.main.recursive = true;
-    datasets."main/share/postgres".useTemplate = "frequent";
-    datasets."main/share/redis".useTemplate = "frequent";
-    datasets."main/share/restic".useTemplate = "frequent";
+    datasets."main/share/postgres".useTemplate = "daily";
+    datasets."main/share/redis".useTemplate = "daily";
+    datasets."main/share/restic".useTemplate = "daily";
     
-    datasets."main/share/7d2d".useTemplate = "frequent";
+    datasets."main/share/7d2d".useTemplate = "frequent_changes";
     datasets."main/share/7d2d".recursive = true;
-    datasets."main/share/vrising".useTemplate = "frequent";
-    datasets."main/share/web-static".useTemplate = "frequent";
+    datasets."main/share/vrising".useTemplate = "frequent_changes";
+    datasets."main/share/web-static".useTemplate = "frequent_changes";
     
-    # datasets."main/multimedia".useTemplate = "frequent";
-    datasets."main/downloads".useTemplate = "frequent";
-    # Disabled
-    datasets."main/share/nix-cache".autosnap = false;
-    datasets."main/share/nix-cache".autoprune = false;
+    # datasets."main/multimedia".useTemplate = "frequent_changes";
+    datasets."main/downloads".useTemplate = "frequent_changes";
+
+    # Time Machine 
+    datasets."main/time-machine".useTemplate = "daily";
   };
 
   services.rpcbind.enable = true; # needed for NFS
@@ -122,4 +132,48 @@
     enable = true;
     openFirewall = true;
   };
+
+  ### Time Machine setup
+  
+  services.avahi = {
+    enable = true;
+    publish = {
+      enable = true;
+      userServices = true;
+    };
+  };
+
+  users.extraUsers.time-traveller = { 
+    name = "time-traveller"; 
+    group = "users";
+    shell = "/usr/sbin/nologin";
+  };
+  
+  services.netatalk = {
+    enable = true;
+    
+    extraConfig = ''
+      mimic model = TimeCapsule6,106  # show the icon for the first gen TC
+      log level = default:warn
+      log file = /var/log/afpd.log
+      hosts allow = 192.168.197.0/24 100.64.0.0/10
+      
+      [Time Machine]
+      path = /main/time-machine
+      valid users = time-traveller
+      time machine = yes
+    '';
+  };
+
+  systemd.services.macUserSetup = {
+    description = "idempotent directory setup for ${user}'s time machine";
+    requiredBy = [ "netatalk.service" ];
+    script = ''
+     mkdir -p 
+      chown time-traveller:users /main/time-machine  # making these calls recursive is a switch
+      chmod 0750 /main/time-machine                  # away but probably computationally expensive
+      '';
+  };
+
+  networking.firewall.allowedTCPPorts = [ 548 636 ];
 }
