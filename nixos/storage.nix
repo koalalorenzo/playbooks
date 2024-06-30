@@ -7,7 +7,7 @@
   boot.supportedFilesystems = [ "zfs" "ext4" "ntfs" ];
   boot.zfs.forceImportRoot = false;
 
-  # Sanoid for ZFS automatic backup
+  ### Sanoid for ZFS automatic backup
   services.sanoid = {
     enable = true;
     
@@ -60,18 +60,41 @@
     datasets."main/time-machine".useTemplate = "daily";
   };
 
+  ### Time Machine User setup
+  users.extraUsers.time-traveller = { 
+    name = "time-traveller"; 
+    group = "users";
+    shell = "/usr/sbin/nologin";
+    hashedPassword = "$6$rounds=150000$kd0UPzA/qxc2n7XO$VC5/mgG2eDQiDQ3HyICNaxHzHO9q80A01jEFx.Q/uGjRXysxrS.IhNIDwg6o6turBZy4uBf99/NBVkwcLHmAo/";
+  };
+
+  ### NFS For Homelab volumes
   services.rpcbind.enable = true; # needed for NFS
   networking.firewall.allowedTCPPorts = [ 2049 ]; # Open port for NFS
+  networking.firewall.allowPing = true;
 
-  ### Samba
+  ### Samba for filesharing and Time Machine
   services.samba = {
     enable = true;
     securityType = "user";
+    enableWinbindd = true;
     openFirewall = true;
     
     extraConfig = ''
+      # Adds better support for iOS/iPadOS/macOS SMB Clients
+      fruit:aapl = yes
+      fruit:nfs_aces = no
+      fruit:copyfile = no
+      fruit:model = MacSamba
+
+      # Improve security protocol
+      client max protocol = default
+      client min protocol = SMB2_10
+      server max protocol = SMB3
+      server min protocol = SMB2_10
+      
       # note: localhost is the ipv6 localhost ::1
-      hosts allow = 192.168.197. 127.0.0.1 localhost
+      hosts allow = 192.168.197. 100.64.0.0/255.192.0.0 127.0.0.1 localhost
       hosts deny = 0.0.0.0/0
 
       workgroup = WORKGROUP
@@ -125,16 +148,33 @@
         "directory mask" = "0755";
         "valid users" = "koalalorenzo";
       };
+
+      "Time Machine" = {
+        "vfs objects" = "catia fruit streams_xattr";
+        "fruit:aapl" = "yes";
+        "fruit:time machine" = "yes";
+        "fruit:time machine max size" = "6T";
+
+        "comment" = "Time Machine";
+        "path" = "/main/time-machine";
+
+        "available" = "yes";
+        "valid users" = "time-traveller";
+        "browseable" = "yes";
+        "guest ok" = "no";
+        "writable" = "yes";
+        "public" = "no";
+      }
     };
   };
 
+  # Enable Windows Support
   services.samba-wsdd = {
     enable = true;
     openFirewall = true;
   };
 
-  ### Time Machine setup
-  
+  # Set up Avahi for Time Machine discovery
   services.avahi = {
     enable = true;
     publish = {
@@ -142,39 +182,4 @@
       userServices = true;
     };
   };
-
-  users.extraUsers.time-traveller = { 
-    name = "time-traveller"; 
-    group = "users";
-    shell = "/usr/sbin/nologin";
-    hashedPassword = "$6$rounds=150000$kd0UPzA/qxc2n7XO$VC5/mgG2eDQiDQ3HyICNaxHzHO9q80A01jEFx.Q/uGjRXysxrS.IhNIDwg6o6turBZy4uBf99/NBVkwcLHmAo/";
-  };
-  
-  services.netatalk = {
-    enable = true;
-    
-    extraConfig = ''
-      mimic model = TimeCapsule6,106  # show the icon for the first gen TC
-      log level = default:warn
-      log file = /var/log/afpd.log
-      hosts allow = 192.168.197.0/24 100.64.0.0/10
-      
-      [Time Machine]
-      path = /main/time-machine
-      valid users = time-traveller
-      time machine = yes
-    '';
-  };
-
-  systemd.services.macUserSetup = {
-    description = "idempotent directory setup for ${user}'s time machine";
-    requiredBy = [ "netatalk.service" ];
-    script = ''
-     mkdir -p 
-      chown time-traveller:users /main/time-machine  # making these calls recursive is a switch
-      chmod 0750 /main/time-machine                  # away but probably computationally expensive
-      '';
-  };
-
-  networking.firewall.allowedTCPPorts = [ 548 636 ];
 }
