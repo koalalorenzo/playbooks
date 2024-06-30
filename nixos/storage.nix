@@ -159,11 +159,13 @@
         "path" = "/main/time-machine";
 
         "available" = "yes";
-        "valid users" = "time-traveller";
+        "valid users" = "time-traveller, @users";
         "browseable" = "yes";
         "guest ok" = "no";
         "writable" = "yes";
         "public" = "no";
+        "force user" = "time-traveller";
+        "force group" = "users";
       }
     };
   };
