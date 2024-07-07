@@ -17,6 +17,7 @@ nixos-config-sync_%:
 		nixos ${SSH_USER_PREFIX}$*:${NIXOS_ETC_PATH}
 
 nixos-config-sync:
+	-$(MAKE) nixos-config-sync_nixos-builder.local -e SSH_USER_PREFIX="builder@"
 	$(foreach var,$(NIXOS_HOSTS),$(MAKE) nixos-config-sync_$(var) || exit 1;)
 .PHONY: nixos-config-sync
 
