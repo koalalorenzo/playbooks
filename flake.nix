@@ -34,6 +34,7 @@
           sops
           rsync
           nixos-generators
+          fping
         ];
       };
     }
