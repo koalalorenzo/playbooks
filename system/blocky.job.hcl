@@ -144,6 +144,14 @@ blocking:
   allowlists:
     tracking: &generic_white_list
       - |
+        # Pete's work
+        /twentythree.systems/
+        *.twentythree.systems
+        /staging.twentythree.systems/
+        *.staging.twentythree.systems
+        /rds.amazonaws.com/
+        *.rds.amazonaws.com
+        # Generic
         /icloud.com/
         /apple.com/
         #/datadoghq.eu/
