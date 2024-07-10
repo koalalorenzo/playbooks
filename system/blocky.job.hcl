@@ -318,6 +318,10 @@ clientLookup:
     compute2:
       - 100.114.69.32
       - 192.168.197.6
+    appletv:
+      - 100.67.248.58
+      - 192.168.197.142
+      - 192.168.197.102
 
 {{ range $index, $element := service "postgres" }}{{if eq $index 0}}
 queryLog:
