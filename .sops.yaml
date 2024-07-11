@@ -1,6 +1,7 @@
 keys:
   - &safe_gpg 73880ECAF69EC2ED44CE5889502BFB12D0B5295F
   - &node_storage0 age15qauah7skmftfg5u4z4l526uas5gqaze6k6d09fm7jnga0zzuqtsfy3m5n
+  - &node_storage1 age1z0gh2u05cap74w6ge453g96uvjusapf7wp2s49l3r4yr0kmekf4s72e430
   - &node_compute0 age1yq5m2qs0ghd87wclpg9vcntql9sxfex06xs6d4efk6n2d80mkp9qrk70yv
   - &node_compute1 age12j6e5yspv9yw7cprqegfprqg39vde3qxkfggscksrneu0pkwju3se80x7t
   - &node_compute2 age1f9uy7mcfdm7skndsa9p5zu9xqfs8hahxtzg75e4vktrkvqc9qu5q89fdzf
@@ -11,6 +12,7 @@ creation_rules:
           - *safe_gpg
         age:
           - *node_storage0
+          - *node_storage1
           - *node_compute0
           - *node_compute1
           - *node_compute2
