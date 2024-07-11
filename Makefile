@@ -6,7 +6,7 @@ endif
 ################################################################################
 # NixOS
 ################################################################################
-NIXOS_HOSTS ?= compute0 compute1 compute2
+NIXOS_HOSTS ?= compute0 compute1 compute2 storage1
 NIXOS_ETC_PATH ?= /etc/
 SSH_USER_PREFIX ?=
 
@@ -14,6 +14,7 @@ nixos-config-sync_%:
 	rsync -avzh --delete --progress --partial-dir=".rsync-partial" \
 		--exclude "hardware-configuration.nix" \
 		--exclude "configuration.nix" \
+		--exclude "flake.lock" \
 		nixos ${SSH_USER_PREFIX}$*:${NIXOS_ETC_PATH}
 
 nixos-config-sync:
