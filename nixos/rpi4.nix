@@ -33,14 +33,4 @@
 
     enableRedistributableFirmware = true;
   };
-
-  # Wait for uptime so that it syncs properly
-  systemd.additionalUpstreamSystemUnits = [ "systemd-time-wait-sync.service" ];
-  systemd.services.systemd-time-wait-sync.wantedBy = [ "multi-user.target" ];
-
-  console.enable = false;
-  environment.systemPackages = with pkgs; [
-    libraspberrypi
-    raspberrypi-eeprom
-  ];
 }
