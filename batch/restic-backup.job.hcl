@@ -29,7 +29,7 @@ job "restic-backup" {
       }
 
       artifact {
-        source = "https://github.com/restic/restic/releases/download/v0.16.4/restic_0.16.4_${attr.kernel.name}_${attr.cpu.arch}.bz2"
+        source = "https://github.com/restic/restic/releases/download/v0.16.5/restic_0.16.4_${attr.kernel.name}_${attr.cpu.arch}.bz2"
         destination = "${NOMAD_ALLOC_DIR}/"
 
         options {
