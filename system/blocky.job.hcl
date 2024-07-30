@@ -182,6 +182,8 @@ blocking:
         /www.googleapis.com/
         /accounts.google.com/
         /calendar.google.com/
+        # Lego
+        /sway.cloud.microsoft/
     ads: *generic_white_list
     malware: *generic_white_list
     suspicious: *generic_white_list
@@ -199,6 +201,12 @@ blocking:
       - https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
       - https://v.firebog.net/hosts/neohostsbasic.txt
       - https://v.firebog.net/hosts/static/w3kbl.txt
+      - /snapchat.com/
+      - /snap.com/
+      - /snapchat.appspot.com/
+      - /sc-analytics.appspot.com/
+      - /feelinsonice-hrd.appspot.com/
+      - /www.feelinsonice.com/
     ads:
       - https://adaway.org/hosts.txt
       - https://blocklistproject.github.io/Lists/alt-version/ads-nl.txt
