@@ -93,3 +93,12 @@ sudo tailscale up
 sudo systemctl restart consul.service nomad.service
 sudo journalctl -f -u consul.service -u nomad.service
 ```
+
+## NixOS generator (iso/images)
+
+Crate a NixOS SD Image by running from `nixos` directory:
+
+```bash
+cd nixos
+nix build '.#nixosConfigurations.rpi5.config.system.build.sdImage'
+```

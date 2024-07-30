@@ -6,6 +6,7 @@
     
     # ./macbookpro.nix
     # ./rpi4.nix
+    # ./rpi5.nix
 
     ./networking.nix
     ./common.nix
