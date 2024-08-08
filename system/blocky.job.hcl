@@ -182,12 +182,13 @@ blocking:
         /www.googleapis.com/
         /accounts.google.com/
         /calendar.google.com/
-        # Lego
+        # LEGO
         /sway.cloud.microsoft/
     ads: *generic_white_list
+    generic: *generic_white_list
     malware: *generic_white_list
-    suspicious: *generic_white_list
     piracy: *generic_white_list
+    suspicious: *generic_white_list
   denylists:
     # Some source: https://github.com/blocklistproject/Lists?tab=readme-ov-file#usage
     suspicious:
@@ -288,7 +289,12 @@ blocking:
       - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
       - https://phishing.army/download/phishing_army_blocklist_extended.txt
       - https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
-
+    generic:
+      - https://raw.githubusercontent.com/columndeeply/hosts/main/hosts00
+      - https://raw.githubusercontent.com/columndeeply/hosts/main/hosts01
+      - https://raw.githubusercontent.com/columndeeply/hosts/main/hosts02
+      - https://raw.githubusercontent.com/columndeeply/hosts/main/hosts03
+      - https://raw.githubusercontent.com/columndeeply/hosts/main/hosts04
   clientGroupsBlock:
     default:
       - ads
