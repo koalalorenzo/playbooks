@@ -19,7 +19,7 @@ job "diun" {
       driver = "docker"
 
       config {
-        image = "ghcr.io/crazy-max/diun:4.28.0"
+        image = "ghcr.io/crazy-max/diun:4"
 
         labels {
           persist_logs = "true"
