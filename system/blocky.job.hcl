@@ -302,11 +302,12 @@ blocking:
       - piracy
       - tracking
       - malware
+      - generic
 caching:
-  minTime: 30m
+  minTime: 1h
   maxTime: 12h
   maxItemsCount: 16384
-  cacheTimeNegative: 5m
+  cacheTimeNegative: 15m
   prefetching: true
   # Prefetch a domain if it has more than 30 requests in 3h.
   prefetchExpires: 3h
