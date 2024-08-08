@@ -52,7 +52,7 @@ job "grafana" {
       kill_timeout = "30s"
 
       config {
-        image = "grafana/alloy:v1.1.1"
+        image = "grafana/alloy:v1.3.0"
         args = [
           "run",
           "--server.http.listen-addr=0.0.0.0:${NOMAD_PORT_http}",
