@@ -185,7 +185,6 @@ blocking:
         # LEGO
         /sway.cloud.microsoft/
     ads: *generic_white_list
-    generic: *generic_white_list
     malware: *generic_white_list
     piracy: *generic_white_list
     suspicious: *generic_white_list
@@ -289,12 +288,6 @@ blocking:
       - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
       - https://phishing.army/download/phishing_army_blocklist_extended.txt
       - https://s3.amazonaws.com/lists.disconnect.me/simple_malvertising.txt
-    generic:
-      - https://raw.githubusercontent.com/columndeeply/hosts/main/hosts00
-      - https://raw.githubusercontent.com/columndeeply/hosts/main/hosts01
-      - https://raw.githubusercontent.com/columndeeply/hosts/main/hosts02
-      - https://raw.githubusercontent.com/columndeeply/hosts/main/hosts03
-      - https://raw.githubusercontent.com/columndeeply/hosts/main/hosts04
   clientGroupsBlock:
     default:
       - ads
@@ -302,7 +295,6 @@ blocking:
       - piracy
       - tracking
       - malware
-      - generic
 caching:
   minTime: 1h
   maxTime: 12h
