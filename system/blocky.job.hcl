@@ -301,8 +301,8 @@ caching:
   maxItemsCount: 16384
   cacheTimeNegative: 15m
   prefetching: true
-  # Prefetch a domain if it has more than 30 requests in 3h.
-  prefetchExpires: 3h
+  # Prefetch a domain if it has more than 30 requests in 1h.
+  prefetchExpires: 1h
   prefetchThreshold: 30
   prefetchMaxItemsCount: 512
 
