@@ -177,6 +177,8 @@ blocking:
         /epicgames.com/
         /api.epicgames.dev/
         /on.epicgames.com/
+        /registry.heroiclabs.com/
+        *.heroiclabs.com
         /cloud.unity3d.com/
         # Google
         /www.googleapis.com/
