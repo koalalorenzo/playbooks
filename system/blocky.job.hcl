@@ -137,7 +137,7 @@ blocking:
     maxErrorsPerSource: 15
     downloads:
       cooldown: 2s
-      timeout: 5s
+      timeout: 15s
       attempts: 5
   blockType: nxDomain
   blockTTL: 12h
@@ -302,7 +302,7 @@ caching:
   maxTime: 12h
   maxItemsCount: 16384
   cacheTimeNegative: 15m
-  prefetching: true
+  prefetching: false
   # Prefetch a domain if it has more than 30 requests in 1h.
   prefetchExpires: 1h
   prefetchThreshold: 30
