@@ -152,6 +152,8 @@ blocking:
         /rds.amazonaws.com/
         *.rds.amazonaws.com
         # Generic
+        *.arpa
+        /.arpa$/
         /icloud.com/
         /apple.com/
         #/datadoghq.eu/
