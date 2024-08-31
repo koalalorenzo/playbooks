@@ -171,7 +171,7 @@ blocking:
         /grafana.net/
         /github-cloud.githubusercontent.com/
         /github-cloud.s3.amazonaws.com/
-        docker.n8n.io
+        /n8n.io/
         # Videogames
         *.epicgames.dev
         *.epicgames.com
