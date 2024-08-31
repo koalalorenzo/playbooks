@@ -76,8 +76,8 @@ job "n8n" {
           EXECUTIONS_TIMEOUT="900" # Max 15 min of execution
           N8N_CONCURRENCY_PRODUCTION_LIMIT="2" # Max 2 exec at the same time
 
-          GENERIC_TIMEZONE="CET"
-          TZ="CET"
+          GENERIC_TIMEZONE="Europe/Copenhagen"
+          TZ="Europe/Copenhagen"
           NODE_ENV=production
 
           N8N_DIAGNOSTICS_ENABLED=true
