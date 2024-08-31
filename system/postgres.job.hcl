@@ -34,7 +34,7 @@ job "postgres" {
       shutdown_delay = "5s"
 
       config {
-        image = "postgres:16.1-alpine"
+        image = "postgres:16.4-alpine"
         ports = ["postgres"]
       }
 
