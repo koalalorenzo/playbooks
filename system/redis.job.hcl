@@ -50,7 +50,10 @@ protected-mode no
 port {{ env "NOMAD_PORT_redis" }}
 loglevel warning
 save 3600 1 300 100 60 10000
+rdbcompression yes
+rdbchecksum yes
 maxmemory 512m
+maxmemory-policy volatile-ttl
 EOH
       }
 
@@ -62,7 +65,7 @@ EOH
 
       resources {
         cpu    = 1000
-        memory = 256
+        memory = 512
       }
 
       service {
