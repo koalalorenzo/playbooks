@@ -17,20 +17,17 @@
           gnupg
           coreutils
           moreutils
-          jinja2-cli
-          python311Packages.jinja2
-          python311Packages.jinja2-ansible-filters
           nomad
           consul
           gnumake
-          python311Packages.dnspython
-          python311Packages.ansible
+          envsubst
+          postgresql
+          redis
           jq
           git
           mosh
           openssh
           ssh-to-age
-          radicle-node
           sops
           rsync
           nixos-generators
