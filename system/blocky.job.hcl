@@ -70,7 +70,7 @@ job "blocky" {
       port = "dns"
 
       check {
-        name     = "blicky-dns"
+        name     = "blocky-dns"
         type     = "tcp"
         interval = "20s"
         timeout  = "2s"
