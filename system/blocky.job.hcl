@@ -161,7 +161,7 @@ blocking:
         /sentry/
         *.sentry-cdn.com
         /sentry.io/
-        # GitHub Actions
+        # GitHub Actions and automations
         /github.com/
         /actions.githubusercontent.com/
         /blob.core.windows.net/
@@ -171,6 +171,7 @@ blocking:
         /grafana.net/
         /github-cloud.githubusercontent.com/
         /github-cloud.s3.amazonaws.com/
+        docker.n8n.io
         # Videogames
         *.epicgames.dev
         *.epicgames.com
