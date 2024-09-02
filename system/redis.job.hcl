@@ -52,7 +52,7 @@ loglevel warning
 # save 3600 1 300 100 60 10000
 # rdbcompression yes
 # rdbchecksum yes
-maxmemory 512m
+maxmemory 256m
 maxmemory-policy volatile-ttl
 EOH
       }
@@ -65,7 +65,8 @@ EOH
 
       resources {
         cpu    = 1000
-        memory = 512
+        memory = 320
+        # memory_max = 512
       }
 
       service {
