@@ -84,10 +84,23 @@ job "n8n" {
         EOH
       }
 
+      volume_mount {
+        volume      = "data"
+        destination = "/home/node/.n8n"
+        read_only   = false
+      }
+
       resources {
         cpu    = 1000
         memory = 1024
       }
+    }
+
+    volume "data" {
+      type            = "csi"
+      source          = "n8n"
+      attachment_mode = "file-system"
+      access_mode     = "single-node-writer"
     }
   }
 }
