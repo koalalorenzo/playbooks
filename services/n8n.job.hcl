@@ -15,6 +15,15 @@ job "n8n" {
       name = "n8n"
       port = "http"
 
+      check {
+        name = "alive"
+        type = "http"
+        path = "/healthz"
+
+        interval = "120s"
+        timeout  = "10s"
+      }
+
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.n8n.rule=Host(`n8n.elates.it`)",
