@@ -68,8 +68,8 @@ job "shiori" {
       }
 
       resources {
-        cpu    = 1000
-        memory = 512
+        cpu    = 500
+        memory = 256
       }
     }
   }
