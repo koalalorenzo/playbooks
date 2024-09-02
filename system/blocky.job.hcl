@@ -173,13 +173,13 @@ blocking:
         /github-cloud.s3.amazonaws.com/
         /n8n.io/
         # Videogames
-        *.epicgames.dev
-        *.epicgames.com
-        /api.epicgames.dev/
-        /epicgames.dev/
-        /epicgames.com/
-        /api.epicgames.dev/
-        /on.epicgames.com/
+        # *.epicgames.dev
+        # *.epicgames.com
+        # /api.epicgames.dev/
+        # /epicgames.dev/
+        # /epicgames.com/
+        # /api.epicgames.dev/
+        # /on.epicgames.com/
         /registry.heroiclabs.com/
         *.heroiclabs.com
         /cloud.unity3d.com/
@@ -206,12 +206,13 @@ blocking:
       - https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt
       - https://v.firebog.net/hosts/neohostsbasic.txt
       - https://v.firebog.net/hosts/static/w3kbl.txt
-      - /snapchat.com/
-      - /snap.com/
-      - /snapchat.appspot.com/
-      - /sc-analytics.appspot.com/
-      - /feelinsonice-hrd.appspot.com/
-      - /www.feelinsonice.com/
+      - |
+        /snapchat.com/
+        /snap.com/
+        /snapchat.appspot.com/
+        /sc-analytics.appspot.com/
+        /feelinsonice-hrd.appspot.com/
+        /www.feelinsonice.com/
     ads:
       - https://adaway.org/hosts.txt
       - https://blocklistproject.github.io/Lists/alt-version/ads-nl.txt
