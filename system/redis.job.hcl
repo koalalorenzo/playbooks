@@ -13,12 +13,12 @@ job "redis" {
       attempts = 3
     }
 
-    volume "data" {
-      type            = "csi"
-      attachment_mode = "file-system"
-      access_mode     = "single-node-writer"
-      source          = "redis"
-    }
+    # volume "data" {
+    #   type            = "csi"
+    #   attachment_mode = "file-system"
+    #   access_mode     = "single-node-writer"
+    #   source          = "redis"
+    # }
 
     network {
       port "redis" {}
@@ -30,7 +30,7 @@ job "redis" {
       kill_timeout = "60s"
 
       config {
-        image = "redis:7.2-alpine"
+        image = "redis:7.4-alpine"
         ports = ["redis"]
         args  = ["/usr/local/etc/redis/redis.conf"]
         volumes = [
@@ -49,19 +49,19 @@ job "redis" {
 protected-mode no
 port {{ env "NOMAD_PORT_redis" }}
 loglevel warning
-save 3600 1 300 100 60 10000
-rdbcompression yes
-rdbchecksum yes
+# save 3600 1 300 100 60 10000
+# rdbcompression yes
+# rdbchecksum yes
 maxmemory 512m
 maxmemory-policy volatile-ttl
 EOH
       }
 
-      volume_mount {
-        volume      = "data"
-        destination = "/data"
-        read_only   = false
-      }
+      # volume_mount {
+      #   volume      = "data"
+      #   destination = "/data"
+      #   read_only   = false
+      # }
 
       resources {
         cpu    = 1000
