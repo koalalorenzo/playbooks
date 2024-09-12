@@ -42,7 +42,6 @@ job "restic-server" {
         "traefik.http.routers.resticserver.tls.certresolver=letsencrypt",
         "prometheus",
       ]
-
     }
 
     task "restic-server" {
